@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="" />
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/UserChangePasswordDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/ApiResponse/ApiResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/MailService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/MailServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/utils/DateUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/configuration/CommonProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/configuration/CommonProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/UserLoginDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/UserLoginDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/UserRegisterDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/UserRegisterDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/security/TokenResponseInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/security/TokenResponseInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/jwt/AuthTokenFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/jwt/AuthTokenFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/AuthenticationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/AuthenticationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/AuthenticationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/AuthenticationServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/security/UserDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/security/UserDetailsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/utils/RoleConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/utils/RoleUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/CommonProperties.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/CommonProperties.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,12 +37,18 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1gdmFJaXaQXqvUwtpYfT82TKwVK" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -29,7 +62,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="D:/Capstone/backend" />
+    <property name="last_opened_file_path" value="F:/Hoc/Spring MVC/Files/SQLMultiTable" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -67,6 +100,9 @@
       <updated>1598452738211</updated>
       <workItem from="1598452743867" duration="15012000" />
       <workItem from="1598503691633" duration="9364000" />
+      <workItem from="1598516178960" duration="969000" />
+      <workItem from="1599031702796" duration="21510000" />
+      <workItem from="1599112096193" duration="13530000" />
     </task>
     <servers />
   </component>
@@ -74,66 +110,70 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser" timestamp="1598454550129">
+    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser" timestamp="1599124313188">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1598454550129" />
-    <state width="429" height="459" key="DebuggerActiveHint" timestamp="1598515402809">
+    <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1599124313188" />
+    <state x="430" y="87" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1599040052042">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="429" height="459" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1598515402809" />
-    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1598506150180">
+    <state x="430" y="87" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1366.728@0.0.1366.728" timestamp="1599040052042" />
+    <state width="429" height="459" key="DebuggerActiveHint" timestamp="1599069390200">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1598506150180" />
-    <state width="1323" height="96" key="GridCell.Tab.0.bottom" timestamp="1598515733778">
+    <state width="429" height="459" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1599069390200" />
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1599115724200">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598515733778" />
-    <state width="1323" height="96" key="GridCell.Tab.0.center" timestamp="1598515733777">
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
+    <state width="1323" height="352" key="GridCell.Tab.0.bottom" timestamp="1599147157966">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1598515733777" />
-    <state width="1323" height="96" key="GridCell.Tab.0.left" timestamp="1598515733777">
+    <state width="1323" height="352" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1599147157966" />
+    <state width="1323" height="352" key="GridCell.Tab.0.center" timestamp="1599147157966">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1598515733777" />
-    <state width="1323" height="96" key="GridCell.Tab.0.right" timestamp="1598515733778">
+    <state width="1323" height="352" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1599147157966" />
+    <state width="1323" height="352" key="GridCell.Tab.0.left" timestamp="1599147157965">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1598515733778" />
-    <state width="1323" height="96" key="GridCell.Tab.1.bottom" timestamp="1598515733779">
+    <state width="1323" height="352" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1599147157965" />
+    <state width="1323" height="352" key="GridCell.Tab.0.right" timestamp="1599147157966">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598515733779" />
-    <state width="1323" height="96" key="GridCell.Tab.1.center" timestamp="1598515733778">
+    <state width="1323" height="352" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1599147157966" />
+    <state width="1323" height="352" key="GridCell.Tab.1.bottom" timestamp="1599147157717">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1598515733778" />
-    <state width="1323" height="96" key="GridCell.Tab.1.left" timestamp="1598515733778">
+    <state width="1323" height="352" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1599147157717" />
+    <state width="1323" height="352" key="GridCell.Tab.1.center" timestamp="1599147157716">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1598515733778" />
-    <state width="1323" height="96" key="GridCell.Tab.1.right" timestamp="1598515733778">
+    <state width="1323" height="352" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1599147157716" />
+    <state width="1323" height="352" key="GridCell.Tab.1.left" timestamp="1599147157716">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1598515733778" />
-    <state width="1323" height="96" key="GridCell.Tab.2.bottom" timestamp="1598515733779">
+    <state width="1323" height="352" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1599147157716" />
+    <state width="1323" height="352" key="GridCell.Tab.1.right" timestamp="1599147157716">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.2.bottom/0.0.1366.728@0.0.1366.728" timestamp="1598515733779" />
-    <state width="1323" height="96" key="GridCell.Tab.2.center" timestamp="1598515733779">
+    <state width="1323" height="352" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1599147157716" />
+    <state width="1323" height="352" key="GridCell.Tab.2.bottom" timestamp="1599147157717">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.2.center/0.0.1366.728@0.0.1366.728" timestamp="1598515733779" />
-    <state width="1323" height="96" key="GridCell.Tab.2.left" timestamp="1598515733779">
+    <state width="1323" height="352" key="GridCell.Tab.2.bottom/0.0.1366.728@0.0.1366.728" timestamp="1599147157717" />
+    <state width="1323" height="352" key="GridCell.Tab.2.center" timestamp="1599147157717">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.2.left/0.0.1366.728@0.0.1366.728" timestamp="1598515733779" />
-    <state width="1323" height="96" key="GridCell.Tab.2.right" timestamp="1598515733779">
+    <state width="1323" height="352" key="GridCell.Tab.2.center/0.0.1366.728@0.0.1366.728" timestamp="1599147157717" />
+    <state width="1323" height="352" key="GridCell.Tab.2.left" timestamp="1599147157717">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="96" key="GridCell.Tab.2.right/0.0.1366.728@0.0.1366.728" timestamp="1598515733779" />
+    <state width="1323" height="352" key="GridCell.Tab.2.left/0.0.1366.728@0.0.1366.728" timestamp="1599147157717" />
+    <state width="1323" height="352" key="GridCell.Tab.2.right" timestamp="1599147157717">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="352" key="GridCell.Tab.2.right/0.0.1366.728@0.0.1366.728" timestamp="1599147157717" />
     <state x="213" y="18" key="Maven.ArtifactSearchDialog" timestamp="1598456210210">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

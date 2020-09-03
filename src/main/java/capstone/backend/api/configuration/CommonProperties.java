@@ -12,4 +12,6 @@ import org.springframework.stereotype.Component;
 public class CommonProperties {
     private String secret;
     private Long expiration;
+    private int codeSize;
+    private String lidiEmail;
 }

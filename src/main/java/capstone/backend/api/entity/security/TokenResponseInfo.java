@@ -9,6 +9,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class TokenResponseInfo {
     private String jwtToken;
-    private String username;
+    private String email;
     private Set<String> roles;
 }
