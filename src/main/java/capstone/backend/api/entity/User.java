@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class User {
     private long id;
 
     @NonNull
+    @Email
     @Column(name = "email")
     private String email;
 
@@ -44,7 +46,7 @@ public class User {
 
     @NonNull
     @Column(name = "gender")
-    private int  gender = 1;
+    private String  gender = "male";
 
     @Column(name = "avatar_image")
     private String avatarImage;

@@ -24,7 +24,7 @@ public class TestController {
                 .password("123445").dob("22/11/1998")
                 .fullName("Le Son Tung")
                 .phoneNumber("0342529999")
-                .gender(1)
+                .gender("male")
                 .roles(roles).build();
     }
 
@@ -37,7 +37,7 @@ public class TestController {
                 .password("mothaiba").dob("12/11/1998")
                 .fullName("Nguyen Minh Chau")
                 .phoneNumber("0369829999")
-                .gender(0)
+                .gender("female")
                 .roles(roles).build();
     }
 

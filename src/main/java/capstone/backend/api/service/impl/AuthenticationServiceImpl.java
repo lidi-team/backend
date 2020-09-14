@@ -1,12 +1,12 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.UserChangePasswordDto;
-import capstone.backend.api.dto.UserLoginDto;
-import capstone.backend.api.dto.UserRegisterDto;
+import capstone.backend.api.dto.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
+import capstone.backend.api.entity.ApiResponse.VerifyCodeResponse;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
+import capstone.backend.api.entity.VerificationCode;
 import capstone.backend.api.entity.security.TokenResponseInfo;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.AuthenticationService;
@@ -14,9 +14,6 @@ import capstone.backend.api.service.impl.security.UserDetailsImpl;
 import capstone.backend.api.utils.DateUtils;
 import capstone.backend.api.utils.RoleUtils;
 import capstone.backend.api.utils.security.JwtUtils;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.LowLevelHttpRequest;
-import com.google.api.services.gmail.Gmail;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,12 +28,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.Date;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -59,58 +52,61 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private MailServiceImpl mailService;
 
+    private ArrayList<VerificationCode> verificationList;
+
     @Override
     public ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException {
-        if(StringUtils.isEmpty(userLoginDto.getEmail().trim())
-                || StringUtils.isEmpty(userLoginDto.getPassword().trim())){
-            logger.error("Email or password is empty!");
+        if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
+                || StringUtils.isEmpty(userLoginDto.getPassword().trim())) {
+            logger.error("Parameter invalid!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message("Email or password is empty!").build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userLoginDto.getEmail(), userLoginDto.getPassword()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toSet());
+        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword());
+
         logger.info("authenticate Ok!");
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(200).message("Authentication successful!")
-                        .data(new TokenResponseInfo(jwt, userDetails.getUsername(), roles)).build()
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(tokenResponseInfo).build()
         );
 
     }
 
     @Override
     public ResponseEntity<?> register(UserRegisterDto userRegisterDto) throws AuthenticationException {
-        if(!validateRegisterInformation(userRegisterDto).isEmpty()){
-            logger.error(validateRegisterInformation(userRegisterDto));
+        if (!validateRegisterInformation(userRegisterDto)) {
+            logger.error("Parameter is empty!");
             return ResponseEntity.badRequest().body(
-                   ApiResponse.builder().code(405).message(validateRegisterInformation(userRegisterDto)).build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
         if (userRepository.existsUserByEmail(userRegisterDto.getEmail())) {
             logger.error("email is already in used!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message("Email is already in used!").build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_EXIST_VALUE())
+                            .message(commonProperties.getMESSAGE_EXIST_VALUE()).build()
             );
         }
         String passwordEncode = passwordEncoder.encode(userRegisterDto.getPassword());
         String dobStr = userRegisterDto.getDob();
         Date dob;
         try {
-            dob = DateUtils.stringToDate(dobStr,DateUtils.PATTERN_ddMMyyyy);
+            dob = DateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
         } catch (ParseException e) {
             logger.error("parse dob in register of user failed!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message("Parse failed! Valid format 'dd/MM/yyyy'").build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_FORMAT_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_FORMAT_INVALID()).build()
             );
         }
         Set<String> strRoles = userRegisterDto.getRoles();
@@ -125,92 +121,214 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .gender(userRegisterDto.getGender())
                         .roles(roles).build());
         logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
+
+        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userRegisterDto.getEmail(), userRegisterDto.getPassword());
+
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(200).message("Register user successfully!").build()
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(tokenResponseInfo).build()
         );
     }
 
     @Override
     public ResponseEntity<?> changePassword(UserChangePasswordDto userPassDto) throws AuthenticationException {
-        if(!validateChangePasswordInformation(userPassDto).isEmpty()){
-            logger.error(validateChangePasswordInformation(userPassDto));
+        if (!validateChangePasswordInformation(userPassDto)) {
+            logger.error("Parameter invalid!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message(validateChangePasswordInformation(userPassDto)).build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
 
-        String oldPassword = passwordEncoder.encode(userPassDto.getOldPassword());
-        if(!userRepository.existsUserByEmailAndPassword(userPassDto.getEmail(),oldPassword)){
+        User user = userRepository.findByEmail(userPassDto.getEmail()).get();
+
+        if (!passwordEncoder.matches(userPassDto.getOldPassword(), user.getPassword())) {
             logger.error("Old password is incorrect!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message("Old password is incorrect!").build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
             );
         }
 
         String newPassword = passwordEncoder.encode(userPassDto.getNewPassword());
-        userRepository.updateUserPassword(newPassword,userPassDto.getEmail());
+        user.setPassword(newPassword);
+        userRepository.save(user);
         logger.info("update successful!");
+
+        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userPassDto.getEmail(), userPassDto.getNewPassword());
+
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(200).message("Update password successful!").build()
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(tokenResponseInfo).build()
         );
     }
 
     @Override
-    public ResponseEntity<?> getVerifyCode(String email) throws AuthenticationException, MessagingException, IOException {
-        if(StringUtils.isEmpty(email.trim())){
-            logger.error("Email is empty!");
+    public ResponseEntity<?> getVerifyCode(String email) throws AuthenticationException, MessagingException {
+        if (StringUtils.isEmpty(email.trim())) {
+            logger.error("Parameter invalid!");
             return ResponseEntity.badRequest().body(
-                    ApiResponse.builder().code(405).message("Email is empty!").build()
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
 
-        String randomCode = generateRandomIntegerCode(commonProperties.getCodeSize());
-        String fromEmail = commonProperties.getLidiEmail();
-        String subject = "LidiEdu get code to change password";
-        String bodyText = "Your verify code is: "+ randomCode;
-        MimeMessage message = mailService.createEmail(email,fromEmail,subject,bodyText);
+        String verifyCode = generateRandomIntegerCode(commonProperties.getCodeSize());
+        String resetCode = generateRandomIntegerCode(commonProperties.getResetCodeSize());
+        Date expiredDate = new Date((new Date()).getTime() + commonProperties.getExpiredTime());
 
+        mailService.CreateMailVerifyCode(email, verifyCode);
 
-       // mailService.sendMessage(null,email,message);
-        return null;
+        User user = userRepository.findByEmail(email).get();
+        verificationList.add(
+                VerificationCode.builder()
+                        .verifyCode(passwordEncoder.encode(verifyCode))
+                        .expiredTime(expiredDate)
+                        .resetCode(passwordEncoder.encode(resetCode))
+                        .user(user)
+                        .active(true).build()
+        );
+        logger.info("saved verify code to DB");
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS()).build()
+        );
     }
 
-    private String validateRegisterInformation(UserRegisterDto user){
-        if(user.getEmail().trim().isEmpty()){
-            return "Email is empty!";
+    @Override
+    public ResponseEntity<?> verifyCode(VerifyCodeDto verifyCodeDto) throws Exception {
+        if (!validateVerifyCodeInformation(verifyCodeDto)) {
+            logger.error("Parameter empty!");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
+            );
         }
-        if(user.getPassword().trim().isEmpty()){
-            return "Password is empty!";
+
+        User user = userRepository.findByEmail(verifyCodeDto.getEmail()).get();
+        VerificationCode verifyCode = findVerificationCodeByUserId(user.getId());
+
+        if (verifyCode == null ||
+                !passwordEncoder.matches(verifyCodeDto.getVerifyCode(), verifyCode.getVerifyCode())) {
+            logger.error("Verified code is invalid!");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
+            );
         }
-        if(user.getFullName().trim().isEmpty()){
-            return "Full name is empty!";
+
+        if (verifyCode.getExpiredTime().before(new Date())) {
+            logger.error("Verified code is expired!");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_TIME_OUT())
+                            .message(commonProperties.getMESSAGE_PARAM_TIME_OUT()).build()
+            );
         }
-        if(user.getDob().trim().isEmpty()){
-            return "Dob is empty!";
-        }
-        if(user.getPhoneNumber().trim().isEmpty()){
-            return "Phone number is empty!";
-        }
-        if(user.getGender() >1 || user.getGender() < -1){
-            return "Gender is in [-1,0,1] only!";
-        }
-        return "";
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(new VerifyCodeResponse(verifyCode.getResetCode()))
+                        .build()
+        );
     }
 
-    private String validateChangePasswordInformation(UserChangePasswordDto user){
-        if(user.getEmail().trim().isEmpty()){
-            return "Email is empty!";
+    @Override
+    public ResponseEntity<?> resetPassword(ResetPasswordDto resetPass) throws Exception {
+        if (!validateResetPasswordInformation(resetPass)) {
+            logger.error("Parameter invalid!");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
+            );
         }
-        if(user.getOldPassword().trim().isEmpty()){
-            return "Old password is empty!";
+
+        User user = userRepository.findByEmail(resetPass.getEmail()).get();
+        VerificationCode verifyCode = findVerificationCodeByUserId(user.getId());
+
+        if (verifyCode == null ||
+                !resetPass.getResetCode().equals(verifyCode.getResetCode())) {
+            logger.error("Reset code is invalid!");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
+            );
         }
-        if(user.getNewPassword().trim().isEmpty()){
-            return "New password is empty!";
-        }
-        return "";
+
+        String newPassword = passwordEncoder.encode(resetPass.getNewPassword());
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        verificationList.removeAll(
+                verificationList.stream()
+                        .filter(code -> code.getUser().getId() == user.getId())
+                        .collect(Collectors.toList())
+        );
+        logger.info("Updated password!");
+
+        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(resetPass.getEmail(), resetPass.getNewPassword());
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(tokenResponseInfo).build()
+        );
     }
 
-    private String generateRandomIntegerCode(int codeSize){
+    private boolean validateRegisterInformation(UserRegisterDto user) {
+        if (user.getEmail().trim().isEmpty() ||
+                user.getPassword().trim().isEmpty() ||
+                user.getFullName().trim().isEmpty() ||
+                user.getDob().trim().isEmpty() ||
+                user.getPhoneNumber().trim().isEmpty() ||
+                user.getGender().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateChangePasswordInformation(UserChangePasswordDto user) {
+        if (user.getEmail().trim().isEmpty() ||
+                user.getOldPassword().trim().isEmpty() ||
+                user.getNewPassword().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateVerifyCodeInformation(VerifyCodeDto user) {
+        if (user.getEmail().trim().isEmpty() ||
+                user.getVerifyCode().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validateResetPasswordInformation(ResetPasswordDto user) {
+        if (user.getEmail().trim().isEmpty() ||
+                user.getResetCode().trim().isEmpty() ||
+                user.getNewPassword().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private String generateRandomIntegerCode(int codeSize) {
         String code = "";
         Random random = new Random();
         for (int i = 0; i < codeSize; i++) {
@@ -218,4 +336,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return code;
     }
+
+    private TokenResponseInfo generateTokenResponseInfo(String email, String password) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email, password
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Set<String> roles = userDetails.getAuthorities().stream()
+                .map(item -> item.getAuthority())
+                .collect(Collectors.toSet());
+
+        return new TokenResponseInfo(jwt, userDetails.getUsername(), roles);
+    }
+
+    private VerificationCode findVerificationCodeByUserId(Long userId) {
+        ArrayList<VerificationCode> reverseList = verificationList;
+        Collections.reverse(reverseList);
+
+        return reverseList.stream()
+                .filter(code -> code.getUser().getId() == userId)
+                .findFirst().get();
+    }
+
+
 }
