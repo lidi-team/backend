@@ -30,6 +30,7 @@ public class ObjectiveController {
         } catch (Exception e) {
             logger.error("add objective failed : " + objectvieDto.getTitle());
             logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
