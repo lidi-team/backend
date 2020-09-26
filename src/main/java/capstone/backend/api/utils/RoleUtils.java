@@ -16,7 +16,7 @@ public class RoleUtils {
     private static final Logger logger = LoggerFactory.getLogger(RoleUtils.class);
     private RoleRepository roleRepository;
 
-    public static final String ROLE_STUDENT = "ROLE_STUDENT";
+    public static final String ROLE_USER = "ROLE_USER";
     public static final String ROLE_TEACHER = "ROLE_TEACHER";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
@@ -24,16 +24,16 @@ public class RoleUtils {
         Set<Role> roles = new HashSet<>();
 
         if(strRoles == null){
-            Role role = roleRepository.findRoleByName(RoleUtils.ROLE_STUDENT).get();
-            logger.info("add role STUDENT");
+            Role role = roleRepository.findRoleByName(RoleUtils.ROLE_USER).get();
+            logger.info("add role USER");
             roles.add(role);
         } else{
             strRoles.forEach(role->{
                 switch (role){
-                    case RoleUtils.ROLE_STUDENT:
+                    case RoleUtils.ROLE_USER:
                     {
-                        Role roleDb = roleRepository.findRoleByName(RoleUtils.ROLE_STUDENT).get();
-                        logger.info("add role STUDENT");
+                        Role roleDb = roleRepository.findRoleByName(RoleUtils.ROLE_USER).get();
+                        logger.info("add role USER");
                         roles.add(roleDb);
                         break;
                     }
