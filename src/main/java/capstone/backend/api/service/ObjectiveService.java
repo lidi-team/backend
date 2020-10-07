@@ -11,7 +11,13 @@ public interface ObjectiveService {
 
     public ResponseEntity<ApiResponse> deleteObjective(long id);
 
-    public ResponseEntity<ApiResponse> getAllObjective();
+    public ResponseEntity<ApiResponse> getAllObjective(long cycleId);
 
     public ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
+
+    public ResponseEntity<ApiResponse> getObjectiveByUserId(long id);
+
+    public ResponseEntity<ApiResponse> searchByCycleIdAndUserId(long cycleId, long userId);
+
+    public ResponseEntity<ApiResponse> viewListObjectiveByCycleId(long cycleId);
 }

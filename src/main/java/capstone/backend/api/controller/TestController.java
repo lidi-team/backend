@@ -17,8 +17,7 @@ public class TestController {
     @GetMapping("teacherRegister")
     public UserRegisterDto teacherRegisterApi() {
         Set<String> roles = new HashSet<>();
-        roles.add(RoleUtils.ROLE_USER);
-        roles.add(RoleUtils.ROLE_TEACHER);
+        roles.add(RoleUtils.ROLE_EMPLOYEE);
         return UserRegisterDto.builder()
                 .email("sontung199x@gmail.com")
                 .password("123445").dob("22/11/1998")
@@ -31,7 +30,7 @@ public class TestController {
     @GetMapping("studentRegister")
     public UserRegisterDto studentRegisterApi() {
         Set<String> roles = new HashSet<>();
-        roles.add(RoleUtils.ROLE_USER);
+        roles.add(RoleUtils.ROLE_EMPLOYEE);
         return UserRegisterDto.builder()
                 .email("nguyenminhchau@gmail.com")
                 .password("mothaiba").dob("12/11/1998")

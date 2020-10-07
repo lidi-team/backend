@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "key_results")
+@Table(name = "keyResults")
 public class KeyResult {
 
     @Id
@@ -17,10 +17,24 @@ public class KeyResult {
     private long id;
 
     @NonNull
+    private int startValue;
+    @NonNull
+    private int valueObtained;
+    @NonNull
+    private int targetedValue;
+
+    @NonNull
     private String content;
 
     @NonNull
-    @ManyToOne
-    @JoinColumn(name = "obj_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "objectiveId")
     private Objective objective;
+
+    @NonNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "measureUnitId")
+    private MeasureUnit measureUnit;
+
+    private String common;
 }

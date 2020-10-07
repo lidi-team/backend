@@ -1,9 +1,6 @@
 package capstone.backend.api.entity.ApiResponse;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,9 +9,20 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KeyResultResponse {
-    @NotNull
     private long id;
+
+    private int startValue;
+
+    private int valueObtained;
+
+    private int targetedValue;
+
     @NotNull
     private String content;
+
+    @NonNull
+    private long measureUnitId;
+
+    private String common;
 
 }

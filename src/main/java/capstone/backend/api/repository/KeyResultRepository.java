@@ -13,6 +13,9 @@ public interface KeyResultRepository extends JpaRepository<KeyResult,Long> {
     @Transactional
     void deleteKeyResultsByObjectiveId(long id);
 
+    @Transactional
+    void deleteKeyResultsById(long id);
+
     ArrayList<KeyResult> getKeyResultsByObjectiveId(long id);
 
 }
