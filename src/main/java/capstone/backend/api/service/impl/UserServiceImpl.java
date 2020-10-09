@@ -2,16 +2,22 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
+import capstone.backend.api.entity.ApiResponse.UserInforResponse;
 import capstone.backend.api.entity.ApiResponse.UsersResponse;
-import capstone.backend.api.entity.User;
+import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.UserService;
+import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -21,6 +27,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     private CommonProperties commonProperties;
+
+    private JwtUtils jwtUtils;
+
+    private DepartmentServiceImpl departmentService;
+
+    private ExecuteServiceImpl executeService;
 
     @Override
     public ResponseEntity<?> getUserByEmail(String email) {
@@ -61,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getAllUsersByDepartmentId(long id, int page, int size) {
-        Page<User> users = userRepository.findAllByDepartmentId(id,PageRequest.of(page, size));
+        Page<User> users = userRepository.findAllByDepartmentId(id, PageRequest.of(page, size));
         int totalPage = users.getTotalPages();
 
         return ResponseEntity.ok().body(
@@ -74,4 +86,29 @@ public class UserServiceImpl implements UserService {
                         ).build()
         );
     }
+
+    @Override
+    public ResponseEntity<?> getUserInformation(String jwtToken) throws Exception {
+
+        String email = jwtUtils.getUserNameFromJwtToken(jwtToken.substring(5));
+        User user = userRepository.findByEmail(email).get();
+        Department department = departmentService.getDepartmentById(user.getDepartment().getId());
+        Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+        ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+
+        UserInforResponse userInforResponse = UserInforResponse.builder().id(user.getId())
+                .email(email).fullName(user.getFullName())
+                .avatarUrl(user.getAvatarImage())
+                .dob(user.getDob()).gender(user.getGender())
+                .point(user.getPoint()).roles(roles)
+                .departmentResponse(new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                .projectResponses(new UserInforResponse().projectResponses(executes)).build();
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(userInforResponse).build()
+        );
+    }
+
 }

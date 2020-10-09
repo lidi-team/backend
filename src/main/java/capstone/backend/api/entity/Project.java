@@ -30,6 +30,8 @@ public class Project {
     @NonNull
     private String status;
 
+    private boolean isPm;
+
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
     private Date fromDate;

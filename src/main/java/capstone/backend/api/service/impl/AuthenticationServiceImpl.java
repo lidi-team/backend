@@ -3,7 +3,6 @@ package capstone.backend.api.service.impl;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.ApiResponse.UserResponse;
 import capstone.backend.api.entity.ApiResponse.VerifyCodeResponse;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
@@ -338,15 +337,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Set<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
-        UserResponse user = UserResponse.builder()
-                .id(userDetails.getId())
-                .fullName(userDetails.getFullName())
-                .email(userDetails.getUsername())
-                .avatarUrl(userDetails.getAvatarUrl())
-                .roles(roles).build();
+
+
 
         return TokenResponseInfo.builder()
-                .jwtToken(jwt).user(user).build();
+                .jwtToken(jwt)
+                .user(new TokenResponseInfo().userResponse(userDetails,roles)).build();
     }
 
     private VerificationCode findVerificationCodeByUserId(Long userId) {

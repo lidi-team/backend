@@ -1,6 +1,7 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -29,6 +30,7 @@ public class User {
     private String password;
 
     @NonNull
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "dateOfBirth")
     private Date dob;
 
@@ -40,7 +42,7 @@ public class User {
 
     private String avatarImage;
 
-    @NonNull
+
     @ManyToOne
     @JoinColumn(name = "departmentId")
     private Department department;
@@ -49,13 +51,17 @@ public class User {
     @Builder.Default
     private boolean isActive = true;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date deactiveAt;
 
     private int status;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
 
-    private Date updateAt;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Builder.Default
+    private Date updateAt = new Date();
 
     private int point;
 

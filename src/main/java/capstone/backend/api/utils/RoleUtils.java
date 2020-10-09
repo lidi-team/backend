@@ -17,8 +17,6 @@ public class RoleUtils {
     private RoleRepository roleRepository;
 
     public static final String ROLE_USER = "ROLE_USER";
-    public static final String ROLE_TEACHER = "ROLE_TEACHER";
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     public Set<Role> getUserRoles(Set<String> strRoles){
         Set<Role> roles = new HashSet<>();
@@ -29,28 +27,10 @@ public class RoleUtils {
             roles.add(role);
         } else{
             strRoles.forEach(role->{
-                switch (role){
-                    case RoleUtils.ROLE_USER:
-                    {
-                        Role roleDb = roleRepository.findRoleByName(RoleUtils.ROLE_USER).get();
-                        logger.info("add role USER");
-                        roles.add(roleDb);
-                        break;
-                    }
-                    case RoleUtils.ROLE_TEACHER:
-                    {
-                        Role roleDb = roleRepository.findRoleByName(RoleUtils.ROLE_TEACHER).get();
-                        logger.info("add role TEACHER");
-                        roles.add(roleDb);
-                        break;
-                    }
-                    case RoleUtils.ROLE_ADMIN:
-                    {
-                        Role roleDb = roleRepository.findRoleByName(RoleUtils.ROLE_ADMIN).get();
-                        logger.info("add role ADMIN");
-                        roles.add(roleDb);
-                        break;
-                    }
+                Role roleDb = roleRepository.findRoleByName(role).orElse(null);
+                if(roleDb != null){
+                    logger.info("add role "+role);
+                    roles.add(roleDb);
                 }
             });
         }

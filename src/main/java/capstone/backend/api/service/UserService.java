@@ -15,5 +15,5 @@ public interface UserService {
 
     ResponseEntity<?> getAllUsersByDepartmentId(long id, int page, int size);
 
-
+    ResponseEntity<?> getUserInformation(String jwtToken) throws Exception;
 }
