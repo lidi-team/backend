@@ -3,6 +3,7 @@ package capstone.backend.api.service.impl;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
+import capstone.backend.api.entity.ApiResponse.UserResponse;
 import capstone.backend.api.entity.ApiResponse.VerifyCodeResponse;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
@@ -23,6 +24,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -117,6 +119,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .email(userRegisterDto.getEmail())
                         .password(passwordEncode).dob(dob)
                         .fullName(userRegisterDto.getFullName())
+                        .roles(roles)
                         .build());
         logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
 
@@ -289,50 +292,37 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private boolean validateRegisterInformation(UserRegisterDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getPassword().trim().isEmpty() ||
-                user.getFullName().trim().isEmpty() ||
-                user.getDob().trim().isEmpty() ||
-                user.getPhoneNumber().trim().isEmpty() ||
-                user.getGender().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getPassword().trim().isEmpty() &&
+                !user.getFullName().trim().isEmpty() &&
+                !user.getDob().trim().isEmpty() &&
+                !user.getPhoneNumber().trim().isEmpty();
     }
 
     private boolean validateChangePasswordInformation(UserChangePasswordDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getOldPassword().trim().isEmpty() ||
-                user.getNewPassword().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getOldPassword().trim().isEmpty() &&
+                !user.getNewPassword().trim().isEmpty();
     }
 
     private boolean validateVerifyCodeInformation(VerifyCodeDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getVerifyCode().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getVerifyCode().trim().isEmpty();
     }
 
     private boolean validateResetPasswordInformation(ResetPasswordDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getResetCode().trim().isEmpty() ||
-                user.getNewPassword().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getResetCode().trim().isEmpty() &&
+                !user.getNewPassword().trim().isEmpty();
     }
 
     private String generateRandomIntegerCode(int codeSize) {
-        String code = "";
+        StringBuilder code = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < codeSize; i++) {
-            code += random.nextInt(9);
+            code.append(random.nextInt(9));
         }
-        return code;
+        return code.toString();
     }
 
     private TokenResponseInfo generateTokenResponseInfo(String email, String password) {
@@ -346,10 +336,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Set<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toSet());
+        UserResponse user = UserResponse.builder()
+                .id(userDetails.getId())
+                .fullName(userDetails.getFullName())
+                .email(userDetails.getUsername())
+                .avatarUrl(userDetails.getAvatarUrl())
+                .roles(roles).build();
 
-        return new TokenResponseInfo(jwt, userDetails.getUsername(), roles);
+        return TokenResponseInfo.builder()
+                .jwtToken(jwt).user(user).build();
     }
 
     private VerificationCode findVerificationCodeByUserId(Long userId) {
