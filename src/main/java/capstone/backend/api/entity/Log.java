@@ -3,22 +3,31 @@ package capstone.backend.api.entity;
 import lombok.*;
 
 import javax.persistence.*;
-
+import java.util.Date;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Table(name = "roles")
-public class Role {
+@Table(name = "logs")
+public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "toUserId")
+    private User toUser;
+
     @NonNull
-    @Column(name = "name")
-    private String name;
+    private String content;
+
+    private Date createAt;
+
+    private String url;
+
+    private String type;
 
     @Builder.Default
     private boolean isDelete = false;

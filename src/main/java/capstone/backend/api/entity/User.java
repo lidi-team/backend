@@ -1,7 +1,6 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
-import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -24,40 +23,51 @@ public class User {
 
     @NonNull
     @Email
-    @Column(name = "email")
     private String email;
 
     @NonNull
-    @Column(name = "password")
     private String password;
 
     @NonNull
-    @Column(name = "date_of_birth")
+    @Column(name = "dateOfBirth")
     private Date dob;
 
     @NonNull
-    @Column(name = "full_name")
     private String fullName;
 
     @NonNull
-    @NumberFormat(pattern = "(0)+([0-9]{9})")
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private int gender;
 
-    @NonNull
-    @Column(name = "gender")
-    private String  gender = "male";
-
-    @Column(name = "avatar_image")
     private String avatarImage;
 
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
+    private Department department;
+
+    @NonNull
+    @Builder.Default
+    private boolean isActive = true;
+
+    private Date deactiveAt;
+
+    private int status;
+
+    private Date createAt;
+
+    private Date updateAt;
+
+    private int point;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "userRoles",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId")
     )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
+    @Builder.Default
+    private boolean isDelete = false;
 }

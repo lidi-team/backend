@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ObjectiveService {
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto);
+    ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto);
 
-    public ResponseEntity<ApiResponse> deleteObjective(long id);
+    ResponseEntity<ApiResponse> deleteObjective(long id);
 
-    public ResponseEntity<ApiResponse> getAllObjective();
+    ResponseEntity<ApiResponse> getAllObjective();
 
-    public ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
+    ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
 }

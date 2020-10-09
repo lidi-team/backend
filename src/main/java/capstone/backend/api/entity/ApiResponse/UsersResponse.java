@@ -1,26 +1,23 @@
 package capstone.backend.api.entity.ApiResponse;
 
+import capstone.backend.api.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObjectiveResponse {
+public class UsersResponse {
 
-    private long id;
+    private int page;
 
-    private String title;
+    private int size;
 
-    private  String content;
+    private int totalPage;
 
-    private long userId;
-
-    private List<KeyResultResponse> keyResults;
-
+    private Page<User> users;
 }

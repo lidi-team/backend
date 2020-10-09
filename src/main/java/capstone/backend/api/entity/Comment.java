@@ -3,37 +3,23 @@ package capstone.backend.api.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "objectives")
-public class Objective {
+@Builder
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-
-    private String parentId;
-
-    @NonNull
-    private String name;
-
-    @NonNull
-    private int type;
-
-    @NonNull
     @ManyToOne
-    @JoinColumn(name = "cycleId")
-    private Cycle cycle;
-
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name = "projectId")
-    private Project project;
+    @JoinColumn(name = "objectiveId")
+    private Objective objective;
 
     @NonNull
     @ManyToOne
@@ -41,15 +27,12 @@ public class Objective {
     private User user;
 
     @NonNull
-    private String status;
+    private String content;
 
     @NonNull
-    private int weight;
+    private Date createAt;
 
     private String history;
-
-    @NonNull
-    private String content;
 
     @Builder.Default
     private boolean isDelete = false;

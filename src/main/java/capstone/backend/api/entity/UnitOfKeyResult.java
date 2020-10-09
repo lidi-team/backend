@@ -4,21 +4,26 @@ import lombok.*;
 
 import javax.persistence.*;
 
-
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Table(name = "roles")
-public class Role {
+@Table( name = "UnitOfKeyResult",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "name")
+        })
+public class UnitOfKeyResult {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
-    @Column(name = "name")
     private String name;
+
+
+    private String description;
 
     @Builder.Default
     private boolean isDelete = false;

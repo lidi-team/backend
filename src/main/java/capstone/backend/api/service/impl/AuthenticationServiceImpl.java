@@ -117,9 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .email(userRegisterDto.getEmail())
                         .password(passwordEncode).dob(dob)
                         .fullName(userRegisterDto.getFullName())
-                        .phoneNumber(userRegisterDto.getPhoneNumber())
-                        .gender(userRegisterDto.getGender())
-                        .roles(roles).build());
+                        .build());
         logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
 
         TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userRegisterDto.getEmail(), userRegisterDto.getPassword());

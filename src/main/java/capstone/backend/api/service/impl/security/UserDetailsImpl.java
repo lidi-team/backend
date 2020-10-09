@@ -3,6 +3,7 @@ package capstone.backend.api.service.impl.security;
 import capstone.backend.api.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,6 +17,7 @@ import java.util.Collection;
 @AllArgsConstructor
 @NoArgsConstructor
 @Service
+@Builder
 public class UserDetailsImpl implements UserDetails {
 
     private Long id;

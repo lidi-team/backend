@@ -8,11 +8,11 @@ import java.util.Date;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "keyResults")
-public class KeyResult {
+@Builder
+@Table( name = "Reports")
+public class Report {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,34 +25,24 @@ public class KeyResult {
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "kindId")
-    private KindOfKeyResult kindOfKeyResult;
+    @JoinColumn(name = "authorizedUserId")
+    private User authorizedUser;
 
     @NonNull
-    @ManyToOne
-    @JoinColumn(name = "unitId")
-    private UnitOfKeyResult unitOfKeyResult;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User userReview;
-
-    @NonNull
-    private int fromValue;
-
-    @NonNull
-    private int toValue;
-
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @NonNull
     private Date deadline;
 
     @NonNull
     private String content;
 
+    @NonNull
+    private String status;
+
+    @NonNull
+    private int point;
+
     private String history;
 
     @Builder.Default
     private boolean isDelete = false;
-
 }

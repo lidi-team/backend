@@ -24,11 +24,18 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email).get();
-        Set<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toSet());
+        User user = userRepository.findByEmail(email).orElse(null);
+        if(user != null){
+            Set<GrantedAuthority> authorities = user.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority(role.getName()))
+                    .collect(Collectors.toSet());
 
-        return new UserDetailsImpl(user.getId(),user.getEmail(),user.getPassword(),authorities);
+            return UserDetailsImpl.builder()
+                    .id(user.getId())
+                    .username(user.getEmail())
+                    .password(user.getPassword())
+                    .authorities(authorities).build();
+        }
+        return null;
     }
 }

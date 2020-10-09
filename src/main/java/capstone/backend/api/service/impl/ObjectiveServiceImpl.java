@@ -49,13 +49,13 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective;
         if (objectvieDto.getId() == 0) {
             objective = Objective.builder()
-                    .title(objectvieDto.getTitle())
+                    .name(objectvieDto.getTitle())
                     .content(objectvieDto.getContent())
                     .user(user).build();
         } else {
             objective = Objective.builder()
                     .id(objectvieDto.getId())
-                    .title(objectvieDto.getTitle())
+                    .name(objectvieDto.getTitle())
                     .content(objectvieDto.getContent())
                     .user(user).build();
         }
@@ -76,18 +76,18 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 ArrayList<KeyResult> keyResults =
                         keyResultService.addKeyResults(objectvieDto.getKeyResults(), objective);
                 keyResults.forEach(keyResult -> {
-                    keyResultResponses.add(new KeyResultResponse()
-                            .builder()
-                            .id(keyResult.getId())
-                            .content(keyResult.getContent())
-                            .build());
+                    keyResultResponses.add(
+                            KeyResultResponse.builder()
+                                    .id(keyResult.getId())
+                                    .content(keyResult.getContent())
+                                    .build());
                 });
                 logger.info("save key results successful");
             }
         }
 
         ObjectiveResponse objectiveResponse = ObjectiveResponse.builder().id(objective.getId())
-                .title(objective.getTitle())
+                .title(objective.getName())
                 .content(objective.getContent())
                 .userId(objective.getUser().getId())
                 .keyResults(keyResultResponses)
@@ -104,7 +104,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> deleteObjective(long id) {
 
-        Objective objective = objectiveRepository.getOne(id);
+        Objective objective = objectiveRepository.findById(id).orElse(null);
         if (objective == null) {
             logger.error("Objective not found!");
             return ResponseEntity.badRequest().body(
@@ -132,9 +132,9 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         objectives.forEach(objective -> {
             objectiveResponses.add(
-                    new ObjectiveResponse().builder()
+                    ObjectiveResponse.builder()
                             .id(objective.getId())
-                            .title(objective.getTitle())
+                            .title(objective.getName())
                             .content(objective.getContent())
                             .userId(objective.getUser().getId())
                             .keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
@@ -152,7 +152,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     @Override
     public ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id) {
-        Objective objective = objectiveRepository.getOne(id);
+        Objective objective = objectiveRepository.findById(id).orElse(null);
         if (objective == null) {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -160,9 +160,9 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
         }
-        ObjectiveResponse objectiveResponse = new ObjectiveResponse().builder()
+        ObjectiveResponse objectiveResponse = ObjectiveResponse.builder()
                 .id(objective.getId())
-                .title(objective.getTitle())
+                .title(objective.getName())
                 .content(objective.getContent())
                 .userId(objective.getUser().getId())
                 .keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
@@ -178,11 +178,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
-        if (objectvieDto.getTitle().trim().isEmpty() ||
-                objectvieDto.getContent().trim().isEmpty() ||
-                objectvieDto.getUserId() == 0) {
-            return false;
-        }
-        return true;
+        return !objectvieDto.getTitle().trim().isEmpty() &&
+                !objectvieDto.getContent().trim().isEmpty() &&
+                objectvieDto.getUserId() != 0;
     }
 }

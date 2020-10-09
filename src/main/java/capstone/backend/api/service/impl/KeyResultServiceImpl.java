@@ -46,24 +46,15 @@ public class KeyResultServiceImpl implements KeyResultService {
 
         ArrayList<KeyResult> keyResultOlds = keyResultRepository.getKeyResultsByObjectiveId(objective.getId());
         if (keyResultOlds != null) {
-//            keyResultOlds.forEach(keyResultOld -> {
-//                boolean check = keyResults.stream().anyMatch(
-//                        keyResult -> {
-//                            return keyResultOld.getId() == keyResult.getId();
-//                        });
-//                if (check == true) {
-//                    keyResultOlds.remove(keyResultOld);
-//                }
-//            });
             for (int i = 0; i < keyResultOlds.size(); i++) {
                 boolean check = true;
-                for (int j = 0; j < keyResults.size(); j++) {
-                    if(keyResultOlds.get(i).getId() == keyResults.get(j).getId()){
+                for (KeyResult keyResult : keyResults) {
+                    if (keyResultOlds.get(i).getId() == keyResult.getId()) {
                         check = false;
                         break;
                     }
                 }
-                if(check == false){
+                if(!check){
                     keyResultOlds.remove(keyResultOlds.get(i));
                 }
             }
