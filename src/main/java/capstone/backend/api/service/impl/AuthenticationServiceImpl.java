@@ -55,6 +55,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private ArrayList<VerificationCode> verificationList;
 
+    private DateUtils dateUtils;
+
     @Override
     public ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException {
         if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
@@ -101,7 +103,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String dobStr = userRegisterDto.getDob();
         Date dob;
         try {
-            dob = DateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
+            dob = dateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
         } catch (ParseException e) {
             logger.error("parse dob in register of user failed!");
             return ResponseEntity.badRequest().body(

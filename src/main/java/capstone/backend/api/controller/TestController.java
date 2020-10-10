@@ -18,7 +18,6 @@ public class TestController {
     public UserRegisterDto teacherRegisterApi() {
         Set<String> roles = new HashSet<>();
         roles.add(RoleUtils.ROLE_USER);
-        roles.add(RoleUtils.ROLE_TEACHER);
         return UserRegisterDto.builder()
                 .email("sontung199x@gmail.com")
                 .password("123445").dob("22/11/1998")

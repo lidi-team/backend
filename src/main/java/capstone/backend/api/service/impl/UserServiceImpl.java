@@ -7,6 +7,7 @@ import capstone.backend.api.entity.ApiResponse.UsersResponse;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.UserService;
+import capstone.backend.api.utils.DateUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -101,8 +101,8 @@ public class UserServiceImpl implements UserService {
                 .avatarUrl(user.getAvatarImage())
                 .dob(user.getDob()).gender(user.getGender())
                 .point(user.getPoint()).roles(roles)
-                .departmentResponse(new UserInforResponse().departmentResponse(department.getId(), department.getName()))
-                .projectResponses(new UserInforResponse().projectResponses(executes)).build();
+                .department(new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                .projects(new UserInforResponse().projectResponses(executes)).build();
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
