@@ -22,6 +22,4 @@ public interface KeyResultService {
 
     boolean validateKeyResults(List<KeyResultDto> keyResultDtos);
 
-    ResponseEntity<ApiResponse> deleteKeyResultById(long id);
-
 }
