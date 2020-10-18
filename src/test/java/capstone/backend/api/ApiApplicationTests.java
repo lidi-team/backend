@@ -48,19 +48,19 @@ class ApiApplicationTests {
 		this.mockMvc.perform(get("/api/test/studentRegister")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("mothaiba")));
 	}
-	@Test
-	public void test3() throws Exception {
-		this.mockMvc.perform(get("/api/test/studentRegister"))
-		.andDo(print())
-		.andExpect(status().isOk())
-		.andExpect(content().string(containsString("mothaiba")))
-		// .andExpect(content().json("{\"email\":\"sontung199x@gmail.com\",\"password\":\"123445\",\"dob\":\"22/11/1998\",\"fullName\":Le Son Tung\",\"phoneNumber\":\"0342529999\",\"gender\":\"male\",\"roles\":[\"ROLE_EMPLOYEE\"]}"));
-		.andExpect(jsonPath("$.email").value("nguyenminhchau@gmail.com"))
-		.andExpect(jsonPath("$.password").value("mothaiba"))
-		.andExpect(jsonPath("$.fullName").value("Nguyen Minh Chau"))
-		.andExpect(jsonPath("$.phoneNumber").value("0369829999"))
-		.andExpect(jsonPath("$.gender").value("female"));
-	}
+//	@Test
+//	public void test3() throws Exception {
+//		this.mockMvc.perform(get("/api/test/studentRegister"))
+//		.andDo(print())
+//		.andExpect(status().isOk())
+//		.andExpect(content().string(containsString("mothaiba")))
+//		// .andExpect(content().json("{\"email\":\"sontung199x@gmail.com\",\"password\":\"123445\",\"dob\":\"22/11/1998\",\"fullName\":Le Son Tung\",\"phoneNumber\":\"0342529999\",\"gender\":\"male\",\"roles\":[\"ROLE_EMPLOYEE\"]}"));
+//		.andExpect(jsonPath("$.email").value("nguyenminhchau@gmail.com"))
+//		.andExpect(jsonPath("$.password").value("mothaiba"))
+//		.andExpect(jsonPath("$.fullName").value("Nguyen Minh Chau"))
+//		.andExpect(jsonPath("$.phoneNumber").value("0369829999"))
+//		.andExpect(jsonPath("$.gender").value("female"));
+//	}
 
 	@Test
 	public void test4() throws Exception {
