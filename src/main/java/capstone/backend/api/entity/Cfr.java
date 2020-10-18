@@ -13,7 +13,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 @Table(name = "feedbacks")
-public class Feedback {
+public class Cfr {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +29,15 @@ public class Feedback {
 
     @ManyToOne
     @JoinColumn(name = "reportId")
-    private Report report;
+    private Objective report;
+
+    @ManyToOne
+    @JoinColumn(name = "objectiveId")
+    private Objective objective;
 
     private String content;
 
-    private boolean isLeaderToStaff;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "evaluationCriteriaId")

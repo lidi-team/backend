@@ -44,7 +44,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         Execute execute = executeService.getExecuteByUserIdAndProjectId(objectvieDto.getUserId(),objectvieDto.getProjectId());
         String alignmentObjectives = arrayToString(objectvieDto.getAlignmentObjectives());
-        String parentObjectives = arrayToString(objectvieDto.getParentId());
         Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
 
         Objective objective;
@@ -56,7 +55,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
                     .alignmentObjectives(alignmentObjectives)
-                    .parentId(parentObjectives)
+                    .parentId(objectvieDto.getParentId())
                     .execute(execute)
                     .status(objectvieDto.getStatus())
                     .type(objectvieDto.getType())
@@ -71,7 +70,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
                     .alignmentObjectives(alignmentObjectives)
-                    .parentId(parentObjectives)
+                    .parentId(objectvieDto.getParentId())
                     .execute(execute)
                     .status(objectvieDto.getStatus())
                     .type(objectvieDto.getType())
@@ -245,7 +244,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private ArrayList<Long> stringToArray(String string){
         ArrayList<Long> longArray = new ArrayList<>();
         if(string != null && !string.trim().isEmpty()){
-            String[] array = string.split(" ");
+            String[] array = string.split(",");
             for (String item: array) {
                 if(!item.trim().isEmpty()){
                     longArray.add(Long.parseLong(item.trim()));
@@ -256,9 +255,9 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     private String arrayToString(List<Long> longArray){
-        StringBuilder string = new StringBuilder(" ");
+        StringBuilder string = new StringBuilder(",");
         for (Long along: longArray) {
-            string.append(along).append(" ");
+            string.append(along).append(",");
         }
         return string.toString();
     }

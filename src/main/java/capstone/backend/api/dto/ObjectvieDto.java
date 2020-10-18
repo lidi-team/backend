@@ -17,7 +17,7 @@ public class ObjectvieDto {
     private String content;
     private long userId;
     private long projectId;
-    private List<Long> parentId;
+    private long parentId;
     private int type;
     private int weight;
     private long cycleId;

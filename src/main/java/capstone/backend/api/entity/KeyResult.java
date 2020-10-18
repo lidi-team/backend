@@ -28,6 +28,8 @@ public class KeyResult {
     @JoinColumn(name = "unitId")
     private UnitOfKeyResult unitOfKeyResult;
 
+    private long parentId;
+
     @NonNull
     private int fromValue;
 
@@ -44,6 +46,8 @@ public class KeyResult {
     private String content;
 
     private String reference;
+
+    private int weight;
 
     @Builder.Default
     private boolean isDelete = false;

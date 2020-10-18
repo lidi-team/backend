@@ -20,7 +20,7 @@ public class ChildObjectiveResponse {
     private int progress;
     private int changing;
     private long cycleId;
-    private String parentObjectiveId;
+    private long parentObjectiveId;
     private ArrayList<KeyResultOfChildObjective> keyResults;
     private ArrayList<Long> alignmentObjectives;
     private AuthorOfChildObjective author;

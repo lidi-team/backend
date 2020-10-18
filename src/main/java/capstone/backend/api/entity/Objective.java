@@ -17,7 +17,7 @@ public class Objective {
     private long id;
 
 
-    private String parentId;
+    private long parentId;
 
     @NonNull
     private String name;
