@@ -20,11 +20,6 @@ public class Report {
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "objectiveId")
-    private Objective objective;
-
-    @NonNull
-    @ManyToOne
     @JoinColumn(name = "authorizedUserId")
     private User authorizedUser;
 
@@ -35,13 +30,17 @@ public class Report {
     @NonNull
     private String content;
 
+    // "DRAFT","SUBMITTED","REJECTED","APPROVED"
     @NonNull
     private String status;
 
     @NonNull
-    private int point;
+    private String attachmentURL;
 
     private String history;
+
+    @NonNull
+    private int confidentLevel;
 
     @Builder.Default
     private boolean isDelete = false;

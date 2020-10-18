@@ -30,7 +30,7 @@ public class UserInforResponse {
 
     private int gender;
 
-    private int point;
+    private int star;
 
     private DepartmentResponse department;
 
@@ -40,17 +40,19 @@ public class UserInforResponse {
         return new DepartmentResponse(id, name);
     }
 
-    public ArrayList<ProjectResponse> projectResponses(ArrayList<Execute> executes) {
+    public ArrayList<ProjectResponse> projectResponses(ArrayList<Execute> executes) throws Exception{
         ArrayList<ProjectResponse> projectResponses = new ArrayList<>();
-        if(executes == null || executes.size() == 0){
-            return null;
+        if(executes != null && executes.size() > 0){
+            executes.forEach(execute -> {
+                if(execute.getProject() != null){
+                    projectResponses.add(ProjectResponse.builder()
+                            .id(execute.getProject().getId())
+                            .name(execute.getProject().getName())
+                            .isPm(execute.isPm()).build());
+                }
+            });
         }
-        executes.forEach(execute -> {
-            projectResponses.add(ProjectResponse.builder()
-                    .id(execute.getProject().getId())
-                    .name(execute.getProject().getName())
-                    .isPm(execute.isPm()).build());
-        });
+
         return projectResponses;
     }
 }

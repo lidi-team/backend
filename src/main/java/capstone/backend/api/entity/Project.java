@@ -28,9 +28,8 @@ public class Project {
     private String name;
 
     @NonNull
-    private String status;
-
-    private boolean isPm;
+    @Builder.Default
+    private boolean isClose = false;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull

@@ -1,6 +1,7 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -30,7 +31,9 @@ public class Comment {
     private String content;
 
     @NonNull
-    private Date createAt;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Builder.Default()
+    private Date createAt = new Date();
 
     private String history;
 

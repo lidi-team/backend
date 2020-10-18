@@ -25,23 +25,16 @@ public class KeyResult {
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "kindId")
-    private KindOfKeyResult kindOfKeyResult;
-
-    @NonNull
-    @ManyToOne
     @JoinColumn(name = "unitId")
     private UnitOfKeyResult unitOfKeyResult;
-
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User userReview;
 
     @NonNull
     private int fromValue;
 
     @NonNull
     private int toValue;
+
+    private int valueObtained;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
@@ -50,7 +43,7 @@ public class KeyResult {
     @NonNull
     private String content;
 
-    private String history;
+    private String reference;
 
     @Builder.Default
     private boolean isDelete = false;

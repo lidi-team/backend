@@ -2,14 +2,9 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.ObjectvieDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
-import capstone.backend.api.entity.ApiResponse.ObjectiveResponse;
-import capstone.backend.api.entity.KeyResult;
-import capstone.backend.api.entity.Objective;
-import capstone.backend.api.entity.User;
+import capstone.backend.api.entity.ApiResponse.*;
+import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.ObjectiveRepository;
-import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.ObjectiveService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -28,14 +23,16 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
 
-    private UserRepository userRepository;
-
     private ObjectiveRepository objectiveRepository;
 
     private KeyResultServiceImpl keyResultService;
 
+    private ExecuteServiceImpl executeService;
+
+    private CycleServiceImpl cycleService;
+
     @Override
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) {
+    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
             return ResponseEntity.badRequest().body(
@@ -45,19 +42,41 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
-        User user = userRepository.findById(objectvieDto.getUserId()).get();
+        Execute execute = executeService.getExecuteByUserIdAndProjectId(objectvieDto.getUserId(),objectvieDto.getProjectId());
+        String alignmentObjectives = arrayToString(objectvieDto.getAlignmentObjectives());
+        String parentObjectives = arrayToString(objectvieDto.getParentId());
+        Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
+
         Objective objective;
         if (objectvieDto.getId() == 0) {
             objective = Objective.builder()
                     .name(objectvieDto.getTitle())
                     .content(objectvieDto.getContent())
-                    .user(user).build();
+                    .cycle(cycle)
+                    .progress(objectvieDto.getProgress())
+                    .changing(objectvieDto.getChanging())
+                    .alignmentObjectives(alignmentObjectives)
+                    .parentId(parentObjectives)
+                    .execute(execute)
+                    .status(objectvieDto.getStatus())
+                    .type(objectvieDto.getType())
+                    .weight(objectvieDto.getWeight())
+                    .build();
         } else {
             objective = Objective.builder()
                     .id(objectvieDto.getId())
                     .name(objectvieDto.getTitle())
                     .content(objectvieDto.getContent())
-                    .user(user).build();
+                    .cycle(cycle)
+                    .progress(objectvieDto.getProgress())
+                    .changing(objectvieDto.getChanging())
+                    .alignmentObjectives(alignmentObjectives)
+                    .parentId(parentObjectives)
+                    .execute(execute)
+                    .status(objectvieDto.getStatus())
+                    .type(objectvieDto.getType())
+                    .weight(objectvieDto.getWeight())
+                    .build();
         }
         objective = objectiveRepository.save(objective);
         logger.info("save objective successful");
@@ -89,7 +108,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         ObjectiveResponse objectiveResponse = ObjectiveResponse.builder().id(objective.getId())
                 .title(objective.getName())
                 .content(objective.getContent())
-                .userId(objective.getUser().getId())
                 .keyResults(keyResultResponses)
                 .build();
 
@@ -136,8 +154,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .id(objective.getId())
                             .title(objective.getName())
                             .content(objective.getContent())
-                            .userId(objective.getUser().getId())
-                            .keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
+                            //.keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
                             .build()
             );
         });
@@ -164,8 +181,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .id(objective.getId())
                 .title(objective.getName())
                 .content(objective.getContent())
-                .userId(objective.getUser().getId())
-                .keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
+                //.keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
                 .build();
 
         return ResponseEntity.ok().body(
@@ -177,9 +193,73 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId,long cycleId) throws Exception {
+        Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
+        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentIdContains(cycleId," " + objectiveId + " ");
+        List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
+        ChildObjectiveResponse childObject = new ChildObjectiveResponse();
+        objectives.forEach(objective -> {
+            User user = objective.getExecute().getUser();
+            Project project = objective.getExecute().getProject();
+            ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
+            childObjectiveResponses.add(
+                    ChildObjectiveResponse.builder()
+                            .id(objective.getId())
+                            .title(objective.getName())
+                            .progress(objective.getProgress())
+                            .changing(objective.getChanging())
+                            .cycleId(objective.getCycle().getId())
+                            .parentObjectiveId(objective.getParentId())
+                            .keyResults(childObject.keyResultOfChildObjectives(keyResults))
+                            .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                            .author(childObject.authorOfChildObjective(user))
+                            .type(childObject.setObjectiveType(
+                                    objective.getType(),
+                                    project == null ? " " : project.getName()))
+                            .build()
+            );
+
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(
+                                DrillDownObjectiveResponse.builder()
+                                .childObjectives(childObjectiveResponses)
+                                .title(objectiveCurrent == null ? "Objective của công ty" : objectiveCurrent.getName())
+                                .build()
+                        )
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty() &&
                 !objectvieDto.getContent().trim().isEmpty() &&
                 objectvieDto.getUserId() != 0;
+    }
+
+    private ArrayList<Long> stringToArray(String string){
+        ArrayList<Long> longArray = new ArrayList<>();
+        if(string != null && !string.trim().isEmpty()){
+            String[] array = string.split(" ");
+            for (String item: array) {
+                if(!item.trim().isEmpty()){
+                    longArray.add(Long.parseLong(item.trim()));
+                }
+            }
+        }
+        return longArray;
+    }
+
+    private String arrayToString(List<Long> longArray){
+        StringBuilder string = new StringBuilder(" ");
+        for (Long along: longArray) {
+            string.append(along).append(" ");
+        }
+        return string.toString();
     }
 }

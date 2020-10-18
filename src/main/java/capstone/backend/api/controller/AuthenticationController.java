@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/common/api/auth")
+@RequestMapping("/api/auth")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -55,21 +55,6 @@ public class AuthenticationController {
             return authenticationService.register(userRegisterDto);
         } catch (Exception e) {
             logger.error("Register failed for user: " + userRegisterDto.getEmail());
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @PostMapping("/change-password")
-    public ResponseEntity<?> changePassword(@Valid @RequestBody UserChangePasswordDto userPassDto) {
-        try {
-            return authenticationService.changePassword(userPassDto);
-        } catch (Exception e) {
-            logger.error("change password failed for user: " + userPassDto.getEmail());
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()

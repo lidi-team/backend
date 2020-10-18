@@ -13,12 +13,17 @@ import java.util.List;
 public class ObjectvieDto {
 
     private long id;
-    @NotNull
     private String title;
-    @NotNull
     private String content;
-    @NotNull
     private long userId;
-
+    private long projectId;
+    private List<Long> parentId;
+    private int type;
+    private int weight;
+    private long cycleId;
+    private int changing;
+    private int progress;
+    private String status;
+    private List<Long> alignmentObjectives;
     private List<KeyResultDto> keyResults;
 }

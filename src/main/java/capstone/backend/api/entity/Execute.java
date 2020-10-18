@@ -28,7 +28,10 @@ public class Execute {
     @JoinColumn(name = "projectId")
     private Project project;
 
-    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "positionId")
+    private ProjectPosition position;
+
     @Builder.Default
     private boolean isPm = false;
 

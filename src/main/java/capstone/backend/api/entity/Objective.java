@@ -22,6 +22,7 @@ public class Objective {
     @NonNull
     private String name;
 
+    //type = 0 objective company, type = 1 objective project, type = 2 objective personal
     @NonNull
     private int type;
 
@@ -32,14 +33,10 @@ public class Objective {
 
     @NonNull
     @ManyToOne
-    @JoinColumn(name = "projectId")
-    private Project project;
+    @JoinColumn(name = "executeId")
+    private Execute execute;
 
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
-
+    // status = "RUNNING","FINISHED","DRAFT"
     @NonNull
     private String status;
 
@@ -50,6 +47,12 @@ public class Objective {
 
     @NonNull
     private String content;
+
+    private int progress;
+
+    private int changing;
+
+    private String alignmentObjectives;
 
     @Builder.Default
     private boolean isDelete = false;

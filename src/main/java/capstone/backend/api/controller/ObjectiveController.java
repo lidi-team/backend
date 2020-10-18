@@ -54,27 +54,13 @@ public class ObjectiveController {
         }
     }
 
-    @GetMapping(path = "/get/all")
-    public ResponseEntity<?> getlistObjective(){
+    @GetMapping(path = "/child-objectives")
+    public ResponseEntity<?> getListChildObjectiveByObjectiveId(@RequestParam(name = "objectiveId") long objectiveId,
+                                                                @RequestParam(name = "cycleId") long cycleId){
         try {
-            return objectiveService.getAllObjective();
+            return objectiveService.getListChildObjectiveByObjectiveId(objectiveId,cycleId);
         } catch (Exception e) {
-            logger.error("get list objective failed : ");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @GetMapping(path = "/get/{id}")
-    public ResponseEntity<?> getObjectiveByObjectiveId(@PathVariable(value = "id") long id){
-        try {
-            return objectiveService.getObjectiveByObjectiveId(id);
-        } catch (Exception e) {
-            logger.error("get objective failed : ");
+            logger.error("get list child objectives failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()

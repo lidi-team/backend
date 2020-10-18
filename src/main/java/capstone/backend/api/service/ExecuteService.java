@@ -8,4 +8,6 @@ import java.util.ArrayList;
 @Service
 public interface ExecuteService {
     ArrayList<Execute> getListExecuteByUserId(long id);
+
+    Execute getExecuteByUserIdAndProjectId(long userId, long projectId) throws Exception;
 }

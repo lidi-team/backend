@@ -13,4 +13,6 @@ import java.util.Optional;
 @Repository
 public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     Optional<Execute> findAllByUserId(long id);
+
+    Optional<Execute> findByUserIdAndProjectId(long userId,long projectId);
 }

@@ -1,9 +1,9 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.dto.KeyResultDto;
-import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
 import capstone.backend.api.entity.KeyResult;
 import capstone.backend.api.entity.Objective;
+import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.repository.KeyResultRepository;
 import capstone.backend.api.service.KeyResultService;
 import lombok.AllArgsConstructor;
@@ -22,29 +22,42 @@ public class KeyResultServiceImpl implements KeyResultService {
 
     private KeyResultRepository keyResultRepository;
 
+    private UnitOfKeyResultServiceImpl unitService;
+
     @Override
-    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) {
+    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) throws Exception{
 
         ArrayList<KeyResult> keyResults = new ArrayList<>();
 
         keyResultDtos.forEach(keyResultDto -> {
+            UnitOfKeyResult unit = unitService.getUnitById(keyResultDto.getId());
             KeyResult keyResult;
             if (keyResultDto.getId() == 0) {
                 keyResult = new KeyResult().builder()
+                        .fromValue(keyResultDto.getStartValue())
+                        .valueObtained(keyResultDto.getValueObtained())
+                        .toValue(keyResultDto.getTargetValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
+                        .unitOfKeyResult(unit)
+                        .reference(keyResultDto.getReference())
                         .build();
             } else {
                 keyResult = new KeyResult().builder()
                         .id(keyResultDto.getId())
+                        .fromValue(keyResultDto.getStartValue())
+                        .valueObtained(keyResultDto.getValueObtained())
+                        .toValue(keyResultDto.getTargetValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
+                        .unitOfKeyResult(unit)
+                        .reference(keyResultDto.getReference())
                         .build();
             }
             keyResults.add(keyResult);
         });
 
-        ArrayList<KeyResult> keyResultOlds = keyResultRepository.getKeyResultsByObjectiveId(objective.getId());
+        ArrayList<KeyResult> keyResultOlds = keyResultRepository.findAllByObjectiveId(objective.getId());
         if (keyResultOlds != null) {
             for (int i = 0; i < keyResultOlds.size(); i++) {
                 boolean check = true;
@@ -70,19 +83,8 @@ public class KeyResultServiceImpl implements KeyResultService {
     }
 
     @Override
-    public ArrayList<KeyResultResponse> getKeyResultsByObjectiveId(long id) {
-        ArrayList<KeyResultResponse> keyResultResponses = new ArrayList<>();
-        ArrayList<KeyResult> keyResults = keyResultRepository.getKeyResultsByObjectiveId(id);
-
-        if (keyResults != null) {
-            keyResults.forEach(keyResult -> {
-                keyResultResponses.add(new KeyResultResponse().builder()
-                        .id(keyResult.getId())
-                        .content(keyResult.getContent())
-                        .build());
-            });
-        }
-        return keyResultResponses;
+    public ArrayList<KeyResult> getKeyResultsByObjectiveId(long id) {
+        return keyResultRepository.findAllByObjectiveId(id);
     }
 
     @Override

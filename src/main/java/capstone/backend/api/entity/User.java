@@ -37,6 +37,7 @@ public class User {
     @NonNull
     private String fullName;
 
+    // gender = 1 male; gender = 2 female
     @NonNull
     private int gender;
 
@@ -47,14 +48,11 @@ public class User {
     @JoinColumn(name = "departmentId")
     private Department department;
 
-    @NonNull
-    @Builder.Default
-    private boolean isActive = true;
-
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date deactiveAt;
 
-    private int status;
+    @Builder.Default
+    private boolean isActive = true;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date createAt;
@@ -63,7 +61,7 @@ public class User {
     @Builder.Default
     private Date updateAt = new Date();
 
-    private int point;
+    private int star;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

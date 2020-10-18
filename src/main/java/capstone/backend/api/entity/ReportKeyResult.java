@@ -9,20 +9,26 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table( name = "KindOfKeyResult",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "name")
-        })
-public class KindOfKeyResult {
+@Table( name = "ReportKeyResults")
+public class ReportKeyResult {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NonNull
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "reportId")
+    private Report report;
 
-    private String description;
+    @ManyToOne
+    @JoinColumn(name = "keyResultId")
+    private KeyResult keyResult;
+
+    @NonNull
+    private int valueObtained;
+
+    @NonNull
+    private int problems;
 
     @Builder.Default
     private boolean isDelete = false;

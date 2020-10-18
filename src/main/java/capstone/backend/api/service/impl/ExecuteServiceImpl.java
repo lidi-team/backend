@@ -21,4 +21,9 @@ public class ExecuteServiceImpl implements ExecuteService {
                 .map(Arrays::asList).map(ArrayList::new)
                 .orElseGet(ArrayList::new);
     }
+
+    @Override
+    public Execute getExecuteByUserIdAndProjectId(long userId, long projectId) throws Exception {
+        return executeRepository.findByUserIdAndProjectId(userId, projectId).orElse(null);
+    }
 }

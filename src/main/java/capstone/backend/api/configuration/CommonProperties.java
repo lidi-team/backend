@@ -36,6 +36,18 @@ public class CommonProperties {
     private int CODE_UNDEFINE_ERROR;
     private int CODE_PARAM_FORMAT_INVALID;
     private int CODE_EXIST_VALUE;
+    private String EC_LEADER_TO_STAFF;
+    private String EC_STAFF_TO_LEADER;
+    private String OBJ_RUNNING;
+    private String OBJ_FINISHED;
+    private String OBJ_DRAFT;
+    private String R_DRAFT;
+    private String R_SUBMITTED;
+    private String R_REJECTED;
+    private String R_APPROVED;
+    private int OBJ_COMPANY;
+    private int OBJ_PROJECT;
+    private int OBJ_PERSONAL;
 
 
 }
