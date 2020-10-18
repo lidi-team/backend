@@ -1,28 +1,23 @@
 package capstone.backend.api.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class KeyResultDto {
 
     private long id;
-
-    private int startValue;
-
-    private int valueObtained;
-
-    private int targetedValue;
-
-    @NotNull
     private String content;
-
-    @NonNull
+    private int startValue;
     private long measureUnitId;
-
-    private String common;
+    private int targetValue;
+    private String reference;
+    private int valueObtained;
 }

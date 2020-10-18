@@ -9,17 +9,18 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "roles")
+@Builder
+@Table(name = "roles",
+        uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NonNull
     @Column(name = "name")
     private String name;
 
-    public Role(String name){
-        this.name = name;
-    }
+    @Builder.Default
+    private boolean isDelete = false;
 }

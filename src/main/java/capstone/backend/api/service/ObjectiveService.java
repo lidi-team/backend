@@ -7,17 +7,13 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ObjectiveService {
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto);
+    ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception;
 
-    public ResponseEntity<ApiResponse> deleteObjective(long id);
+    ResponseEntity<ApiResponse> deleteObjective(long id);
 
-    public ResponseEntity<ApiResponse> getAllObjective(long cycleId);
+    ResponseEntity<ApiResponse> getAllObjective();
 
-    public ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
+    ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
 
-    public ResponseEntity<ApiResponse> getObjectiveByUserId(long id);
-
-    public ResponseEntity<ApiResponse> searchByCycleIdAndUserId(long cycleId, long userId);
-
-    public ResponseEntity<ApiResponse> viewListObjectiveByCycleId(long cycleId);
+    ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId,long cycleId) throws Exception;
 }

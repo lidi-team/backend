@@ -16,21 +16,22 @@ public class RoleUtils {
     private static final Logger logger = LoggerFactory.getLogger(RoleUtils.class);
     private RoleRepository roleRepository;
 
-    public static final String ROLE_EMPLOYEE = "ROLE_EMPLOYEE";
+    public static final String ROLE_USER = "ROLE_USER";
 
     public Set<Role> getUserRoles(Set<String> strRoles){
         Set<Role> roles = new HashSet<>();
 
         if(strRoles == null){
-            Role role = roleRepository.findRoleByName(RoleUtils.ROLE_EMPLOYEE).get();
-            logger.info("add role EMPLOYEE");
+            Role role = roleRepository.findRoleByName(RoleUtils.ROLE_USER).get();
+            logger.info("add role USER");
             roles.add(role);
         } else{
             strRoles.forEach(role->{
-                Role roleDb = roleRepository.findRoleByName(role).get();
-                logger.info("add role "+ role);
-                roles.add(roleDb);
-
+                Role roleDb = roleRepository.findRoleByName(role).orElse(null);
+                if(roleDb != null){
+                    logger.info("add role "+role);
+                    roles.add(roleDb);
+                }
             });
         }
         return roles;

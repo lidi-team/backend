@@ -1,11 +1,10 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
@@ -21,10 +20,16 @@ public class Cycle {
     @NonNull
     private String name;
 
-    @NonNull
-    private Date startDate;
+    private String description;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @NonNull
+    private Date fromDate;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
     private Date endDate;
 
+    @Builder.Default
+    private boolean isDelete = false;
 }

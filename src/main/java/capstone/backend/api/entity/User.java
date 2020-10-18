@@ -1,7 +1,7 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
-import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -24,40 +24,54 @@ public class User {
 
     @NonNull
     @Email
-    @Column(name = "email")
     private String email;
 
     @NonNull
-    @Column(name = "password")
     private String password;
 
     @NonNull
-    @Column(name = "date_of_birth")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Column(name = "dateOfBirth")
     private Date dob;
 
     @NonNull
-    @Column(name = "full_name")
     private String fullName;
 
+    // gender = 1 male; gender = 2 female
     @NonNull
-    @NumberFormat(pattern = "(0)+([0-9]{9})")
-    @Column(name = "phone_number")
-    private String phoneNumber;
+    private int gender;
 
-    @NonNull
-    @Column(name = "gender")
-    private String  gender = "male";
-
-    @Column(name = "avatar_image")
     private String avatarImage;
 
 
+    @ManyToOne
+    @JoinColumn(name = "departmentId")
+    private Department department;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date deactiveAt;
+
+    @Builder.Default
+    private boolean isActive = true;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date createAt;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    @Builder.Default
+    private Date updateAt = new Date();
+
+    private int star;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
+            name = "userRoles",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId")
     )
+    @Builder.Default
     private Set<Role> roles = new HashSet<>();
 
+    @Builder.Default
+    private boolean isDelete = false;
 }

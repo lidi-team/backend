@@ -1,15 +1,22 @@
 package capstone.backend.api.utils.security;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.entity.security.TokenResponseInfo;
 import capstone.backend.api.service.impl.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
@@ -58,6 +65,27 @@ public class JwtUtils {
             logger.error("JWT claims string is empty!", e.getMessage());
         }
         return false;
+    }
+
+    public TokenResponseInfo generateTokenResponseInfo(String email, String password,AuthenticationManager authenticationManager) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email, password
+                )
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String jwt = generateJwtToken(authentication);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Set<String> roles = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toSet());
+
+
+
+        return TokenResponseInfo.builder()
+                .jwtToken(jwt)
+                .user(new TokenResponseInfo().userResponse(userDetails,roles)).build();
     }
 
 }

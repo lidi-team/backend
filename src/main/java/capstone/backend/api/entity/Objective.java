@@ -3,7 +3,6 @@ package capstone.backend.api.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
@@ -17,32 +16,44 @@ public class Objective {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private int progress;
 
-    private boolean isRootObjective;
+    private long parentId;
 
     @NonNull
-    private String title;
+    private String name;
+
+    //type = 0 objective company, type = 1 objective project, type = 2 objective personal
+    @NonNull
+    private int type;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "cycleId")
+    private Cycle cycle;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "executeId")
+    private Execute execute;
+
+    // status = "RUNNING","FINISHED","DRAFT"
+    @NonNull
+    private String status;
+
+    @NonNull
+    private int weight;
+
+    private String history;
 
     @NonNull
     private String content;
 
-    @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
-    private User user;
+    private int progress;
 
-    @NonNull
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cycleId")
-    private Cycle cycle;
+    private int changing;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL)
-     @JoinColumn(name = "parentObjectiveId")
-    private Objective parentObjective;
+    private String alignmentObjectives;
 
-    @OneToMany(mappedBy = "parentObjective", cascade={CascadeType.ALL})
-    private Set<Objective> objectives;
-
-
+    @Builder.Default
+    private boolean isDelete = false;
 }

@@ -1,19 +1,14 @@
 package capstone.backend.api.service.impl;
 
-import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.KeyResultDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
 import capstone.backend.api.entity.KeyResult;
-import capstone.backend.api.entity.MeasureUnit;
 import capstone.backend.api.entity.Objective;
+import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.repository.KeyResultRepository;
-import capstone.backend.api.repository.MeasureUnitRepository;
 import capstone.backend.api.service.KeyResultService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,44 +22,42 @@ public class KeyResultServiceImpl implements KeyResultService {
 
     private KeyResultRepository keyResultRepository;
 
-    private MeasureUnitRepository measureUnitRepository;
-
-    private CommonProperties commonProperties;
+    private UnitOfKeyResultServiceImpl unitService;
 
     @Override
-    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) {
+    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) throws Exception{
 
         ArrayList<KeyResult> keyResults = new ArrayList<>();
 
         keyResultDtos.forEach(keyResultDto -> {
-            MeasureUnit measureUnit = measureUnitRepository.findById(keyResultDto.getMeasureUnitId()).get();
+            UnitOfKeyResult unit = unitService.getUnitById(keyResultDto.getId());
             KeyResult keyResult;
             if (keyResultDto.getId() == 0) {
                 keyResult = new KeyResult().builder()
-                        .startValue(keyResultDto.getStartValue())
+                        .fromValue(keyResultDto.getStartValue())
                         .valueObtained(keyResultDto.getValueObtained())
-                        .targetedValue(keyResultDto.getTargetedValue())
+                        .toValue(keyResultDto.getTargetValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
-                        .measureUnit(measureUnit)
-                        .common(keyResultDto.getCommon())
+                        .unitOfKeyResult(unit)
+                        .reference(keyResultDto.getReference())
                         .build();
             } else {
                 keyResult = new KeyResult().builder()
                         .id(keyResultDto.getId())
-                        .startValue(keyResultDto.getStartValue())
+                        .fromValue(keyResultDto.getStartValue())
                         .valueObtained(keyResultDto.getValueObtained())
-                        .targetedValue(keyResultDto.getTargetedValue())
+                        .toValue(keyResultDto.getTargetValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
-                        .measureUnit(measureUnit)
-                        .common(keyResultDto.getCommon())
+                        .unitOfKeyResult(unit)
+                        .reference(keyResultDto.getReference())
                         .build();
             }
             keyResults.add(keyResult);
         });
 
-        ArrayList<KeyResult> keyResultOlds = keyResultRepository.getKeyResultsByObjectiveId(objective.getId());
+        ArrayList<KeyResult> keyResultOlds = keyResultRepository.findAllByObjectiveId(objective.getId());
         if (keyResultOlds != null) {
             for (int i = 0; i < keyResultOlds.size(); i++) {
                 boolean check = true;
@@ -90,37 +83,8 @@ public class KeyResultServiceImpl implements KeyResultService {
     }
 
     @Override
-    public ArrayList<KeyResultResponse> getKeyResultsByObjectiveId(long id) {
-        ArrayList<KeyResultResponse> keyResultResponses = new ArrayList<>();
-        ArrayList<KeyResult> keyResults = keyResultRepository.getKeyResultsByObjectiveId(id);
-
-        if (keyResults != null) {
-            keyResults.forEach(keyResult -> {
-                keyResultResponses.add(new KeyResultResponse().builder()
-                        .id(keyResult.getId())
-                        .common(keyResult.getCommon())
-                        .measureUnitId(keyResult.getMeasureUnit().getId())
-                        .startValue(keyResult.getStartValue())
-                        .valueObtained(keyResult.getValueObtained())
-                        .targetedValue(keyResult.getTargetedValue())
-                        .content(keyResult.getContent())
-                        .build());
-            });
-        }
-        return keyResultResponses;
-    }
-
-
-    @Override
-    public ResponseEntity<ApiResponse> deleteKeyResultById(long id) {
-        keyResultRepository.deleteKeyResultsById(id);
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .build()
-        );
+    public ArrayList<KeyResult> getKeyResultsByObjectiveId(long id) {
+        return keyResultRepository.findAllByObjectiveId(id);
     }
 
     @Override
@@ -130,4 +94,6 @@ public class KeyResultServiceImpl implements KeyResultService {
                         keyResultDto -> keyResultDto.getContent().trim().isEmpty()
                 );
     }
+
+
 }

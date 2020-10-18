@@ -9,9 +9,5 @@ import java.util.List;
 @Repository
 public interface ObjectiveRepository extends JpaRepository<Objective,Long> {
 
-    List<Objective> findAllByUserId(long id);
-
-    List<Objective> findAllByCycleIdAndUserId(long cycleId, long userId);
-
-    List<Objective> findAllByCycleId(long id);
+    List<Objective> findAllByCycleIdAndParentIdContains(long cycleId,String id);
 }

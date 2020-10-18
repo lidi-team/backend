@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public interface KeyResultService {
 
-    ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective);
+    ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) throws Exception;
 
     void deleteKeyResultByObjectiveId(long id);
 
-    ArrayList<KeyResultResponse> getKeyResultsByObjectiveId(long id);
+    ArrayList<KeyResult> getKeyResultsByObjectiveId(long id);
 
     boolean validateKeyResults(List<KeyResultDto> keyResultDtos);
 

@@ -1,7 +1,10 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.*;
+import capstone.backend.api.dto.ResetPasswordDto;
+import capstone.backend.api.dto.UserLoginDto;
+import capstone.backend.api.dto.UserRegisterDto;
+import capstone.backend.api.dto.VerifyCodeDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.VerifyCodeResponse;
 import capstone.backend.api.entity.Role;
@@ -10,7 +13,6 @@ import capstone.backend.api.entity.VerificationCode;
 import capstone.backend.api.entity.security.TokenResponseInfo;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.AuthenticationService;
-import capstone.backend.api.service.impl.security.UserDetailsImpl;
 import capstone.backend.api.utils.DateUtils;
 import capstone.backend.api.utils.RoleUtils;
 import capstone.backend.api.utils.security.JwtUtils;
@@ -20,14 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.mail.MessagingException;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,8 +35,6 @@ import java.util.stream.Collectors;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
-
-    private AuthenticationManager authenticationManager;
 
     private UserRepository userRepository;
 
@@ -54,6 +50,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private ArrayList<VerificationCode> verificationList;
 
+    private DateUtils dateUtils;
+
+    private AuthenticationManager authenticationManager;
+
     @Override
     public ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException {
         if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         }
 
-        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword());
+        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword(),authenticationManager);
 
         logger.info("authenticate Ok!");
         return ResponseEntity.ok().body(
@@ -100,7 +100,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String dobStr = userRegisterDto.getDob();
         Date dob;
         try {
-            dob = DateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
+            dob = dateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
         } catch (ParseException e) {
             logger.error("parse dob in register of user failed!");
             return ResponseEntity.badRequest().body(
@@ -117,12 +117,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         .email(userRegisterDto.getEmail())
                         .password(passwordEncode).dob(dob)
                         .fullName(userRegisterDto.getFullName())
-                        .phoneNumber(userRegisterDto.getPhoneNumber())
-                        .gender(userRegisterDto.getGender())
-                        .roles(roles).build());
+                        .roles(roles)
+                        .build());
         logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
 
-        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userRegisterDto.getEmail(), userRegisterDto.getPassword());
+        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(
+                userRegisterDto.getEmail(), userRegisterDto.getPassword(),authenticationManager);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -133,44 +133,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<?> changePassword(UserChangePasswordDto userPassDto) throws AuthenticationException {
-        if (!validateChangePasswordInformation(userPassDto)) {
-            logger.error("Parameter invalid!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
-            );
-        }
-
-        User user = userRepository.findByEmail(userPassDto.getEmail()).get();
-
-        if (!passwordEncoder.matches(userPassDto.getOldPassword(), user.getPassword())) {
-            logger.error("Old password is incorrect!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
-            );
-        }
-
-        String newPassword = passwordEncoder.encode(userPassDto.getNewPassword());
-        user.setPassword(newPassword);
-        userRepository.save(user);
-        logger.info("update successful!");
-
-        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(userPassDto.getEmail(), userPassDto.getNewPassword());
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(tokenResponseInfo).build()
-        );
-    }
-
-    @Override
-    public ResponseEntity<?> getVerifyCode(String email) throws AuthenticationException, MessagingException {
+    public ResponseEntity<?> getVerifyCode(String email) throws Exception {
         if (StringUtils.isEmpty(email.trim())) {
             logger.error("Parameter invalid!");
             return ResponseEntity.badRequest().body(
@@ -280,7 +243,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
         logger.info("Updated password!");
 
-        TokenResponseInfo tokenResponseInfo = generateTokenResponseInfo(resetPass.getEmail(), resetPass.getNewPassword());
+        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(
+                resetPass.getEmail(), resetPass.getNewPassword(),authenticationManager);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -291,67 +255,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     private boolean validateRegisterInformation(UserRegisterDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getPassword().trim().isEmpty() ||
-                user.getFullName().trim().isEmpty() ||
-                user.getDob().trim().isEmpty() ||
-                user.getPhoneNumber().trim().isEmpty() ||
-                user.getGender().trim().isEmpty()) {
-            return false;
-        }
-        return true;
-    }
-
-    private boolean validateChangePasswordInformation(UserChangePasswordDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getOldPassword().trim().isEmpty() ||
-                user.getNewPassword().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getPassword().trim().isEmpty() &&
+                !user.getFullName().trim().isEmpty() &&
+                !user.getDob().trim().isEmpty() &&
+                !user.getPhoneNumber().trim().isEmpty();
     }
 
     private boolean validateVerifyCodeInformation(VerifyCodeDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getVerifyCode().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getVerifyCode().trim().isEmpty();
     }
 
     private boolean validateResetPasswordInformation(ResetPasswordDto user) {
-        if (user.getEmail().trim().isEmpty() ||
-                user.getResetCode().trim().isEmpty() ||
-                user.getNewPassword().trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !user.getEmail().trim().isEmpty() &&
+                !user.getResetCode().trim().isEmpty() &&
+                !user.getNewPassword().trim().isEmpty();
     }
 
     private String generateRandomIntegerCode(int codeSize) {
-        String code = "";
+        StringBuilder code = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < codeSize; i++) {
-            code += random.nextInt(9);
+            code.append(random.nextInt(9));
         }
-        return code;
-    }
-
-    private TokenResponseInfo generateTokenResponseInfo(String email, String password) {
-
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        email, password
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        Set<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toSet());
-
-        return new TokenResponseInfo(jwt, userDetails.getUsername(), roles);
+        return code.toString();
     }
 
     private VerificationCode findVerificationCodeByUserId(Long userId) {

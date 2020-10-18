@@ -12,8 +12,14 @@ import java.util.Date;
 public class DateUtils {
     public static final String PATTERN_ddMMyyyy = "dd/MM/yyyy";
 
-    public static Date stringToDate(String dateStr, String pattern) throws ParseException {
+    public Date stringToDate(String dateStr, String pattern) throws ParseException {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(dateStr);
+    }
+
+    public Date formatDate(Date date, String pattern) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String dateStr = date.toString();
         return simpleDateFormat.parse(dateStr);
     }
 }

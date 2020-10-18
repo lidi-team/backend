@@ -22,7 +22,9 @@ public class UserRegisterDto {
     @NotNull
     private String phoneNumber;
     @NotNull
-    private String gender;
+    private int gender;
+
+    private String avatarUrl;
 
     private Set<String> roles;
 }
