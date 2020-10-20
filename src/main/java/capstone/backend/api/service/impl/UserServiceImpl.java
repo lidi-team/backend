@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -119,4 +120,104 @@ public class UserServiceImpl implements UserService {
                 !user.getNewPassword().trim().isEmpty();
     }
 
+    public ResponseEntity<?> getAllUsers(String jwtToken) throws Exception {
+        List<User> users = userRepository.findAll();
+        List<UserInforResponse> listUserInforResponse = new ArrayList<>();
+
+        users.forEach(user -> {
+            try {
+                Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
+                Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+                ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+
+                UserInforResponse userInforResponse = UserInforResponse.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .fullName(user.getFullName())
+                        .avatarUrl(user.getAvatarImage())
+                        .dob(user.getDob()).gender(user.getGender())
+                        .star(user.getStar()).roles(roles)
+                        .department(department == null ? null
+                                : new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                        .projects(new UserInforResponse().projectResponses(executes)).build();
+
+                listUserInforResponse.add(userInforResponse);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(listUserInforResponse).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getUserInformationById(long id, String jwtToken) throws Exception {
+        User user = userRepository.findById(id).orElse(null);
+        logger.info("Error");
+        if (user == null) {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+                            .message("Ngu").build()
+            );
+        }
+
+        Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
+        Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+        ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+
+        UserInforResponse userInforResponse = UserInforResponse.builder().id(user.getId())
+                .email(user.getEmail())
+                .fullName(user.getFullName())
+                .avatarUrl(user.getAvatarImage())
+                .dob(user.getDob()).gender(user.getGender())
+                .star(user.getStar()).roles(roles)
+                .department(department == null ? null
+                        : new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                .projects(new UserInforResponse().projectResponses(executes)).build();
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(userInforResponse).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getNumberStaff(String jwtToken) throws Exception {
+        List<User> users = userRepository.findAll();
+        List<UserInforResponse> listUserInforResponse = new ArrayList<>();
+
+        users.forEach(user -> {
+            try {
+                Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
+                Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+                ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+                if(roles.contains("ROLE_USER") || roles.contains("ROLE_PM")) {
+
+                    UserInforResponse userInforResponse = UserInforResponse.builder()
+                            .id(user.getId())
+                            .email(user.getEmail())
+                            .fullName(user.getFullName())
+                            .avatarUrl(user.getAvatarImage())
+                            .dob(user.getDob()).gender(user.getGender())
+                            .star(user.getStar()).roles(roles)
+                            .department(department == null ? null
+                                    : new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                            .projects(new UserInforResponse().projectResponses(executes)).build();
+
+                    listUserInforResponse.add(userInforResponse);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(listUserInforResponse.size()).build()
+        );
+    }
 }

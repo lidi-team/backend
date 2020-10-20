@@ -34,14 +34,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="APIs Document">
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/configuration/Swagger2Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/RoleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/RoleService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/RoleServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/RoleRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/RoleRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,8 +65,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Interface" />
         <option value="HTML File" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -112,6 +112,10 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -133,6 +137,53 @@
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="apiserver" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="apiserver" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -203,15 +254,20 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="275" y="22" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1599578884491" />
+    <state x="448" y="193" key="#Project_Structure" timestamp="1603190767549">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="448" y="193" key="#Project_Structure/0.23.1920.1177@0.23.1920.1177" timestamp="1603190767549" />
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602994885599">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1602994885599" />
-    <state x="686" y="104" key="#com.intellij.ide.util.MemberChooser" timestamp="1599667364838">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state x="686" y="141" key="#com.intellij.ide.util.MemberChooser" timestamp="1603194089618">
+      <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state x="686" y="104" key="#com.intellij.ide.util.MemberChooser/-1366.0.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1599667364838" />
     <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1599578235151" />
+    <state x="686" y="141" key="#com.intellij.ide.util.MemberChooser/0.23.1920.1177@0.23.1920.1177" timestamp="1603194089618" />
     <state x="583" y="445" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1599663605605">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -233,26 +289,26 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1878" height="324" key="GridCell.Tab.0.bottom" timestamp="1603180821432">
+    <state width="1878" height="295" key="GridCell.Tab.0.bottom" timestamp="1603196745143">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="324" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821432" />
-    <state width="1878" height="324" key="GridCell.Tab.0.center" timestamp="1603180821431">
+    <state width="1878" height="295" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1603196745143" />
+    <state width="1878" height="295" key="GridCell.Tab.0.center" timestamp="1603196745142">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="324" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821431" />
-    <state width="1878" height="324" key="GridCell.Tab.0.left" timestamp="1603180821431">
+    <state width="1878" height="295" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1603196745142" />
+    <state width="1878" height="295" key="GridCell.Tab.0.left" timestamp="1603196745141">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
-    <state width="1878" height="324" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821431" />
-    <state width="1878" height="324" key="GridCell.Tab.0.right" timestamp="1603180821432">
+    <state width="1878" height="295" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1603196745141" />
+    <state width="1878" height="295" key="GridCell.Tab.0.right" timestamp="1603196745142">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="324" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821432" />
+    <state width="1878" height="295" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1603196745142" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
@@ -305,10 +361,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1366.728@0.0.1366.728" timestamp="1598515779060" />
-    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603180852895">
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603184232301">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
-    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.1177@0.23.1920.1177" timestamp="1603180852895" />
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.1177@0.23.1920.1177" timestamp="1603184232301" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1599884553235">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
