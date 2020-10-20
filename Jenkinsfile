@@ -4,7 +4,7 @@ pipeline {
         stage('Build') { 
             steps {
                 // sh 'export A=$(lsof -t -i:8082)'
-                // sh 'kill $A'
+                sh 'bash ./pre.sh'
                 sh 'mvn -B -DskipTests clean install' 
             }
         }
@@ -12,7 +12,7 @@ pipeline {
             steps {
                 // sh 'cd ./target'
                 // sh 'pwd'
-                sh 'java -jar ./target/api-0.0.1-SNAPSHOT.jar &' 
+                sh 'java -jar ./target/api-0.0.1-SNAPSHOT.jar' 
             }
         }
     }
