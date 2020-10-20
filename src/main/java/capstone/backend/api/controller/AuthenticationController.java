@@ -4,6 +4,8 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.AuthenticationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
+@Api(value = "Đăng nhập, xác thực")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -27,6 +30,7 @@ public class AuthenticationController {
     private CommonProperties commonProperties;
 
     @PostMapping("/signin")
+    @ApiOperation(value = "Đăng nhập")
     public ResponseEntity<?> authenticate(@Valid @RequestBody UserLoginDto userLoginDto) {
         try {
             return authenticationService.authenticate(userLoginDto);
@@ -50,6 +54,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
+    @ApiOperation(value = "Đăng ký")
     public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
         try {
             return authenticationService.register(userRegisterDto);

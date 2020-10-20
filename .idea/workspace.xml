@@ -1,8 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="">
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="APIs Document">
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/configuration/Swagger2Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/AuthenticationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/TestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/security/WebSecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,19 +72,31 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="developer" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$USER_HOME$/.m2/wrapper/dists/apache-maven-3.6.3-bin/1iopthnavndlasol9gbrbg6bf2/apache-maven-3.6.3" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
   <component name="ProjectId" id="1gdmFJaXaQXqvUwtpYfT82TKwVK" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -54,6 +104,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -62,6 +113,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -71,7 +123,20 @@
       <recent name="C:\Users\Tung 2508\Desktop\apiserver\src\main\java\capstone\backend\api\exception" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ApiApplication">
+    <configuration name="ApiApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="capstone.backend.api.ApiApplication" />
+      <module name="api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="capstone.backend.api.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <module name="apiserver" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="capstone.backend.api.ApiApplication" />
@@ -79,7 +144,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ApiApplication" />
+      </list>
+    </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -103,17 +174,39 @@
       <workItem from="1599878910119" duration="19869000" />
       <workItem from="1600006958610" duration="2018000" />
       <workItem from="1600059422632" duration="12189000" />
+      <workItem from="1602994701666" duration="59000" />
+      <workItem from="1603165179883" duration="6139000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="APIs Document" />
+    <option name="LAST_COMMIT_MESSAGE" value="APIs Document" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#Notifications" timestamp="1599578884491">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="275" y="22" key="#Notifications/0.0.1366.728@0.0.1366.728" timestamp="1599578884491" />
+    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1602994885599">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1602994885599" />
     <state x="686" y="104" key="#com.intellij.ide.util.MemberChooser" timestamp="1599667364838">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -140,22 +233,26 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1323" height="159" key="GridCell.Tab.0.bottom" timestamp="1600062721065">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1878" height="324" key="GridCell.Tab.0.bottom" timestamp="1603180821432">
+      <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1323" height="159" key="GridCell.Tab.0.center" timestamp="1600062721065">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1878" height="324" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821432" />
+    <state width="1878" height="324" key="GridCell.Tab.0.center" timestamp="1603180821431">
+      <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1323" height="159" key="GridCell.Tab.0.left" timestamp="1600062721064">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1878" height="324" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821431" />
+    <state width="1878" height="324" key="GridCell.Tab.0.left" timestamp="1603180821431">
+      <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
-    <state width="1323" height="159" key="GridCell.Tab.0.right" timestamp="1600062721065">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state width="1878" height="324" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821431" />
+    <state width="1878" height="324" key="GridCell.Tab.0.right" timestamp="1603180821432">
+      <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
+    <state width="1878" height="324" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1603180821432" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
@@ -200,10 +297,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="200" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1599885956073" />
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2" timestamp="1603181955505">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1603181955505" />
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598515779060">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1366.728@0.0.1366.728" timestamp="1598515779060" />
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1603180852895">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.1177@0.23.1920.1177" timestamp="1603180852895" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1599884553235">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
