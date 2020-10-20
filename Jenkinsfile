@@ -1,12 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Pre') { 
-            steps {
-                sh 'docker container stop my-jenkins'
-                sh 'docker container prune --force my-jenkins'
-            }
-        }
+        // stage('Pre') { 
+        //     steps {
+        //         sh 'docker container stop my-jenkins'
+        //         sh 'docker container prune --force my-jenkins'
+        //     }
+        // }
 
         stage('Build') { 
             steps {
