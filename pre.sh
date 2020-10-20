@@ -1,3 +1,4 @@
 #!/bin/bash
 set +x
-kill $(lsof -t -i:8082)
+export A=$(lsof -t -i:8082)
+kill $A
