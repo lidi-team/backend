@@ -51,10 +51,4 @@ public class TestController {
     public String userApi() {
         return "User API";
     }
-
-    @PreAuthorize("hasRole('ROLE_TEACHER')")
-    @GetMapping("teacher")
-    public String teacherApi() {
-        return "Teacher API";
-    }
 }
