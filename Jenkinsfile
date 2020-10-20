@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'sudo kill $(lsof -t -i:8082)'
+                sh 'kill $(lsof -t -i:8082)'
                 sh 'mvn -B -DskipTests clean install' 
             }
         }
