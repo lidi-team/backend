@@ -4,6 +4,9 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.ObjectvieDto;
 import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.*;
+import capstone.backend.api.entity.ApiResponse.Objective.ChildObjectiveResponse;
+import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
+import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveTitleResponse;
 import capstone.backend.api.repository.ObjectiveRepository;
 import capstone.backend.api.service.ObjectiveService;
 import lombok.AllArgsConstructor;
@@ -77,8 +80,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .weight(objectvieDto.getWeight())
                     .build();
         }
-        objective = objectiveRepository.save(objective);
-        logger.info("save objective successful");
 
         ArrayList<KeyResultResponse> keyResultResponses = new ArrayList<>();
 
@@ -91,6 +92,9 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                 .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
                 );
             } else {
+                objective = objectiveRepository.save(objective);
+                logger.info("save objective successful");
+
                 ArrayList<KeyResult> keyResults =
                         keyResultService.addKeyResults(objectvieDto.getKeyResults(), objective);
                 keyResults.forEach(keyResult -> {
@@ -98,6 +102,11 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             KeyResultResponse.builder()
                                     .id(keyResult.getId())
                                     .content(keyResult.getContent())
+                                    .measureUnitId(keyResult.getUnitOfKeyResult().getId())
+                                    .startValue(keyResult.getFromValue())
+                                    .targetedValue(keyResult.getToValue())
+                                    .valueObtained(keyResult.getValueObtained())
+                                    .reference(keyResult.getReference())
                                     .build());
                 });
                 logger.info("save key results successful");
@@ -107,6 +116,17 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         ObjectiveResponse objectiveResponse = ObjectiveResponse.builder().id(objective.getId())
                 .title(objective.getName())
                 .content(objective.getContent())
+                .userId(objective.getExecute().getUser().getId())
+                .projectId(objective.getExecute().getProject() == null ? 0 :
+                            objective.getExecute().getProject().getId())
+                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                .changing(objective.getChanging())
+                .cycleId(objective.getCycle().getId())
+                .parentId(objective.getParentId())
+                .progress(objective.getProgress())
+                .status(objective.getStatus())
+                .type(objective.getType())
+                .weight(objective.getWeight())
                 .keyResults(keyResultResponses)
                 .build();
 
@@ -143,59 +163,9 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getAllObjective() {
-        List<Objective> objectives = objectiveRepository.findAll();
-        List<ObjectiveResponse> objectiveResponses = new ArrayList<>();
-
-        objectives.forEach(objective -> {
-            objectiveResponses.add(
-                    ObjectiveResponse.builder()
-                            .id(objective.getId())
-                            .title(objective.getName())
-                            .content(objective.getContent())
-                            //.keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
-                            .build()
-            );
-        });
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(objectiveResponses)
-                        .build()
-        );
-    }
-
-    @Override
-    public ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id) {
-        Objective objective = objectiveRepository.findById(id).orElse(null);
-        if (objective == null) {
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
-        }
-        ObjectiveResponse objectiveResponse = ObjectiveResponse.builder()
-                .id(objective.getId())
-                .title(objective.getName())
-                .content(objective.getContent())
-                //.keyResults(keyResultService.getKeyResultsByObjectiveId(objective.getId()))
-                .build();
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(objectiveResponse)
-                        .build()
-        );
-    }
-
-    @Override
     public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId,long cycleId) throws Exception {
         Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
-        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentIdContains(cycleId," " + objectiveId + " ");
+        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId,objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
         ChildObjectiveResponse childObject = new ChildObjectiveResponse();
         objectives.forEach(objective -> {
@@ -231,6 +201,28 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                 .title(objectiveCurrent == null ? "Objective của công ty" : objectiveCurrent.getName())
                                 .build()
                         )
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception {
+        List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
+
+        List<ObjectiveTitleResponse> responses = new ArrayList<>();
+        objectives.forEach(objective -> {
+            responses.add(
+                    ObjectiveTitleResponse.builder()
+                    .id(objective.getId())
+                    .title(objective.getName())
+                    .build()
+            );
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
                         .build()
         );
     }

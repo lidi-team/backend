@@ -15,9 +15,10 @@ public class KeyResultDto {
 
     private long id;
     private String content;
-    private int startValue;
+    private long parentId;
+    private double startValue;
     private long measureUnitId;
-    private int targetValue;
+    private double targetValue;
     private String reference;
-    private int valueObtained;
+    private double valueObtained;
 }

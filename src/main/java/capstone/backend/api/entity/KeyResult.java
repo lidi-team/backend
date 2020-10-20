@@ -2,6 +2,7 @@ package capstone.backend.api.entity;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -31,15 +32,17 @@ public class KeyResult {
     private long parentId;
 
     @NonNull
-    private int fromValue;
+    @NumberFormat(pattern = "#.##")
+    private double fromValue;
 
     @NonNull
-    private int toValue;
+    @NumberFormat(pattern = "#.##")
+    private double toValue;
 
-    private int valueObtained;
+    @NumberFormat(pattern = "#.##")
+    private double valueObtained;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    @NonNull
     private Date deadline;
 
     @NonNull
@@ -47,7 +50,8 @@ public class KeyResult {
 
     private String reference;
 
-    private int weight;
+    @NumberFormat(pattern = "#.##")
+    private double weight;
 
     @Builder.Default
     private boolean isDelete = false;

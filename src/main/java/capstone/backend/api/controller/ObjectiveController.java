@@ -69,4 +69,19 @@ public class ObjectiveController {
             );
         }
     }
+
+    @GetMapping(path = "/list-okr/{userId}")
+    public ResponseEntity<?> getListObjectiveTitleByUserId(@PathVariable(name = "userId") long userId){
+        try {
+            return objectiveService.getListObjectiveTitleByUserId(userId);
+        } catch (Exception e) {
+            logger.error("get list objective titles failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 }

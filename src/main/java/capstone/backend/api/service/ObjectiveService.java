@@ -11,9 +11,7 @@ public interface ObjectiveService {
 
     ResponseEntity<ApiResponse> deleteObjective(long id);
 
-    ResponseEntity<ApiResponse> getAllObjective();
-
-    ResponseEntity<ApiResponse> getObjectiveByObjectiveId(long id);
-
     ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId,long cycleId) throws Exception;
+
+    ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception;
 }

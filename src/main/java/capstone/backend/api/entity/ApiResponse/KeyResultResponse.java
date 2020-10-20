@@ -11,11 +11,11 @@ import javax.validation.constraints.NotNull;
 public class KeyResultResponse {
     private long id;
 
-    private int startValue;
+    private double startValue;
 
-    private int valueObtained;
+    private double valueObtained;
 
-    private int targetedValue;
+    private double targetedValue;
 
     @NotNull
     private String content;
@@ -23,6 +23,6 @@ public class KeyResultResponse {
     @NonNull
     private long measureUnitId;
 
-    private String common;
+    private String reference;
 
 }

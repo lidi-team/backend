@@ -22,8 +22,9 @@ public class UnitOfKeyResult {
     @NonNull
     private String name;
 
+    private String preset;
 
-    private String description;
+    private int measureIndex;
 
     @Builder.Default
     private boolean isDelete = false;

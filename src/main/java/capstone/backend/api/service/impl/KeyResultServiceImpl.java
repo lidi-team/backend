@@ -32,7 +32,7 @@ public class KeyResultServiceImpl implements KeyResultService {
         ArrayList<KeyResult> keyResults = new ArrayList<>();
 
         keyResultDtos.forEach(keyResultDto -> {
-            UnitOfKeyResult unit = unitService.getUnitById(keyResultDto.getId());
+            UnitOfKeyResult unit = unitService.getUnitById(keyResultDto.getMeasureUnitId());
             KeyResult keyResult;
             if (keyResultDto.getId() == 0) {
                 keyResult = new KeyResult().builder()

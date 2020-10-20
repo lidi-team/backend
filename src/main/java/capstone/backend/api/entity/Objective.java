@@ -1,6 +1,7 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 
@@ -41,16 +42,19 @@ public class Objective {
     private String status;
 
     @NonNull
-    private int weight;
+    @NumberFormat(pattern = "#.#")
+    private double weight;
 
     private String history;
 
     @NonNull
     private String content;
 
-    private int progress;
+    @NumberFormat(pattern = "#.#")
+    private double progress;
 
-    private int changing;
+    @NumberFormat(pattern = "#.#")
+    private double changing;
 
     private String alignmentObjectives;
 

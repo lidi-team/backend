@@ -3,26 +3,26 @@ package capstone.backend.api.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@Table(name = "measureUnits")
-public class MeasureUnit {
+@Table(name = "lessons")
+public class Lesson {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NonNull
-    private String preset;
+    private String title;
 
     @NonNull
-    private String type;
+    private String content;
 
-    @NonNull
-    private int measureIndex;
+    private int lessonIndex;
 
+    private String slug;
 }

@@ -1,4 +1,4 @@
-package capstone.backend.api.entity.ApiResponse;
+package capstone.backend.api.entity.ApiResponse.Objective;
 
 import capstone.backend.api.entity.KeyResult;
 import capstone.backend.api.entity.User;
@@ -17,8 +17,8 @@ public class ChildObjectiveResponse {
     private long id;
     private String title;
     private String type;
-    private int progress;
-    private int changing;
+    private double progress;
+    private double changing;
     private long cycleId;
     private long parentObjectiveId;
     private ArrayList<KeyResultOfChildObjective> keyResults;
@@ -69,9 +69,9 @@ public class ChildObjectiveResponse {
 @AllArgsConstructor
 class KeyResultOfChildObjective {
     private long id;
-    private int startValue;
-    private int valueObtained;
-    private int targetValue;
+    private double startValue;
+    private double valueObtained;
+    private double targetValue;
     private String content;
     private String reference;
     private long measureUnitId;

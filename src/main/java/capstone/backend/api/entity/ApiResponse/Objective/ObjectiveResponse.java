@@ -1,16 +1,18 @@
-package capstone.backend.api.dto;
+package capstone.backend.api.entity.ApiResponse.Objective;
 
+import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class ObjectvieDto {
+public class ObjectiveResponse {
 
     private long id;
     private String title;
@@ -25,5 +27,6 @@ public class ObjectvieDto {
     private double progress;
     private String status;
     private List<Long> alignmentObjectives;
-    private List<KeyResultDto> keyResults;
+    private List<KeyResultResponse> keyResults;
+
 }
