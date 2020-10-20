@@ -10,7 +10,7 @@ pipeline {
             steps {
                 // sh 'cd ./target'
                 // sh 'pwd'
-                sh 'java -jar ./target/api-0.0.1-SNAPSHOT.jar &' 
+                sh 'java -jar ./target/api-0.0.1-SNAPSHOT.jar' 
             }
         }
     }
