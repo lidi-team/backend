@@ -3,7 +3,8 @@ pipeline {
     stages {
         stage('Build') { 
             steps {
-                sh 'kill $(lsof -t -i:8082)'
+                sh 'export A=$(lsof -t -i:8082)'
+                sh 'kill $A'
                 sh 'mvn -B -DskipTests clean install' 
             }
         }
