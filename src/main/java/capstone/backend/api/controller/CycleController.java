@@ -23,10 +23,10 @@ public class CycleController {
 
     CycleServiceImpl cycleService;
 
-    @GetMapping(path = "/current")
-    public ResponseEntity<?> getCurrentCycle(){
+    @GetMapping(path = "/current/{id}")
+    public ResponseEntity<?> getCurrentCycle(@PathVariable(value = "id") long id){
         try {
-            return cycleService.getCurrentCycle();
+            return cycleService.getCurrentCycle(id);
         } catch (Exception e) {
             logger.error("get current cycle failed");
             logger.error(e.getMessage());

@@ -12,6 +12,6 @@ public interface CycleService {
 
     ResponseEntity<ApiResponse> getListMetaDataCycle();
 
-    ResponseEntity<ApiResponse> getCurrentCycle();
+    ResponseEntity<ApiResponse> getCurrentCycle(long id);
 
 }

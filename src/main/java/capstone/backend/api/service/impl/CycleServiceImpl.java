@@ -49,15 +49,24 @@ public class CycleServiceImpl implements CycleService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getCurrentCycle() {
-        Date today = new Date();
-        Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
-        MetaDataResponse response = new MetaDataResponse();
-        if( cycle != null){
-            response = MetaDataResponse.builder()
-                    .id(cycle.getId())
-                    .name(cycle.getName()).build();
+    public ResponseEntity<ApiResponse> getCurrentCycle(long id) {
+        Cycle cycle;
+        if(id == 0){
+            Date today = new Date();
+            cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
+        } else {
+            cycle = cycleRepository.findById(id).orElse(null);
         }
+        if( cycle == null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        MetaDataResponse response = MetaDataResponse.builder()
+                .id(cycle.getId())
+                .name(cycle.getName()).build();
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
