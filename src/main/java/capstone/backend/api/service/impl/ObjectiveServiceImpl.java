@@ -227,6 +227,38 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id) throws Exception {
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        if(objective == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
+        ObjectiveTitleResponse response;
+        if(parentObjective != null){
+            response = ObjectiveTitleResponse.builder()
+                    .id(parentObjective.getId())
+                    .title(parentObjective.getName())
+                    .build();
+        } else {
+            response = null;
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty() &&
                 !objectvieDto.getContent().trim().isEmpty() &&

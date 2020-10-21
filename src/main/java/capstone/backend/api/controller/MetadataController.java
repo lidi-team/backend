@@ -1,50 +1,41 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.ObjectvieDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.service.impl.ObjectiveServiceImpl;
+import capstone.backend.api.service.impl.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/objective")
-public class ObjectiveController {
-
-    private ObjectiveServiceImpl objectiveService;
+@RequestMapping(value = "/api/meta_data")
+public class MetadataController {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveController.class);
 
     private CommonProperties commonProperties;
 
-    @PostMapping(path = "/add")
-    public ResponseEntity<?> addObjective(@Valid @RequestBody ObjectvieDto objectvieDto) {
-        try {
-            return objectiveService.addObjective(objectvieDto);
-        } catch (Exception e) {
-            logger.error("add objective failed : " + objectvieDto.getTitle());
-            logger.error(e.getMessage());
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
+    private DepartmentServiceImpl departmentService;
 
-    @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<?> deleteObjective(@PathVariable(value = "id") long id) {
+    private ProjectServiceImpl projectService;
+
+    private ProjectPositionServiceImpl positionService;
+
+    private CycleServiceImpl cycleService;
+
+    private EvaluationCriteriaServiceImpl criteriaService;
+
+    @GetMapping(path = "/departments")
+    public ResponseEntity<?> getListMetaDataDepartment(){
         try {
-            return objectiveService.deleteObjective(id);
+            return departmentService.getListMetaDataDepartment();
         } catch (Exception e) {
-            logger.error("delete objective failed : " + id);
+            logger.error("get meta data departments failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -54,13 +45,12 @@ public class ObjectiveController {
         }
     }
 
-    @GetMapping(path = "/child-objectives")
-    public ResponseEntity<?> getListChildObjectiveByObjectiveId(@RequestParam(name = "objectiveId") long objectiveId,
-                                                                @RequestParam(name = "cycleId") long cycleId){
+    @GetMapping(path = "/projects")
+    public ResponseEntity<?> getListMetaDataProject(){
         try {
-            return objectiveService.getListChildObjectiveByObjectiveId(objectiveId,cycleId);
+            return projectService.getListMetaDataProject();
         } catch (Exception e) {
-            logger.error("get list child objectives failed");
+            logger.error("get meta data projects failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -70,12 +60,12 @@ public class ObjectiveController {
         }
     }
 
-    @GetMapping(path = "/list-okr/{userId}")
-    public ResponseEntity<?> getListObjectiveTitleByUserId(@PathVariable(name = "userId") long userId){
+    @GetMapping(path = "/positions")
+    public ResponseEntity<?> getListMetaDataPosition(){
         try {
-            return objectiveService.getListObjectiveTitleByUserId(userId);
+            return positionService.getListMetaDataPosition();
         } catch (Exception e) {
-            logger.error("get list objective titles failed");
+            logger.error("get meta data position failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -85,12 +75,27 @@ public class ObjectiveController {
         }
     }
 
-    @GetMapping(path = "/parent-okr/{id}")
-    public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(@PathVariable(name = "id") long id){
+    @GetMapping(path = "/cycles")
+    public ResponseEntity<?> getListMetaDataCycle(){
         try {
-            return objectiveService.getParentObjectiveTitleByObjectiveId(id);
+            return cycleService.getListMetaDataCycle();
         } catch (Exception e) {
-            logger.error("get parent objective titles failed");
+            logger.error("get meta data cycle failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping(path = "/evaluationCriteria")
+    public ResponseEntity<?> getListMetaDataEvaluationCriteria(){
+        try {
+            return criteriaService.getListMetaDataEvaluation();
+        } catch (Exception e) {
+            logger.error("get meta data evaluation criteria failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
