@@ -156,7 +156,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String verifyCode = generateRandomCode(commonProperties.getCodeSize());
 
-        mailService.CreateMailVerifyCode(email, verifyCode);
+        try{
+            mailService.CreateMailVerifyCode(email, verifyCode);
+        }catch (Exception ignored){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_TIME_OUT())
+                            .message("Cannot send mail!").build()
+            );
+        }
 
         String newPassword = passwordEncoder.encode(verifyCode);
         user.setPassword(newPassword);
