@@ -86,9 +86,10 @@ public class ObjectiveController {
     }
 
     @GetMapping(path = "/parent-okr/{id}")
-    public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(@PathVariable(name = "id") long id){
+    public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(@PathVariable(name = "id") long id,
+                                                                  @RequestHeader(name = "Authorization") String token){
         try {
-            return objectiveService.getParentObjectiveTitleByObjectiveId(id);
+            return objectiveService.getParentObjectiveTitleByObjectiveId(id,token);
         } catch (Exception e) {
             logger.error("get parent objective titles failed");
             logger.error(e.getMessage());

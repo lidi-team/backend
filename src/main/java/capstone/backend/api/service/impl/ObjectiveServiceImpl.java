@@ -6,8 +6,11 @@ import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.Objective.ChildObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
+import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveTitleResponse;
 import capstone.backend.api.repository.ObjectiveRepository;
+import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.ObjectiveService;
+import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private ExecuteServiceImpl executeService;
 
     private CycleServiceImpl cycleService;
+
+    private JwtUtils jwtUtils;
+
+    private UserRepository userRepository;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
@@ -227,27 +234,114 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id) throws Exception {
+    public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id,String token) throws Exception {
+        ObjectiveTitleResponse response = new ObjectiveTitleResponse();
+        List<MetaDataResponse> objectiveList = new ArrayList<>();
         Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+
+        if(id == 0){
+            if (user.getRoles().stream()
+                    .anyMatch(role -> role.getName().equals("ROLE_DIRECTOR"))) {
+                response.setPosition("Director");
+                response.setPermit(true);
+            } else {
+                response.setPosition("Staff");
+                response.setPermit(false);
+            }
+            response.setObjectives(objectiveList);
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(response)
+                            .build()
+            );
+        }
 
         if(objective == null){
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .data(response)
                             .build()
             );
         }
-        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
-        MetaDataResponse response;
-        if(parentObjective != null){
-            response = MetaDataResponse.builder()
-                    .id(parentObjective.getId())
-                    .name(parentObjective.getName())
-                    .build();
-        } else {
-            response = null;
+
+        Execute execute = objective.getExecute();
+        if(execute.getProject() == null) {
+            if (execute.getUser().getRoles().stream()
+                    .anyMatch(role -> role.getName().equals("ROLE_DIRECTOR"))) {
+                response.setPosition("Director");
+                response.setPermit(true);
+            } else {
+                response.setPosition("Staff");
+                response.setPermit(false);
+            }
+        }else{
+            List<Objective> objectives;
+            long projectId = objective.getExecute().getProject().getId();
+            Execute execute1 = executeService.getExecuteByUserIdAndProjectId(user.getId(),projectId);
+            if(objective.getType() == 1){
+                Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
+                long cycleId = parentObjective.getCycle().getId();
+                if(objective.getExecute().getProject().getParentProject() == null){
+                    objectives = objectiveRepository.
+                            findAllByCycleIdAndParentId(cycleId,0);
+                    objectives.forEach(objective1 -> {
+                        objectiveList.add(
+                                MetaDataResponse.builder()
+                                        .id(objective1.getId())
+                                        .name(objective1.getName())
+                                        .build()
+                        );
+                    });
+                }else{
+                    long parentProjectId = objective.getExecute().getProject().getParentProject().getId();
+                    objectives = objectiveRepository.
+                            findObjectivesByProjectIdAndCycleIdAndTypeProject(parentProjectId,cycleId);
+                    objectives.forEach(objective1 -> {
+                        objectiveList.add(
+                                MetaDataResponse.builder()
+                                        .id(objective1.getId())
+                                        .name(objective1.getName())
+                                        .build()
+                        );
+                    });
+                }
+            }else{
+                long cycleId = objective.getCycle().getId();
+                objectives = objectiveRepository.
+                        findObjectivesByProjectIdAndCycleIdAndTypeProject(projectId,cycleId);
+                objectives.forEach(objective1 -> {
+                    objectiveList.add(
+                            MetaDataResponse.builder()
+                                    .id(objective1.getId())
+                                    .name(objective1.getName())
+                                    .build()
+                    );
+                });
+            }
+            if(execute1 == null){
+                response.setPosition("None");
+                response.setPermit(false);
+            }else{
+                if(objective.getType() == 1){
+                    String position = execute1.getPosition().getName();
+                    response.setPosition(position);
+                    response.setPermit(execute1.isPm());
+                }else if(objective.getType() == 2){
+                    String position = execute1.getPosition().getName();
+                    response.setPosition(position);
+                    response.setPermit(true);
+                }
+            }
         }
+        response.setObjectives(objectiveList);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
