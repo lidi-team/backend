@@ -2,7 +2,7 @@ package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.service.impl.CycleServiceImpl;
+import capstone.backend.api.service.impl.KeyResultServiceImpl;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -15,20 +15,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/cycle")
-public class CycleController {
+@RequestMapping(value = "/api/key-result")
+public class KeyResultController {
+
     private CommonProperties commonProperties;
 
-    private static final Logger logger = LoggerFactory.getLogger(CycleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(KeyResultController.class);
 
-    CycleServiceImpl cycleService;
+    private KeyResultServiceImpl keyResultService;
 
-    @GetMapping(path = "/current")
-    public ResponseEntity<?> getCurrentCycle(){
+    @GetMapping(path = "/objective/{id}")
+    public ResponseEntity<?> getListKeyResultByObjectiveId(@PathVariable(value = "id") long id){
         try {
-            return cycleService.getCurrentCycle();
+            return null;
         } catch (Exception e) {
-            logger.error("get current cycle failed");
+            logger.error("get list child objectives failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()

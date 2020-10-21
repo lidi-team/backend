@@ -4,7 +4,6 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.Cycle;
-import capstone.backend.api.entity.ProjectPosition;
 import capstone.backend.api.repository.CycleRepository;
 import capstone.backend.api.service.CycleService;
 import lombok.AllArgsConstructor;
@@ -12,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -45,6 +45,25 @@ public class CycleServiceImpl implements CycleService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(responses).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getCurrentCycle() {
+        Date today = new Date();
+        Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
+        MetaDataResponse response = new MetaDataResponse();
+        if( cycle != null){
+            response = MetaDataResponse.builder()
+                    .id(cycle.getId())
+                    .name(cycle.getName()).build();
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response).build()
         );
     }
 }

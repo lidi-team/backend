@@ -6,7 +6,6 @@ import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.Objective.ChildObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveTitleResponse;
 import capstone.backend.api.repository.ObjectiveRepository;
 import capstone.backend.api.service.ObjectiveService;
 import lombok.AllArgsConstructor;
@@ -209,12 +208,12 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception {
         List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
 
-        List<ObjectiveTitleResponse> responses = new ArrayList<>();
+        List<MetaDataResponse> responses = new ArrayList<>();
         objectives.forEach(objective -> {
             responses.add(
-                    ObjectiveTitleResponse.builder()
+                    MetaDataResponse.builder()
                     .id(objective.getId())
-                    .title(objective.getName())
+                    .name(objective.getName())
                     .build()
             );
         });
@@ -240,11 +239,11 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
         Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
-        ObjectiveTitleResponse response;
+        MetaDataResponse response;
         if(parentObjective != null){
-            response = ObjectiveTitleResponse.builder()
+            response = MetaDataResponse.builder()
                     .id(parentObjective.getId())
-                    .title(parentObjective.getName())
+                    .name(parentObjective.getName())
                     .build();
         } else {
             response = null;
@@ -255,6 +254,42 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception {
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        if(objective == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        if(parentObjective != null){
+            ArrayList<KeyResult> keyResults =  keyResultService.getKeyResultsByObjectiveId(parentObjective.getId());
+
+            keyResults.forEach(keyResult -> {
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(keyResult.getId())
+                                .name(keyResult.getContent())
+                                .build()
+                );
+            });
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
                         .build()
         );
     }

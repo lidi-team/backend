@@ -16,4 +16,6 @@ public interface ObjectiveService {
     ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception;
 
     ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id) throws Exception;
+
+    ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
 }
