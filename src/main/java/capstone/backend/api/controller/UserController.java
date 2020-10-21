@@ -7,6 +7,7 @@ import capstone.backend.api.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,22 @@ public class UserController {
             return userService.changePassword(userPassDto,jwtToken);
         } catch (Exception e) {
             logger.error("change password failed for user: ");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @PutMapping("/upload-avatar")
+    public ResponseEntity<?> uploadAvatar(@Valid @RequestParam(name = "avatarUrl") String url,
+                                            @RequestHeader(value = "Authorization") String token) {
+        try {
+            return userService.saveAvatarLink(url,token);
+        } catch (Exception e) {
+            logger.error("upload image failed!");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()

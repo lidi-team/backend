@@ -114,6 +114,26 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> saveAvatarLink(String url, String token) throws Exception {
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        user.setAvatarImage(url);
+
+        userRepository.save(user);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS()).build()
+        );
+    }
+
     private boolean validateChangePasswordInformation(UserChangePasswordDto user) {
         return !user.getOldPassword().trim().isEmpty() &&
                 !user.getNewPassword().trim().isEmpty();

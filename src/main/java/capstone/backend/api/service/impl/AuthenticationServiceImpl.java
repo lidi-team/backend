@@ -6,7 +6,6 @@ import capstone.backend.api.dto.UserLoginDto;
 import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.dto.VerifyCodeDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.ApiResponse.VerifyCodeResponse;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
 import capstone.backend.api.entity.VerificationCode;
@@ -27,7 +26,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +50,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private MailServiceImpl mailService;
 
-    private ArrayList<VerificationCode> verificationList;
-
     private DateUtils dateUtils;
 
     private AuthenticationManager authenticationManager;
@@ -66,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         }
 
-        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword(),authenticationManager);
+        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword(), authenticationManager);
 
         logger.info("authenticate Ok!");
         return ResponseEntity.ok().body(
@@ -122,7 +122,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
 
         TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(
-                userRegisterDto.getEmail(), userRegisterDto.getPassword(),authenticationManager);
+                userRegisterDto.getEmail(), userRegisterDto.getPassword(), authenticationManager);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -142,115 +142,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
+        User user = userRepository.findByEmail(email).orElse(null);
 
-        String verifyCode = generateRandomIntegerCode(commonProperties.getCodeSize());
-        String resetCode = generateRandomIntegerCode(commonProperties.getResetCodeSize());
-        Date expiredDate = new Date((new Date()).getTime() + commonProperties.getExpiredTime());
+        if (user == null) {
+            logger.error("Email is not correct");
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
+            );
+        }
+
+
+        String verifyCode = generateRandomCode(commonProperties.getCodeSize());
 
         mailService.CreateMailVerifyCode(email, verifyCode);
 
-        User user = userRepository.findByEmail(email).get();
-        verificationList.add(
-                VerificationCode.builder()
-                        .verifyCode(passwordEncoder.encode(verifyCode))
-                        .expiredTime(expiredDate)
-                        .resetCode(passwordEncoder.encode(resetCode))
-                        .user(user)
-                        .active(true).build()
-        );
-        logger.info("saved verify code to DB");
+        String newPassword = passwordEncoder.encode(verifyCode);
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS()).build()
-        );
-    }
-
-    @Override
-    public ResponseEntity<?> verifyCode(VerifyCodeDto verifyCodeDto) throws Exception {
-        if (!validateVerifyCodeInformation(verifyCodeDto)) {
-            logger.error("Parameter empty!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
-            );
-        }
-
-        User user = userRepository.findByEmail(verifyCodeDto.getEmail()).get();
-        VerificationCode verifyCode = findVerificationCodeByUserId(user.getId());
-
-        if (verifyCode == null ||
-                !passwordEncoder.matches(verifyCodeDto.getVerifyCode(), verifyCode.getVerifyCode())) {
-            logger.error("Verified code is invalid!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
-            );
-        }
-
-        if (verifyCode.getExpiredTime().before(new Date())) {
-            logger.error("Verified code is expired!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_TIME_OUT())
-                            .message(commonProperties.getMESSAGE_PARAM_TIME_OUT()).build()
-            );
-        }
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(new VerifyCodeResponse(verifyCode.getResetCode()))
-                        .build()
-        );
-    }
-
-    @Override
-    public ResponseEntity<?> resetPassword(ResetPasswordDto resetPass) throws Exception {
-        if (!validateResetPasswordInformation(resetPass)) {
-            logger.error("Parameter invalid!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
-            );
-        }
-
-        User user = userRepository.findByEmail(resetPass.getEmail()).get();
-        VerificationCode verifyCode = findVerificationCodeByUserId(user.getId());
-
-        if (verifyCode == null ||
-                !resetPass.getResetCode().equals(verifyCode.getResetCode())) {
-            logger.error("Reset code is invalid!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
-            );
-        }
-
-        String newPassword = passwordEncoder.encode(resetPass.getNewPassword());
-        user.setPassword(newPassword);
-        userRepository.save(user);
-
-        verificationList.removeAll(
-                verificationList.stream()
-                        .filter(code -> code.getUser().getId() == user.getId())
-                        .collect(Collectors.toList())
-        );
-        logger.info("Updated password!");
-
-        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(
-                resetPass.getEmail(), resetPass.getNewPassword(),authenticationManager);
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(tokenResponseInfo).build()
         );
     }
 
@@ -262,33 +177,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 !user.getPhoneNumber().trim().isEmpty();
     }
 
-    private boolean validateVerifyCodeInformation(VerifyCodeDto user) {
-        return !user.getEmail().trim().isEmpty() &&
-                !user.getVerifyCode().trim().isEmpty();
-    }
+    private String generateRandomCode(int codeSize) {
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+        StringBuilder sb = new StringBuilder(codeSize);
 
-    private boolean validateResetPasswordInformation(ResetPasswordDto user) {
-        return !user.getEmail().trim().isEmpty() &&
-                !user.getResetCode().trim().isEmpty() &&
-                !user.getNewPassword().trim().isEmpty();
-    }
-
-    private String generateRandomIntegerCode(int codeSize) {
-        StringBuilder code = new StringBuilder();
-        Random random = new Random();
         for (int i = 0; i < codeSize; i++) {
-            code.append(random.nextInt(9));
+            int index
+                    = (int) (AlphaNumericString.length()
+                    * Math.random());
+            sb.append(AlphaNumericString.charAt(index));
         }
-        return code.toString();
-    }
-
-    private VerificationCode findVerificationCodeByUserId(Long userId) {
-        ArrayList<VerificationCode> reverseList = verificationList;
-        Collections.reverse(reverseList);
-
-        return reverseList.stream()
-                .filter(code -> code.getUser().getId() == userId)
-                .findFirst().get();
+        return sb.toString();
     }
 
 

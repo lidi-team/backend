@@ -12,8 +12,4 @@ public interface AuthenticationService {
     ResponseEntity<?> register(UserRegisterDto userRegisterDto) throws AuthenticationException;
 
     ResponseEntity<?> getVerifyCode(String email) throws Exception;
-
-    ResponseEntity<?> verifyCode(VerifyCodeDto verifyCodeDto) throws Exception;
-
-    ResponseEntity<?> resetPassword(ResetPasswordDto resetPass) throws Exception;
 }

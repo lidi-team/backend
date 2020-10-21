@@ -64,40 +64,10 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/get-verify-code")
-    public ResponseEntity<?> getVerifyCode(@Valid @Param("email") String email) {
+    @GetMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam(name = "email") String email) {
         try {
             return authenticationService.getVerifyCode(email);
-        } catch (Exception e) {
-            logger.error("Send code failed!");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(@Valid @RequestBody VerifyCodeDto verifyCodeDto) {
-        try {
-            return authenticationService.verifyCode(verifyCodeDto);
-        } catch (Exception e) {
-            logger.error("verify code failed!");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto resetPasswordDto) {
-        try {
-            return authenticationService.resetPassword(resetPasswordDto);
         } catch (Exception e) {
             logger.error("Reset password failed!");
             logger.error(e.getMessage());
