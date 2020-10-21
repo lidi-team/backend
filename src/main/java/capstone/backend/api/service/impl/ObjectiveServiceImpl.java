@@ -260,6 +260,16 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     @Override
     public ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception {
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        if(id == 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(responses)
+                            .build()
+            );
+        }
         Objective objective = objectiveRepository.findById(id).orElse(null);
 
         if(objective == null){
@@ -271,7 +281,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
         Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
-        ArrayList<MetaDataResponse> responses = new ArrayList<>();
         if(parentObjective != null){
             ArrayList<KeyResult> keyResults =  keyResultService.getKeyResultsByObjectiveId(parentObjective.getId());
 
