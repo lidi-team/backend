@@ -115,4 +115,19 @@ public class ObjectiveController {
             );
         }
     }
+
+    @GetMapping(path = "/align-objective/{id}")
+    public ResponseEntity<?> getListAlignByObjectiveId(@PathVariable(value = "id") long id){
+        try {
+            return objectiveService.getListAlignByObjectiveId(id);
+        } catch (Exception e) {
+            logger.error("get list align objectives failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 }

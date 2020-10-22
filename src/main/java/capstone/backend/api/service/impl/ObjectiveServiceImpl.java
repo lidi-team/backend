@@ -303,7 +303,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 }else{
                     long parentProjectId = objective.getExecute().getProject().getParentProject().getId();
                     objectives = objectiveRepository.
-                            findObjectivesByProjectIdAndCycleIdAndTypeProject(parentProjectId,cycleId);
+                            findAllByProjectIdAndCycleIdAndType(parentProjectId,cycleId,1);
                     objectives.forEach(objective1 -> {
                         objectiveList.add(
                                 MetaDataResponse.builder()
@@ -316,7 +316,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             }else{
                 long cycleId = objective.getCycle().getId();
                 objectives = objectiveRepository.
-                        findObjectivesByProjectIdAndCycleIdAndTypeProject(projectId,cycleId);
+                        findAllByProjectIdAndCycleIdAndType(projectId,cycleId,1);
                 objectives.forEach(objective1 -> {
                     objectiveList.add(
                             MetaDataResponse.builder()
@@ -387,6 +387,60 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 );
             });
         }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception {
+        List<MetaDataResponse> responses = new ArrayList<>();
+        List<Objective> objectives;
+
+        if(id == 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(responses)
+                            .build()
+            );
+        }
+
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+        if(objective == null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+
+        Execute execute = objective.getExecute();
+        Project project = execute.getProject();
+        Cycle cycle = objective.getCycle();
+        int type = objective.getType();
+
+        if(type == 0){
+             objectives = objectiveRepository.findAllByTypeAndCycleId(type,cycle.getId());
+        } else {
+            objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(project.getId(),cycle.getId(),type);
+        }
+
+        objectives.forEach(obj ->{
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(obj.getId())
+                            .name(obj.getName())
+                            .build()
+            );
+        });
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
