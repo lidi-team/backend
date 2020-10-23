@@ -3,6 +3,8 @@ package capstone.backend.api.controller;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.RoleServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +23,10 @@ public class RoleController {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     private CommonProperties commonProperties;
 
+    @ApiOperation(value = "Danh sách các role trong hệ thống")
     @GetMapping("")
-    public ResponseEntity<?> getAllRoles(@RequestHeader(value = "Authorization") String jwtToken) {
+    public ResponseEntity<?> getAllRoles(
+            @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get all roles:");
         try {
             return roleService.getAllRoles(jwtToken);

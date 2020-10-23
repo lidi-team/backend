@@ -6,6 +6,7 @@ import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.AuthenticationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,11 @@ public class AuthenticationController {
 
     private CommonProperties commonProperties;
 
-    @PostMapping("/signin")
     @ApiOperation(value = "Đăng nhập")
-    public ResponseEntity<?> authenticate(@Valid @RequestBody UserLoginDto userLoginDto) {
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticate(
+            @ApiParam(value = "Thông tin đăng nhập", required = true)
+            @Valid @RequestBody UserLoginDto userLoginDto) {
         try {
             return authenticationService.authenticate(userLoginDto);
         } catch (AuthenticationException e) {
@@ -53,9 +56,11 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/signup")
     @ApiOperation(value = "Đăng ký")
-    public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDto userRegisterDto) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> register(
+            @ApiParam(value = "Thông tin đăng ký một tài khoản", required = true)
+            @Valid @RequestBody UserRegisterDto userRegisterDto) {
         try {
             return authenticationService.register(userRegisterDto);
         } catch (Exception e) {
@@ -69,8 +74,11 @@ public class AuthenticationController {
         }
     }
 
+    @ApiOperation(value = "Lấy mã xác thực")
     @GetMapping("/get-verify-code")
-    public ResponseEntity<?> getVerifyCode(@Valid @Param("email") String email) {
+    public ResponseEntity<?> getVerifyCode(
+            @ApiParam(value = "Địa chỉ để gửi mail", required = true)
+            @Valid @Param("email") String email) {
         try {
             return authenticationService.getVerifyCode(email);
         } catch (Exception e) {
@@ -84,8 +92,11 @@ public class AuthenticationController {
         }
     }
 
+    @ApiOperation(value = "Xác thực bằng mã")
     @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(@Valid @RequestBody VerifyCodeDto verifyCodeDto) {
+    public ResponseEntity<?> verifyCode(
+            @ApiParam(value = "Mã xác thực", required = true)
+            @Valid @RequestBody VerifyCodeDto verifyCodeDto) {
         try {
             return authenticationService.verifyCode(verifyCodeDto);
         } catch (Exception e) {
@@ -99,8 +110,11 @@ public class AuthenticationController {
         }
     }
 
+    @ApiOperation(value = "Reset password")
     @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswordDto resetPasswordDto) {
+    public ResponseEntity<?> resetPassword(
+            @ApiParam(value = "Password cũ và mới", required = true)
+            @Valid @RequestBody ResetPasswordDto resetPasswordDto) {
         try {
             return authenticationService.resetPassword(resetPasswordDto);
         } catch (Exception e) {

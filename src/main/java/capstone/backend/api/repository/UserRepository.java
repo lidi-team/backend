@@ -4,6 +4,7 @@ import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findByRoles(Role role, PageRequest of);
 
-    List<User> findAllByRolesContains(Role role);
+    List<User> findAllByRolesContains(Role role, Pageable pageable);
+
+    List<User> findByFullNameContainsAndRoles(String name, Role role, Pageable pageable);
 
 }

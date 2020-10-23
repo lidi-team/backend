@@ -4,6 +4,8 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import capstone.backend.api.service.impl.ProjectServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,7 @@ public class ProjectController {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
 
+    @ApiOperation(value = "Tất cả Project trong Cycle hiện tại")
     @GetMapping(path = "/all")
     public ResponseEntity<?> getCurrentCycle(){
         try {
