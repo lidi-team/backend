@@ -1,13 +1,9 @@
 package capstone.backend.api.service;
 
 import capstone.backend.api.dto.UserChangePasswordDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.User;
+import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -25,4 +21,10 @@ public interface UserService {
     ResponseEntity<?> getAllUsers(int page, int size, String sort, String jwtToken) throws Exception;
 
     ResponseEntity<?> getStaffPaging(int page, int size, String sort, String jwtToken) throws Exception;
+
+    ResponseEntity<?> putUserInformationById(UserInforResponse userInfo, String jwtToken) throws Exception;
+
+    ResponseEntity<?> isActiveUserById(long id, boolean isActive, String jwtToken) throws Exception;
+
+    ResponseEntity<?> searchByName(String name, int page, int size, String sort, String jwtToken) throws Exception;
 }

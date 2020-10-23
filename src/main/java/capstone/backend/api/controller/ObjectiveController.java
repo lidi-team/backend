@@ -4,6 +4,8 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.ObjectvieDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +25,12 @@ public class ObjectiveController {
 
     private CommonProperties commonProperties;
 
+
+    @ApiOperation(value = "Thêm Objective")
     @PostMapping(path = "/add")
-    public ResponseEntity<?> addObjective(@Valid @RequestBody ObjectvieDto objectvieDto) {
+    public ResponseEntity<?> addObjective(
+            @ApiParam(value = "Thông tin của một Objective", required = true)
+            @Valid @RequestBody ObjectvieDto objectvieDto) {
         try {
             return objectiveService.addObjective(objectvieDto);
         } catch (Exception e) {
@@ -39,8 +45,12 @@ public class ObjectiveController {
         }
     }
 
+
+    @ApiOperation(value = "Xoá một Objective theo id")
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<?> deleteObjective(@PathVariable(value = "id") long id) {
+    public ResponseEntity<?> deleteObjective(
+            @ApiParam(value = "ID của objective cần xoá", required = true)
+            @PathVariable(value = "id") long id) {
         try {
             return objectiveService.deleteObjective(id);
         } catch (Exception e) {
@@ -54,9 +64,14 @@ public class ObjectiveController {
         }
     }
 
+
+    @ApiOperation(value = "Danh sách Objective con theo ID của objective cha")
     @GetMapping(path = "/child-objectives")
-    public ResponseEntity<?> getListChildObjectiveByObjectiveId(@RequestParam(name = "objectiveId") long objectiveId,
-                                                                @RequestParam(name = "cycleId") long cycleId){
+    public ResponseEntity<?> getListChildObjectiveByObjectiveId(
+            @ApiParam(value = "ID của Objective cha", required = true)
+            @RequestParam(name = "objectiveId") long objectiveId,
+            @ApiParam(value = "ID của Cycle cần lấy danh sách Objective con")
+            @RequestParam(name = "cycleId") long cycleId){
         try {
             return objectiveService.getListChildObjectiveByObjectiveId(objectiveId,cycleId);
         } catch (Exception e) {
@@ -70,8 +85,11 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách Objective theo User ID")
     @GetMapping(path = "/list-okr/{userId}")
-    public ResponseEntity<?> getListObjectiveTitleByUserId(@PathVariable(name = "userId") long userId){
+    public ResponseEntity<?> getListObjectiveTitleByUserId(
+            @ApiParam(value = "User ID cần lấy danh sách Objective", required = true)
+            @PathVariable(name = "userId") long userId){
         try {
             return objectiveService.getListObjectiveTitleByUserId(userId);
         } catch (Exception e) {
