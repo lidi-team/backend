@@ -16,4 +16,13 @@ public interface UserService {
 
     ResponseEntity<?> changePassword(UserChangePasswordDto userChangePasswordDto, String jwtToken) throws Exception;
 
+    ResponseEntity<?> getAllUsers(String jwtToken) throws Exception;
+
+    ResponseEntity<?> getUserInformationById(long id, String jwtToken) throws Exception;
+
+    ResponseEntity<?> getNumberStaff(String jwtToken) throws Exception;
+
+    ResponseEntity<?> getAllUsers(int page, int size, String sort, String jwtToken) throws Exception;
+
+    ResponseEntity<?> getStaffPaging(int page, int size, String sort, String jwtToken) throws Exception;
 }

@@ -24,6 +24,7 @@ public class UserController {
 
     @GetMapping("me")
     public ResponseEntity<?> getUserInformation(@RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Info me:");
         try {
             return userService.getUserInformation(jwtToken);
         } catch (Exception e) {
@@ -40,8 +41,9 @@ public class UserController {
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody UserChangePasswordDto userPassDto,
                                             @RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Change password:");
         try {
-            return userService.changePassword(userPassDto,jwtToken);
+            return userService.changePassword(userPassDto, jwtToken);
         } catch (Exception e) {
             logger.error("change password failed for user: ");
             logger.error(e.getMessage());
@@ -53,4 +55,91 @@ public class UserController {
         }
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUser(@RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Find All Users:");
+        try {
+            return userService.getAllUsers(jwtToken);
+        } catch (Exception e) {
+            logger.error("Get all user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping("/allPaging")
+    public ResponseEntity<?> getAllUserPaging(@RequestParam(name = "paging") int page,
+                                              @RequestParam(name = "size") int size,
+                                              @RequestParam(name = "sortWith") String sort,
+                                              @RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Get user in paging: " + page);
+        try {
+            return userService.getAllUsers(page, size, sort, jwtToken);
+        } catch (Exception e) {
+            logger.error("Get user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message("Ngu Controller").build()
+            );
+        }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<?> getUserById(@RequestParam(name = "id") long id,
+                                         @RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Get info id: " + id);
+        try {
+            return userService.getUserInformationById(id, jwtToken);
+        } catch (Exception e) {
+            logger.error("Get user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message("Ngu Controller").build()
+            );
+        }
+    }
+
+    @GetMapping("/admin")
+    public ResponseEntity<?> getNumberStaff(@RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Get number PM & Staff");
+
+        try {
+            return userService.getNumberStaff(jwtToken);
+        } catch (Exception e) {
+            logger.error("Get all user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping("/listStaffPaging")
+    public ResponseEntity<?> getStaffPaging(@RequestParam(name = "paging") int page,
+                                            @RequestParam(name = "size") int size,
+                                            @RequestParam(name = "sortWith") String sort,
+                                            @RequestHeader(value = "Authorization") String jwtToken){
+        logger.info("Get list staff in paging: " + page);
+        try {
+            return userService.getStaffPaging(page, size, sort, jwtToken);
+        } catch (Exception e) {
+            logger.error("Get user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message("Ngu Controller").build()
+            );
+        }
+    }
 }
