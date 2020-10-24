@@ -3,9 +3,9 @@ package capstone.backend.api.controller;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.Cycle;
-import capstone.backend.api.service.CycleService;
-import capstone.backend.api.service.impl.CycleServiceImpl;
+import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
+import capstone.backend.api.service.impl.UnitOfKeyResultServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
@@ -15,38 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/cycle")
-public class CycleController {
+@RequestMapping(value = "/api/measure")
+public class MeasureController {
     private CommonProperties commonProperties;
-
-    private CycleServiceImpl cycleService;
-
-    private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
-
-
-    @ApiOperation(value = "")
-    @GetMapping(path = "/current")
-    public ResponseEntity<?> getCurrentCycle(
-            @ApiParam(value = "", required = true)
-            @PathVariable(value = "id") long id) {
-        try {
-            return null;
-        } catch (Exception e) {
-            logger.error("get list child objectives failed");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
+    private static final Logger logger = (Logger) LoggerFactory.getLogger(ObjectiveServiceImpl.class);
+    private UnitOfKeyResultServiceImpl unitOfKeyResultService;
 
     @ApiOperation(value = "")
     @GetMapping(path = "/all")
@@ -56,9 +34,9 @@ public class CycleController {
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         try {
-            return cycleService.getAllCycles(page, size, sort, jwtToken);
+            return unitOfKeyResultService.getAllMeasure(page, size, sort, jwtToken);
         } catch (Exception e) {
-            logger.error("get list cycles failed");
+            logger.error("get list measure failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -70,12 +48,12 @@ public class CycleController {
 
     @ApiOperation(value = "")
     @PostMapping(path = "create")
-    public ResponseEntity<?> createCycle(
-            @ApiParam(value = "", required = true) @Valid @RequestBody Cycle cycle,
+    public ResponseEntity<?> createMeasure(
+            @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Create cycle: " + cycle.getFromDate());
+        logger.info("Create measure: " + unit.getName());
         try {
-            return cycleService.createCycle(cycle, jwtToken);
+            return unitOfKeyResultService.createMeasure(unit, jwtToken);
         } catch (Exception e) {
             logger.error("Create cycle failed!");
             logger.error(e.getMessage());
@@ -89,12 +67,12 @@ public class CycleController {
 
     @ApiOperation(value = "")
     @PutMapping(path = "update")
-    public ResponseEntity<?> updateCycle(
-            @ApiParam(value = "", required = true) @Valid @RequestBody Cycle cycle,
+    public ResponseEntity<?> updateMeasure(
+            @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Update cycle: " + cycle.getName());
+        logger.info("Update measure: " + unit.getName());
         try {
-            return cycleService.updateCycle(cycle, jwtToken);
+            return unitOfKeyResultService.updateMeasure(unit, jwtToken);
         } catch (Exception e) {
             logger.error("Update cycle failed!");
             return ResponseEntity.badRequest().body(
@@ -107,12 +85,12 @@ public class CycleController {
 
     @ApiOperation(value = "")
     @DeleteMapping(path = "delete")
-    public ResponseEntity<?> deleteCycle(
+    public ResponseEntity<?> deleteMeasure(
             @ApiParam(value = "", required = true) @RequestParam(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Delete cycle: " + id);
+        logger.info("Delete measure: " + id);
         try {
-            return cycleService.deleteCycle(id, jwtToken);
+            return unitOfKeyResultService.deleteMeasure(id, jwtToken);
         } catch (Exception e) {
             logger.error("Delete cycle failed!");
             return ResponseEntity.badRequest().body(
@@ -125,18 +103,17 @@ public class CycleController {
 
     @ApiOperation(value = "")
     @GetMapping(path = "search")
-    public ResponseEntity<?> searchByDate(
-            @ApiParam(value = "", required = true) @RequestParam(name = "date") String date,
+    public ResponseEntity<?> searchByName(
+            @ApiParam(value = "", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Search cycle: " + date);
+        logger.info("Search measure: " + name);
         try {
-            Date dateSreach = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-            return cycleService.searchCycle(dateSreach, page, size, sort, jwtToken);
+            return unitOfKeyResultService.searchMeasure(name, page, size, sort, jwtToken);
         } catch (Exception e) {
-            logger.error("Search cycle failed!");
+            logger.error("Search measure failed!");
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())

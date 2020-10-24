@@ -12,12 +12,11 @@ public class CycleResponse {
 
     private long id;
 
-
     private String name;
 
+    private String description;
 
     private Date startDate;
-
 
     private Date endDate;
 }
