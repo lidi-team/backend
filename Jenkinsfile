@@ -26,9 +26,11 @@ pipeline {
         //     }
         // }
     }
-    // post {
-    //     always {
-    //         cleanWs()
-    //     }
-    // }
+    post {
+        failure {
+        mail to: 'dinhlehoang35@example.com',
+             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+             body: "Something is wrong with ${env.BUILD_URL}"
+    }
+    }
 }

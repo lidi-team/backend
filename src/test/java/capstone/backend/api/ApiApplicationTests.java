@@ -46,11 +46,11 @@ class ApiApplicationTests {
 	@Autowired
 	private MockMvc mockMvc;
 
-	// @Test
-	// public void test1() throws Exception {
-	// 	this.mockMvc.perform(get("/api/test/teacherRegister")).andDo(print()).andExpect(status().isOk())
-	// 			.andExpect(content().string(containsString("hoang5.com")));
-	// }
+	@Test
+	public void test1() throws Exception {
+		this.mockMvc.perform(get("/api/test/teacherRegister")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("hoang4.com")));
+	}
 
 	// @Test
 	// public void test2() throws Exception {
