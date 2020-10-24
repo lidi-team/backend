@@ -4,19 +4,18 @@ pipeline {
         maven 'M3'
     }
     stages {
-        // stage('Pre') { 
-        //     steps {
-        //         sh 'docker container stop my-jenkins'
-        //         sh 'docker container prune --force my-jenkins'
-        //     }
-        // }
+        stage('Pre') { 
+            steps {
+                sh 'bash ./pre.sh'
+            }
+        }
 
         stage('Build') { 
             steps {
                 // sh 'export A=$(lsof -t -i:8082)'
                 sh 'mvn clean install' 
-                sh 'docker build -t myjenkins .'
-                sh 'docker container run -d -p 8082:8082 --name my-jenkins myjenkins'
+                sh 'docker build -t backend .'
+                sh 'docker container run -d -p 8080:8080 --name my-backend backend'
             }
         }
         // stage('Deliver') { 
