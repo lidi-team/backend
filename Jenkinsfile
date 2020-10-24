@@ -13,7 +13,7 @@ pipeline {
         stage('Build') { 
             steps {
                 // sh 'export A=$(lsof -t -i:8082)'
-                sh 'mvn clean install' 
+                sh 'mvn clean package' 
                 sh 'docker build -t backend .'
                 sh 'docker container run -d -p 8081:8080 --name my-backend backend'
             }
