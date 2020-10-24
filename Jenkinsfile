@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('Pre') { 
             steps {
+                sh 'sudo chmod 777 pre.sh'
                 sh 'bash ./pre.sh'
             }
         }
