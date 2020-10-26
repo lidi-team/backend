@@ -19,7 +19,7 @@ public class TestController {
         Set<String> roles = new HashSet<>();
         roles.add(RoleUtils.ROLE_EMPLOYEE);
         return UserRegisterDto.builder()
-                .email("hoang7.com")
+                .email("hoang8.com")
                 .password("123445").dob("22/11/1998")
                 .fullName("Le Son Tung")
                 .phoneNumber("0342529999")
