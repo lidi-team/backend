@@ -25,22 +25,23 @@ public class Report {
 
     @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date deadline;
+    private Date nextCheckinDate;
 
     @NonNull
-    private String content;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date checkinDate;
+
+    @ManyToOne
+    @JoinColumn(name = "objectiveId")
+    private Objective objective;
 
     // "DRAFT","SUBMITTED","REJECTED","APPROVED"
     @NonNull
     private String status;
 
-    @NonNull
-    private String attachmentURL;
+    private boolean isLeaderFeedback;
 
-    private String history;
-
-    @NonNull
-    private int confidentLevel;
+    private boolean isStaffFeedback;
 
     @Builder.Default
     private boolean isDelete = false;

@@ -1,6 +1,7 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
 
@@ -9,8 +10,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table( name = "ReportKeyResults")
-public class ReportKeyResult {
+@Table( name = "ReportDetails")
+public class ReportDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +26,19 @@ public class ReportKeyResult {
     private KeyResult keyResult;
 
     @NonNull
-    private int valueObtained;
+    @NumberFormat(pattern = "#.##")
+    private double valueObtained;
 
-    @NonNull
-    private int problems;
+    @NumberFormat(pattern = "#.##")
+    private double targetValue;
+
+    private double confidentLevel;
+
+    private String progress;
+
+    private String plans;
+
+    private String problems;
 
     @Builder.Default
     private boolean isDelete = false;

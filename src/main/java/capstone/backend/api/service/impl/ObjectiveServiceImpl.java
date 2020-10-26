@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,37 +105,14 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 ArrayList<KeyResult> keyResults =
                         keyResultService.addKeyResults(objectvieDto.getKeyResults(), objective);
                 keyResults.forEach(keyResult -> {
-                    keyResultResponses.add(
-                            KeyResultResponse.builder()
-                                    .id(keyResult.getId())
-                                    .content(keyResult.getContent())
-                                    .measureUnitId(keyResult.getUnitOfKeyResult().getId())
-                                    .startValue(keyResult.getFromValue())
-                                    .targetedValue(keyResult.getToValue())
-                                    .valueObtained(keyResult.getValueObtained())
-                                    .reference(keyResult.getReference())
-                                    .build());
+                    KeyResultResponse keyResultResponse = setKeyResult(keyResult);
+                    keyResultResponses.add(keyResultResponse);
                 });
                 logger.info("save key results successful");
             }
         }
 
-        ObjectiveResponse objectiveResponse = ObjectiveResponse.builder().id(objective.getId())
-                .title(objective.getName())
-                .content(objective.getContent())
-                .userId(objective.getExecute().getUser().getId())
-                .projectId(objective.getExecute().getProject() == null ? 0 :
-                            objective.getExecute().getProject().getId())
-                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
-                .changing(objective.getChanging())
-                .cycleId(objective.getCycle().getId())
-                .parentId(objective.getParentId())
-                .progress(objective.getProgress())
-                .status(objective.getStatus())
-                .type(objective.getType())
-                .weight(objective.getWeight())
-                .keyResults(keyResultResponses)
-                .build();
+        ObjectiveResponse objectiveResponse = setObjective(objective,keyResultResponses);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -289,7 +267,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             if(objective.getType() == 1){
                 Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
                 long cycleId = parentObjective.getCycle().getId();
-                if(objective.getExecute().getProject().getParentProject() == null){
+                if(objective.getExecute().getProject().getParentId().getId() == 0){
                     objectives = objectiveRepository.
                             findAllByCycleIdAndParentId(cycleId,0);
                     objectives.forEach(objective1 -> {
@@ -301,7 +279,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         );
                     });
                 }else{
-                    long parentProjectId = objective.getExecute().getProject().getParentProject().getId();
+                    long parentProjectId = objective.getExecute().getProject().getParentId().getId();
                     objectives = objectiveRepository.
                             findAllByProjectIdAndCycleIdAndType(parentProjectId,cycleId,1);
                     objectives.forEach(objective1 -> {
@@ -476,5 +454,36 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             string.append(along).append(",");
         }
         return string.toString();
+    }
+
+    public ObjectiveResponse setObjective(Objective objective, List<KeyResultResponse> keyResults){
+        return ObjectiveResponse.builder().id(objective.getId())
+                .title(objective.getName())
+                .content(objective.getContent())
+                .userId(objective.getExecute().getUser().getId())
+                .projectId(objective.getExecute().getProject() == null ? 0 :
+                        objective.getExecute().getProject().getId())
+                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                .changing(objective.getChanging())
+                .cycleId(objective.getCycle().getId())
+                .parentId(objective.getParentId())
+                .progress(objective.getProgress())
+                .status(objective.getStatus())
+                .type(objective.getType())
+                .weight(objective.getWeight())
+                .keyResults(keyResults)
+                .build();
+    }
+
+    public KeyResultResponse setKeyResult(KeyResult keyResult){
+        return KeyResultResponse.builder()
+                .id(keyResult.getId())
+                .content(keyResult.getContent())
+                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
+                .startValue(keyResult.getFromValue())
+                .targetedValue(keyResult.getToValue())
+                .valueObtained(keyResult.getValueObtained())
+                .reference(keyResult.getReference())
+                .build();
     }
 }
