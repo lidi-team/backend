@@ -7,4 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ProjectService {
     ResponseEntity<ApiResponse> getAllProjects() throws Exception;
+
+    ResponseEntity<ApiResponse> getListMetaDataProject() throws Exception;
 }

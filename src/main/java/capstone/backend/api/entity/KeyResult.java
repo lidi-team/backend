@@ -53,6 +53,9 @@ public class KeyResult {
     @NumberFormat(pattern = "#.##")
     private double weight;
 
+    @NumberFormat(pattern = "#.##")
+    private double progress;
+
     @Builder.Default
     private boolean isDelete = false;
 

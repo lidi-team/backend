@@ -102,4 +102,50 @@ public class ObjectiveController {
             );
         }
     }
+
+    @GetMapping(path = "/parent-okr/{id}")
+    public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(@PathVariable(name = "id") long id,
+                                                                  @RequestHeader(name = "Authorization") String token){
+        try {
+            return objectiveService.getParentObjectiveTitleByObjectiveId(id,token);
+        } catch (Exception e) {
+            logger.error("get parent objective titles failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping(path = "/parent-key_result/{id}")
+    public ResponseEntity<?> getListParentKeyResultByObjectiveId(@PathVariable(value = "id") long id){
+        try {
+            return objectiveService.getParentKeyResultTitleByObjectiveId(id);
+        } catch (Exception e) {
+            logger.error("get list child objectives failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping(path = "/align-objective/{id}")
+    public ResponseEntity<?> getListAlignByObjectiveId(@PathVariable(value = "id") long id){
+        try {
+            return objectiveService.getListAlignByObjectiveId(id);
+        } catch (Exception e) {
+            logger.error("get list align objectives failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 }

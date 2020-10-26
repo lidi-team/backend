@@ -8,13 +8,16 @@ import capstone.backend.api.entity.ApiResponse.Objective.ChildObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveTitleResponse;
 import capstone.backend.api.repository.ObjectiveRepository;
+import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.ObjectiveService;
+import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private ExecuteServiceImpl executeService;
 
     private CycleServiceImpl cycleService;
+
+    private JwtUtils jwtUtils;
+
+    private UserRepository userRepository;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
@@ -98,37 +105,14 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 ArrayList<KeyResult> keyResults =
                         keyResultService.addKeyResults(objectvieDto.getKeyResults(), objective);
                 keyResults.forEach(keyResult -> {
-                    keyResultResponses.add(
-                            KeyResultResponse.builder()
-                                    .id(keyResult.getId())
-                                    .content(keyResult.getContent())
-                                    .measureUnitId(keyResult.getUnitOfKeyResult().getId())
-                                    .startValue(keyResult.getFromValue())
-                                    .targetedValue(keyResult.getToValue())
-                                    .valueObtained(keyResult.getValueObtained())
-                                    .reference(keyResult.getReference())
-                                    .build());
+                    KeyResultResponse keyResultResponse = setKeyResult(keyResult);
+                    keyResultResponses.add(keyResultResponse);
                 });
                 logger.info("save key results successful");
             }
         }
 
-        ObjectiveResponse objectiveResponse = ObjectiveResponse.builder().id(objective.getId())
-                .title(objective.getName())
-                .content(objective.getContent())
-                .userId(objective.getExecute().getUser().getId())
-                .projectId(objective.getExecute().getProject() == null ? 0 :
-                            objective.getExecute().getProject().getId())
-                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
-                .changing(objective.getChanging())
-                .cycleId(objective.getCycle().getId())
-                .parentId(objective.getParentId())
-                .progress(objective.getProgress())
-                .status(objective.getStatus())
-                .type(objective.getType())
-                .weight(objective.getWeight())
-                .keyResults(keyResultResponses)
-                .build();
+        ObjectiveResponse objectiveResponse = setObjective(objective,keyResultResponses);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -209,15 +193,233 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception {
         List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
 
-        List<ObjectiveTitleResponse> responses = new ArrayList<>();
+        List<MetaDataResponse> responses = new ArrayList<>();
         objectives.forEach(objective -> {
             responses.add(
-                    ObjectiveTitleResponse.builder()
+                    MetaDataResponse.builder()
                     .id(objective.getId())
-                    .title(objective.getName())
+                    .name(objective.getName())
                     .build()
             );
         });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id,String token) throws Exception {
+        ObjectiveTitleResponse response = new ObjectiveTitleResponse();
+        List<MetaDataResponse> objectiveList = new ArrayList<>();
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+
+        if(id == 0){
+            if (user.getRoles().stream()
+                    .anyMatch(role -> role.getName().equals("ROLE_DIRECTOR"))) {
+                response.setPosition("Director");
+                response.setPermit(true);
+            } else {
+                response.setPosition("Staff");
+                response.setPermit(false);
+            }
+            response.setObjectives(objectiveList);
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(response)
+                            .build()
+            );
+        }
+
+        if(objective == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .data(response)
+                            .build()
+            );
+        }
+
+        Execute execute = objective.getExecute();
+        if(execute.getProject() == null) {
+            if (execute.getUser().getRoles().stream()
+                    .anyMatch(role -> role.getName().equals("ROLE_DIRECTOR"))) {
+                response.setPosition("Director");
+                response.setPermit(true);
+            } else {
+                response.setPosition("Staff");
+                response.setPermit(false);
+            }
+        }else{
+            List<Objective> objectives;
+            long projectId = objective.getExecute().getProject().getId();
+            Execute execute1 = executeService.getExecuteByUserIdAndProjectId(user.getId(),projectId);
+            if(objective.getType() == 1){
+                Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
+                long cycleId = parentObjective.getCycle().getId();
+                if(objective.getExecute().getProject().getParentId().getId() == 0){
+                    objectives = objectiveRepository.
+                            findAllByCycleIdAndParentId(cycleId,0);
+                    objectives.forEach(objective1 -> {
+                        objectiveList.add(
+                                MetaDataResponse.builder()
+                                        .id(objective1.getId())
+                                        .name(objective1.getName())
+                                        .build()
+                        );
+                    });
+                }else{
+                    long parentProjectId = objective.getExecute().getProject().getParentId().getId();
+                    objectives = objectiveRepository.
+                            findAllByProjectIdAndCycleIdAndType(parentProjectId,cycleId,1);
+                    objectives.forEach(objective1 -> {
+                        objectiveList.add(
+                                MetaDataResponse.builder()
+                                        .id(objective1.getId())
+                                        .name(objective1.getName())
+                                        .build()
+                        );
+                    });
+                }
+            }else{
+                long cycleId = objective.getCycle().getId();
+                objectives = objectiveRepository.
+                        findAllByProjectIdAndCycleIdAndType(projectId,cycleId,1);
+                objectives.forEach(objective1 -> {
+                    objectiveList.add(
+                            MetaDataResponse.builder()
+                                    .id(objective1.getId())
+                                    .name(objective1.getName())
+                                    .build()
+                    );
+                });
+            }
+            if(execute1 == null){
+                response.setPosition("None");
+                response.setPermit(false);
+            }else{
+                if(objective.getType() == 1){
+                    String position = execute1.getPosition().getName();
+                    response.setPosition(position);
+                    response.setPermit(execute1.isPm());
+                }else if(objective.getType() == 2){
+                    String position = execute1.getPosition().getName();
+                    response.setPosition(position);
+                    response.setPermit(true);
+                }
+            }
+        }
+        response.setObjectives(objectiveList);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception {
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        if(id == 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(responses)
+                            .build()
+            );
+        }
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        if(objective == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
+        if(parentObjective != null){
+            ArrayList<KeyResult> keyResults =  keyResultService.getKeyResultsByObjectiveId(parentObjective.getId());
+
+            keyResults.forEach(keyResult -> {
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(keyResult.getId())
+                                .name(keyResult.getContent())
+                                .build()
+                );
+            });
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception {
+        List<MetaDataResponse> responses = new ArrayList<>();
+        List<Objective> objectives;
+
+        if(id == 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(responses)
+                            .build()
+            );
+        }
+
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+        if(objective == null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+
+        Execute execute = objective.getExecute();
+        Project project = execute.getProject();
+        Cycle cycle = objective.getCycle();
+        int type = objective.getType();
+
+        if(type == 0){
+             objectives = objectiveRepository.findAllByTypeAndCycleId(type,cycle.getId());
+        } else {
+            objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(project.getId(),cycle.getId(),type);
+        }
+
+        objectives.forEach(obj ->{
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(obj.getId())
+                            .name(obj.getName())
+                            .build()
+            );
+        });
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
@@ -252,5 +454,36 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             string.append(along).append(",");
         }
         return string.toString();
+    }
+
+    public ObjectiveResponse setObjective(Objective objective, List<KeyResultResponse> keyResults){
+        return ObjectiveResponse.builder().id(objective.getId())
+                .title(objective.getName())
+                .content(objective.getContent())
+                .userId(objective.getExecute().getUser().getId())
+                .projectId(objective.getExecute().getProject() == null ? 0 :
+                        objective.getExecute().getProject().getId())
+                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                .changing(objective.getChanging())
+                .cycleId(objective.getCycle().getId())
+                .parentId(objective.getParentId())
+                .progress(objective.getProgress())
+                .status(objective.getStatus())
+                .type(objective.getType())
+                .weight(objective.getWeight())
+                .keyResults(keyResults)
+                .build();
+    }
+
+    public KeyResultResponse setKeyResult(KeyResult keyResult){
+        return KeyResultResponse.builder()
+                .id(keyResult.getId())
+                .content(keyResult.getContent())
+                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
+                .startValue(keyResult.getFromValue())
+                .targetedValue(keyResult.getToValue())
+                .valueObtained(keyResult.getValueObtained())
+                .reference(keyResult.getReference())
+                .build();
     }
 }

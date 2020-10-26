@@ -12,6 +12,7 @@ public interface UserService {
 
     ResponseEntity<?> changePassword(UserChangePasswordDto userChangePasswordDto, String jwtToken) throws Exception;
 
+    ResponseEntity<?> saveAvatarLink(String url, String token) throws Exception;
     ResponseEntity<?> getAllUsers(String jwtToken) throws Exception;
 
     ResponseEntity<?> getUserInformationById(long id, String jwtToken) throws Exception;
