@@ -71,9 +71,9 @@ public class ObjectiveController {
             @ApiParam(value = "ID của Objective cha", required = true)
             @RequestParam(name = "objectiveId") long objectiveId,
             @ApiParam(value = "ID của Cycle cần lấy danh sách Objective con")
-            @RequestParam(name = "cycleId") long cycleId){
+            @RequestParam(name = "cycleId") long cycleId) {
         try {
-            return objectiveService.getListChildObjectiveByObjectiveId(objectiveId,cycleId);
+            return objectiveService.getListChildObjectiveByObjectiveId(objectiveId, cycleId);
         } catch (Exception e) {
             logger.error("get list child objectives failed");
             logger.error(e.getMessage());
@@ -89,7 +89,7 @@ public class ObjectiveController {
     @GetMapping(path = "/list-okr/{userId}")
     public ResponseEntity<?> getListObjectiveTitleByUserId(
             @ApiParam(value = "User ID cần lấy danh sách Objective", required = true)
-            @PathVariable(name = "userId") long userId){
+            @PathVariable(name = "userId") long userId) {
         try {
             return objectiveService.getListObjectiveTitleByUserId(userId);
         } catch (Exception e) {
@@ -103,11 +103,12 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách Objectives cha của objective hiện tại")
     @GetMapping(path = "/parent-okr/{id}")
     public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(@PathVariable(name = "id") long id,
-                                                                  @RequestHeader(name = "Authorization") String token){
+                                                                  @RequestHeader(name = "Authorization") String token) {
         try {
-            return objectiveService.getParentObjectiveTitleByObjectiveId(id,token);
+            return objectiveService.getParentObjectiveTitleByObjectiveId(id, token);
         } catch (Exception e) {
             logger.error("get parent objective titles failed");
             logger.error(e.getMessage());
@@ -119,8 +120,9 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách key result cha của objective hiện tại")
     @GetMapping(path = "/parent-key_result/{id}")
-    public ResponseEntity<?> getListParentKeyResultByObjectiveId(@PathVariable(value = "id") long id){
+    public ResponseEntity<?> getListParentKeyResultByObjectiveId(@PathVariable(value = "id") long id) {
         try {
             return objectiveService.getParentKeyResultTitleByObjectiveId(id);
         } catch (Exception e) {
@@ -134,8 +136,9 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách objective có thể liên kết với objective hiện tại")
     @GetMapping(path = "/align-objective/{id}")
-    public ResponseEntity<?> getListAlignByObjectiveId(@PathVariable(value = "id") long id){
+    public ResponseEntity<?> getListAlignByObjectiveId(@PathVariable(value = "id") long id) {
         try {
             return objectiveService.getListAlignByObjectiveId(id);
         } catch (Exception e) {

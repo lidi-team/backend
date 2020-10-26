@@ -11,11 +11,11 @@ public interface ObjectiveService {
 
     ResponseEntity<ApiResponse> deleteObjective(long id);
 
-    ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId,long cycleId) throws Exception;
+    ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception;
 
     ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception;
 
-    ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id,String token) throws Exception;
+    ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception;
 
     ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
 

@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface ReportService  {
+public interface ReportService {
 
     ResponseEntity<?> getCheckinHistoryByObjectiveId(long id);
 

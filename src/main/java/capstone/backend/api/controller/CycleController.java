@@ -3,29 +3,24 @@ package capstone.backend.api.controller;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.Cycle;
-import capstone.backend.api.service.CycleService;
 import capstone.backend.api.service.impl.CycleServiceImpl;
-import capstone.backend.api.service.impl.ObjectiveServiceImpl;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/cycle")
+@Api(value = "Chu kì")
 public class CycleController {
     private CommonProperties commonProperties;
 
@@ -33,10 +28,10 @@ public class CycleController {
     private static final Logger logger = LoggerFactory.getLogger(CycleController.class);
 
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "lấy thông tin chu kì theo id")
     @GetMapping(path = "/current/{id}")
     public ResponseEntity<?> getCurrentCycle(
-            @ApiParam(value = "", required = true)
+            @ApiParam(required = true)
             @PathVariable(value = "id") long id) {
         try {
             return cycleService.getCurrentCycle(id);
@@ -54,9 +49,9 @@ public class CycleController {
     @ApiOperation(value = "")
     @GetMapping(path = "/all")
     public ResponseEntity<?> viewListCycles(
-            @ApiParam(value = "S? trang c?n truy v?n, trang d?u ti�n l� 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "S? lu?ng k?t qu? tr�n m?i trang, s? nguy�n", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "K?t qu? tr? v? s?p x?p theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         try {
             return cycleService.getAllCycles(page, size, sort, jwtToken);
@@ -93,7 +88,7 @@ public class CycleController {
     @ApiOperation(value = "")
     @PutMapping(path = "update")
     public ResponseEntity<?> updateCycle(
-            @ApiParam(value = "", required = true) @Valid @RequestBody Cycle cycle,
+            @ApiParam(required = true) @Valid @RequestBody Cycle cycle,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Update cycle: " + cycle.getName());
         try {
@@ -111,7 +106,7 @@ public class CycleController {
     @ApiOperation(value = "")
     @DeleteMapping(path = "delete")
     public ResponseEntity<?> deleteCycle(
-            @ApiParam(value = "", required = true) @RequestParam(name = "id") long id,
+            @ApiParam(required = true) @RequestParam(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Delete cycle: " + id);
         try {
@@ -130,9 +125,9 @@ public class CycleController {
     @GetMapping(path = "search")
     public ResponseEntity<?> searchByDate(
             @ApiParam(value = "", required = true) @RequestParam(name = "date") String date,
-            @ApiParam(value = "S? trang c?n truy v?n, trang d?u ti�n l� 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "S? lu?ng k?t qu? tr�n m?i trang, s? nguy�n", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "K?t qu? tr? v? s?p x?p theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Search cycle: " + date);
         try {

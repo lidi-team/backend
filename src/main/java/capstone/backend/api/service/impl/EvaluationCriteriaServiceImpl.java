@@ -26,7 +26,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         List<EvaluationCriteria> criterias = evaluationRepository.findAll();
 
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
-        criterias.forEach(criteria ->{
+        criterias.forEach(criteria -> {
             responses.add(
                     MetaDataResponse.builder()
                             .id(criteria.getId())

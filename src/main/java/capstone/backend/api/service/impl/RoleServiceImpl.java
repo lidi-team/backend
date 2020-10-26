@@ -32,8 +32,8 @@ public class RoleServiceImpl implements RoleService {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
-                .message(commonProperties.getMESSAGE_SUCCESS())
-                .data(roles).build()
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(roles).build()
         );
     }
 }

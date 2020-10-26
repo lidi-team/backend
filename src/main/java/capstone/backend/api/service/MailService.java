@@ -6,5 +6,5 @@ import javax.mail.MessagingException;
 
 @Service
 public interface MailService {
-    void CreateMailVerifyCode(String email,String code) throws MessagingException;
+    void CreateMailVerifyCode(String email, String code) throws MessagingException;
 }

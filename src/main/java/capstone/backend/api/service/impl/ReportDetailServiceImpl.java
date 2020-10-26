@@ -9,7 +9,6 @@ import capstone.backend.api.repository.ReportDetailRepository;
 import capstone.backend.api.service.ReportDetailService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.templateresolver.FileTemplateResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ReportDetailServiceImpl implements ReportDetailService {
         List<ReportDetail> details = new ArrayList<>();
         List<KeyResult> keyResults = new ArrayList<>();
 
-        list.forEach(item ->{
+        list.forEach(item -> {
             KeyResult keyResult = keyResultRepository.findById(item.getKeyResultId()).orElse(null);
             details.add(
                     ReportDetail.builder()
@@ -42,10 +41,10 @@ public class ReportDetailServiceImpl implements ReportDetailService {
                             .keyResult(keyResult)
                             .build()
             );
-            if(keyResult != null){
+            if (keyResult != null) {
                 keyResult.setValueObtained(item.getValueObtained());
                 keyResult.setProgress(Math.abs((item.getValueObtained() - keyResult.getFromValue())
-                        /(keyResult.getToValue() - keyResult.getFromValue())));
+                        / (keyResult.getToValue() - keyResult.getFromValue())));
 
                 keyResults.add(keyResult);
             }

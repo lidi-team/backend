@@ -1,7 +1,6 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.controller.ObjectiveController;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.Department;

@@ -3,7 +3,6 @@ package capstone.backend.api.controller;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.KeyResultServiceImpl;
-import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,7 @@ public class KeyResultController {
     private KeyResultServiceImpl keyResultService;
 
     @GetMapping(path = "/objective/{id}")
-    public ResponseEntity<?> getListKeyResultByObjectiveId(@PathVariable(value = "id") long id){
+    public ResponseEntity<?> getListKeyResultByObjectiveId(@PathVariable(value = "id") long id) {
         try {
             return null;
         } catch (Exception e) {

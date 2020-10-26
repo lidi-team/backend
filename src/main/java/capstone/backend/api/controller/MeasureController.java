@@ -2,7 +2,6 @@ package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.Cycle;
 import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import capstone.backend.api.service.impl.UnitOfKeyResultServiceImpl;
@@ -15,15 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/measure")
 public class MeasureController {
     private CommonProperties commonProperties;
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(ObjectiveServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeasureController.class);
     private UnitOfKeyResultServiceImpl unitOfKeyResultService;
 
     @ApiOperation(value = "")

@@ -9,5 +9,5 @@ import java.util.List;
 @Service
 public interface ReportDetailService {
 
-    void addReportDetails(List<CheckinDetailDto> list, Report report) throws  Exception;
+    void addReportDetails(List<CheckinDetailDto> list, Report report) throws Exception;
 }

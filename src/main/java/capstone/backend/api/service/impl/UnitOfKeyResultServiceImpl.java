@@ -2,7 +2,6 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.Cycle;
 import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.repository.UnitOfKeyResultRepository;
 import capstone.backend.api.service.UnitOfKeyResultService;
@@ -23,7 +22,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     private CommonProperties commonProperties;
 
     @Override
-    public UnitOfKeyResult getUnitById(long id){
+    public UnitOfKeyResult getUnitById(long id) {
         return unitRepository.findById(id).orElse(null);
     }
 
@@ -56,7 +55,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
-        }else{
+        } else {
             unitOfKeyResult = unit;
             unitRepository.save(unitOfKeyResult);
         }
@@ -77,7 +76,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
-        }else{
+        } else {
             unitOfKeyResult.setDelete(true);
             unitRepository.save(unitOfKeyResult);
         }

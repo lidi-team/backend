@@ -10,7 +10,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class UserController {
 
     private CommonProperties commonProperties;
 
-    @ApiOperation(value = "Th�ng tin t�i kho?n dang dang nh?p")
+    @ApiOperation(value = "Thông tin tài khoản đăng nhập")
     @GetMapping("me")
     public ResponseEntity<?> getUserInformation(
             @ApiParam(value = "", required = true)
@@ -45,10 +44,10 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Thay d?i password t�i kho?n dang dang nh?p")
+    @ApiOperation(value = "Thay đổi mật khẩu của tài khoản hiện tại")
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
-            @ApiParam(value = "Th�ng tin t�i kho?n c?n d?i password", required = true)
+            @ApiParam(value = "Thông tin password mới", required = true)
             @Valid @RequestBody UserChangePasswordDto userPassDto,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Change password:");
@@ -65,11 +64,12 @@ public class UserController {
         }
     }
 
+    @ApiOperation(value = "lưu avatar link của tài khoản")
     @PutMapping("/upload-avatar")
     public ResponseEntity<?> uploadAvatar(@Valid @RequestParam(name = "avatarUrl") String url,
-                                            @RequestHeader(value = "Authorization") String token) {
+                                          @RequestHeader(value = "Authorization") String token) {
         try {
-            return userService.saveAvatarLink(url,token);
+            return userService.saveAvatarLink(url, token);
         } catch (Exception e) {
             logger.error("upload image failed!");
             logger.error(e.getMessage());
@@ -81,7 +81,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Danh s�ch to�n b? user, kh�ng ph�n trang")
+    @ApiOperation(value = "Danh sách toàn bộ user, không phân trang")
     @GetMapping("/all")
     public ResponseEntity<?> getAllUser(
             @RequestHeader(value = "Authorization") String jwtToken) {
@@ -99,12 +99,12 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Danh s�ch to�n b? user, c� ph�n trang")
+    @ApiOperation(value = "Danh sách toàn bộ user có phân trang")
     @GetMapping("/allPaging")
     public ResponseEntity<?> getAllUserPaging(
-            @ApiParam(value = "S? trang c?n truy v?n, trang d?u ti�n l� 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "S? lu?ng k?t qu? tr�n m?i trang, s? nguy�n", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "K?t qu? tr? v? s?p x?p theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get user in paging: " + page);
         try {
@@ -120,10 +120,10 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Th�ng tin t�i kho?n theo ID")
+    @ApiOperation(value = "Thông tin tài khoản theo ID")
     @GetMapping("")
     public ResponseEntity<?> getUserById(
-            @ApiParam(value = "ID c?a t�i kho?n c?n l?y th�ng tin", required = true)
+            @ApiParam(value = "ID của tài khoản cần lấy id", required = true)
             @RequestParam(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get info id: " + id);
@@ -140,7 +140,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "S? lu?ng PM v� Staff tr�n h? th?ng")
+    @ApiOperation(value = "số lượng pm và staff trên hệ thống")
     @GetMapping("/admin")
     public ResponseEntity<?> getNumberStaff(
             @RequestHeader(value = "Authorization") String jwtToken) {
@@ -159,12 +159,12 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Danh s�ch Staff, c� ph�n trang")
+    @ApiOperation(value = "Danh sách Staff, có phân trang")
     @GetMapping("/listStaffPaging")
     public ResponseEntity<?> getStaffPaging(
-            @ApiParam(value = "S? trang c?n truy v?n, trang d?u ti�n l� 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "S? lu?ng k?t qu? tr�n m?i trang, s? nguy�n", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "K?t qu? tr? v? s?p x?p theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get list staff in paging: " + page);
         try {
@@ -180,7 +180,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "C?p nh?t th�ng tin c?a t�i kho?n Staff")
+    @ApiOperation(value = "cập nhật thông tin tài khoản Staff")
     @PutMapping("")
     public ResponseEntity<?> updateInfoStaff(
             @ApiParam(value = "", required = true)
@@ -200,11 +200,11 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "K�ch ho?t/ Hu? k�ch ho?t t�i kho?n theo ID")
+    @ApiOperation(value = "Kích hoạt/ Huỷ kích hoạt tài khoản theo ID")
     @GetMapping("isActive")
     public ResponseEntity<?> activeStaff(
-            @ApiParam(value = "ID c?a t�i kho?n c?n k�ch ho?t/ hu?", required = true) @RequestParam(name = "id") long id,
-            @ApiParam(value = "true: k�ch ho?t, false: hu? k�ch ho?t", required = true) @RequestParam(name = "isActive") boolean isActive,
+            @ApiParam(value = "ID của tài khoản cần kích hoạt/ huỷ", required = true) @RequestParam(name = "id") long id,
+            @ApiParam(value = "true: kích hoạt, false: huỷ kích hoạt", required = true) @RequestParam(name = "isActive") boolean isActive,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Active/ De-active user id: " + id);
         try {
@@ -220,13 +220,13 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "T�m nh�n vi�n theo t�n, c� ph�n trang")
+    @ApiOperation(value = "Tìm nhân viên theo tên, có phân trang")
     @GetMapping("search")
     public ResponseEntity<?> searchByName(
-            @ApiParam(value = "T�n nh�n v?t c?n t�m", required = true) @RequestParam(name = "name") String name,
-            @ApiParam(value = "S? trang c?n truy v?n, trang d?u ti�n l� 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "S? lu?ng k?t qu? tr�n m?i trang, s? nguy�n", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "K?t qu? tr? v? s?p x?p theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Tên nhân vật cần tìm", required = true) @RequestParam(name = "name") String name,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Search user by name: " + name);
         try {

@@ -28,11 +28,11 @@ public class ProjectServiceImpl implements ProjectService {
         projects.forEach(project -> {
             projectListResponses.add(
                     ProjectListResponse.builder()
-                    .id(project.getId())
-                    .name(project.getName())
-                    .fromDate(project.getFromDate())
-                    .toDate(project.getEndDate())
-                    .build()
+                            .id(project.getId())
+                            .name(project.getName())
+                            .fromDate(project.getFromDate())
+                            .toDate(project.getEndDate())
+                            .build()
 
             );
         });

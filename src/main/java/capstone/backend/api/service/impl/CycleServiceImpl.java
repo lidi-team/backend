@@ -53,13 +53,13 @@ public class CycleServiceImpl implements CycleService {
     @Override
     public ResponseEntity<ApiResponse> getCurrentCycle(long id) {
         Cycle cycle;
-        if(id == 0){
+        if (id == 0) {
             Date today = new Date();
             cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
         } else {
             cycle = cycleRepository.findById(id).orElse(null);
         }
-        if( cycle == null){
+        if (cycle == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
@@ -107,7 +107,7 @@ public class CycleServiceImpl implements CycleService {
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
-        }else{
+        } else {
             currentCycle = cycle;
             cycleRepository.save(currentCycle);
         }
@@ -128,7 +128,7 @@ public class CycleServiceImpl implements CycleService {
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
-        }else{
+        } else {
             currentCycle.setDelete(true);
             cycleRepository.save(currentCycle);
         }

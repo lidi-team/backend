@@ -2,12 +2,12 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.CheckinDto;
-import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.ProjectObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.ReportResponse;
+import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ReportService;
 import capstone.backend.api.utils.security.JwtUtils;
@@ -85,7 +85,7 @@ public class ReportServiceImpl implements ReportService {
 
         report = reportRepository.save(report);
 
-        reportDetailService.addReportDetails(checkinDto.getCheckinDetails(),report);
+        reportDetailService.addReportDetails(checkinDto.getCheckinDetails(), report);
 
         return null;
     }
@@ -107,7 +107,7 @@ public class ReportServiceImpl implements ReportService {
 
         executes.forEach(execute -> {
             List<ObjectiveResponse> objectivesResponse = new ArrayList<>();
-            List<Objective> objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(),cycleId,2);
+            List<Objective> objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(), cycleId, 2);
 
             objectives.forEach(objective -> {
                 List<KeyResultResponse> keyResultResponses = new ArrayList<>();
@@ -118,7 +118,7 @@ public class ReportServiceImpl implements ReportService {
                     keyResultResponses.add(keyResultResponse);
                 });
 
-                ObjectiveResponse objectiveResponse = objectiveService.setObjective(objective,keyResultResponses);
+                ObjectiveResponse objectiveResponse = objectiveService.setObjective(objective, keyResultResponses);
                 objectivesResponse.add(objectiveResponse);
             });
 

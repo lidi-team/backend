@@ -19,6 +19,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
     private CommonProperties commonProperties;
 
     private ProjectPositionRepository positionRepository;
+
     @Override
     public ResponseEntity<ApiResponse> getListMetaDataPosition() throws Exception {
         ArrayList<ProjectPosition> positions = (ArrayList<ProjectPosition>) positionRepository.findAll();

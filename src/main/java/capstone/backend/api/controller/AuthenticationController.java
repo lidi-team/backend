@@ -1,7 +1,8 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.*;
+import capstone.backend.api.dto.UserLoginDto;
+import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.AuthenticationService;
 import io.swagger.annotations.Api;
@@ -10,7 +11,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
-@Api(value = "�ang nh?p, x�c th?c")
+@Api(value = "Đăng nhập, xác thực")
 @AllArgsConstructor
 public class AuthenticationController {
 
@@ -30,10 +30,10 @@ public class AuthenticationController {
 
     private CommonProperties commonProperties;
 
-    @ApiOperation(value = "�ang nh?p")
+    @ApiOperation(value = "Đăng nhập")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(
-            @ApiParam(value = "Th�ng tin dang nh?p", required = true)
+            @ApiParam(value = "Thông tin đăng nhập", required = true)
             @Valid @RequestBody UserLoginDto userLoginDto) {
         try {
             return authenticationService.authenticate(userLoginDto);
@@ -45,7 +45,7 @@ public class AuthenticationController {
                             .code(commonProperties.getCODE_AUTH_FAILED())
                             .message(commonProperties.getMESSAGE_AUTH_FAILED()).build()
             );
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Undefined error");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
@@ -56,10 +56,10 @@ public class AuthenticationController {
         }
     }
 
-    @ApiOperation(value = "�ang k�")
+    @ApiOperation(value = "Đăng kí")
     @PostMapping("/signup")
     public ResponseEntity<?> register(
-            @ApiParam(value = "Th�ng tin dang k� m?t t�i kho?n", required = true)
+            @ApiParam(value = "Thông tin đăng kí tài khoản", required = true)
             @Valid @RequestBody UserRegisterDto userRegisterDto) {
         try {
             return authenticationService.register(userRegisterDto);
@@ -73,9 +73,11 @@ public class AuthenticationController {
             );
         }
     }
-
+    @ApiOperation(value = "Reset lại mật khẩu")
     @GetMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(@RequestParam(name = "email") String email) {
+    public ResponseEntity<?> resetPassword(
+            @ApiParam(value = "Thông tin email để gửi mật khẩu mới", required = true)
+            @RequestParam(name = "email") String email) {
         try {
             return authenticationService.getVerifyCode(email);
         } catch (Exception e) {

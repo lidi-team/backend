@@ -3,6 +3,7 @@ package capstone.backend.api.controller;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,8 +31,9 @@ public class MetadataController {
 
     private EvaluationCriteriaServiceImpl criteriaService;
 
+    @ApiOperation(value = "lấy toàn bộ department cho dropdown list")
     @GetMapping(path = "/departments")
-    public ResponseEntity<?> getListMetaDataDepartment(){
+    public ResponseEntity<?> getListMetaDataDepartment() {
         try {
             return departmentService.getListMetaDataDepartment();
         } catch (Exception e) {
@@ -45,8 +47,9 @@ public class MetadataController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ project cho dropdown list")
     @GetMapping(path = "/projects")
-    public ResponseEntity<?> getListMetaDataProject(){
+    public ResponseEntity<?> getListMetaDataProject() {
         try {
             return projectService.getListMetaDataProject();
         } catch (Exception e) {
@@ -60,8 +63,9 @@ public class MetadataController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ position cho dropdown list")
     @GetMapping(path = "/positions")
-    public ResponseEntity<?> getListMetaDataPosition(){
+    public ResponseEntity<?> getListMetaDataPosition() {
         try {
             return positionService.getListMetaDataPosition();
         } catch (Exception e) {
@@ -75,8 +79,9 @@ public class MetadataController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ cycle cho dropdown list")
     @GetMapping(path = "/cycles")
-    public ResponseEntity<?> getListMetaDataCycle(){
+    public ResponseEntity<?> getListMetaDataCycle() {
         try {
             return cycleService.getListMetaDataCycle();
         } catch (Exception e) {
@@ -90,8 +95,9 @@ public class MetadataController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ criteria cho dropdown list")
     @GetMapping(path = "/evaluationCriteria")
-    public ResponseEntity<?> getListMetaDataEvaluationCriteria(){
+    public ResponseEntity<?> getListMetaDataEvaluationCriteria() {
         try {
             return criteriaService.getListMetaDataEvaluation();
         } catch (Exception e) {

@@ -1,6 +1,5 @@
 package capstone.backend.api.service;
 
-import capstone.backend.api.entity.Cycle;
 import capstone.backend.api.entity.UnitOfKeyResult;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -28,11 +28,11 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private UserDetailsServiceImpl userDetailsService;
 
-    private String parseJwt(HttpServletRequest req){
+    private String parseJwt(HttpServletRequest req) {
         String headerAuth = req.getHeader("Authorization");
 
-        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("lidi ") ){
-            return  headerAuth.substring(5);
+        if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("lidi ")) {
+            return headerAuth.substring(5);
         }
         return null;
     }
@@ -40,20 +40,20 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
                                     FilterChain filterChain) throws ServletException, IOException {
-        try{
+        try {
             String jwt = parseJwt(req);
-            if(jwt != null && jwtUtils.validateJwtToken(jwt)){
+            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
                 String email = jwtUtils.getUserNameFromJwtToken(jwt);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
-        }catch (Exception e){
-            logger.error("Cannot set user authentication!",e);
+        } catch (Exception e) {
+            logger.error("Cannot set user authentication!", e);
         }
 
-        filterChain.doFilter(req,res);
+        filterChain.doFilter(req, res);
     }
 }

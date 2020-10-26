@@ -1,7 +1,6 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.dto.KeyResultDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.KeyResult;
 import capstone.backend.api.entity.Objective;
 import capstone.backend.api.entity.UnitOfKeyResult;
@@ -10,7 +9,6 @@ import capstone.backend.api.service.KeyResultService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,7 +25,7 @@ public class KeyResultServiceImpl implements KeyResultService {
     private UnitOfKeyResultServiceImpl unitService;
 
     @Override
-    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) throws Exception{
+    public ArrayList<KeyResult> addKeyResults(List<KeyResultDto> keyResultDtos, Objective objective) throws Exception {
 
         ArrayList<KeyResult> keyResults = new ArrayList<>();
 
@@ -69,7 +67,7 @@ public class KeyResultServiceImpl implements KeyResultService {
                         break;
                     }
                 }
-                if(!check){
+                if (!check) {
                     keyResultOlds.remove(keyResultOlds.get(i));
                 }
             }

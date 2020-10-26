@@ -1,14 +1,11 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.ResetPasswordDto;
 import capstone.backend.api.dto.UserLoginDto;
 import capstone.backend.api.dto.UserRegisterDto;
-import capstone.backend.api.dto.VerifyCodeDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
-import capstone.backend.api.entity.VerificationCode;
 import capstone.backend.api.entity.security.TokenResponseInfo;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.AuthenticationService;
@@ -26,11 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -156,9 +150,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String verifyCode = generateRandomCode(commonProperties.getCodeSize());
 
-        try{
+        try {
             mailService.CreateMailVerifyCode(email, verifyCode);
-        }catch (Exception ignored){
+        } catch (Exception ignored) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_TIME_OUT())
