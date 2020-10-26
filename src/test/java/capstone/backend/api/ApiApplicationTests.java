@@ -49,7 +49,7 @@ class ApiApplicationTests {
 	@Test
 	public void test1() throws Exception {
 		this.mockMvc.perform(get("/api/test/teacherRegister")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("hoang9.com")));
+				.andExpect(content().string(containsString("hoang10.com")));
 	}
 
 	// @Test
