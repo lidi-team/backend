@@ -17,4 +17,6 @@ public interface UnitOfKeyResultService {
     ResponseEntity<?> deleteMeasure(long id, String jwtToken) throws Exception;
 
     ResponseEntity<?> searchMeasure(String name, int page, int size, String sort, String jwtToken);
+
+    ResponseEntity<?> getListMetaDataMeasureUnit() throws Exception;
 }

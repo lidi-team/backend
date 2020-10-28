@@ -31,6 +31,8 @@ public class MetadataController {
 
     private EvaluationCriteriaServiceImpl criteriaService;
 
+    private UnitOfKeyResultServiceImpl unitService;
+
     @ApiOperation(value = "lấy toàn bộ department cho dropdown list")
     @GetMapping(path = "/departments")
     public ResponseEntity<?> getListMetaDataDepartment() {
@@ -100,6 +102,21 @@ public class MetadataController {
     public ResponseEntity<?> getListMetaDataEvaluationCriteria() {
         try {
             return criteriaService.getListMetaDataEvaluation();
+        } catch (Exception e) {
+            logger.error("get meta data evaluation criteria failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @GetMapping(path = "/measureUnit")
+    public ResponseEntity<?> getListMetaDataMeasureUnit(){
+        try {
+            return unitService.getListMetaDataMeasureUnit();
         } catch (Exception e) {
             logger.error("get meta data evaluation criteria failed");
             logger.error(e.getMessage());
