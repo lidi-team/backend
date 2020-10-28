@@ -19,11 +19,11 @@ import javax.validation.Valid;
 @RequestMapping(value = "/api/objective")
 public class ObjectiveController {
 
-    private ObjectiveServiceImpl objectiveService;
+    private final ObjectiveServiceImpl objectiveService;
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveController.class);
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
 
     @ApiOperation(value = "Thêm Objective")
@@ -151,4 +151,5 @@ public class ObjectiveController {
             );
         }
     }
+
 }

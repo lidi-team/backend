@@ -113,6 +113,7 @@ public class MetadataController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ measure unit cho dropdown list")
     @GetMapping(path = "/measureUnit")
     public ResponseEntity<?> getListMetaDataMeasureUnit(){
         try {
