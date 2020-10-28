@@ -9,4 +9,6 @@ public interface ProjectService {
     ResponseEntity<ApiResponse> getAllProjects() throws Exception;
 
     ResponseEntity<ApiResponse> getListMetaDataProject() throws Exception;
+
+    ResponseEntity<ApiResponse> getAllAvailableProjectOfUser(String token,int type) throws Exception;
 }
