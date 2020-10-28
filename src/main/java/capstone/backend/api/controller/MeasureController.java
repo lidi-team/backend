@@ -23,7 +23,7 @@ public class MeasureController {
     private static final Logger logger = LoggerFactory.getLogger(MeasureController.class);
     private UnitOfKeyResultServiceImpl unitOfKeyResultService;
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "lấy toàn bộ measure, có phân trang")
     @GetMapping(path = "/all")
     public ResponseEntity<?> viewListCycles(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
@@ -43,7 +43,7 @@ public class MeasureController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "tạo measure")
     @PostMapping(path = "create")
     public ResponseEntity<?> createMeasure(
             @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
@@ -62,7 +62,7 @@ public class MeasureController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "chập nhật measure theo id")
     @PutMapping(path = "update")
     public ResponseEntity<?> updateMeasure(
             @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
@@ -80,7 +80,7 @@ public class MeasureController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "xoá measure theo id")
     @DeleteMapping(path = "delete")
     public ResponseEntity<?> deleteMeasure(
             @ApiParam(value = "", required = true) @RequestParam(name = "id") long id,
@@ -98,7 +98,7 @@ public class MeasureController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "tìm kiếm measure, có sắp xếp")
     @GetMapping(path = "search")
     public ResponseEntity<?> searchByName(
             @ApiParam(value = "", required = true) @RequestParam(name = "name") String name,
