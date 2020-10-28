@@ -24,19 +24,19 @@ public class MailServiceImpl implements MailService {
     private JavaMailSender javaMailSender;
 
     @Override
-    public void CreateMailVerifyCode(String userEmail,String code) throws MessagingException {
+    public void CreateMailVerifyCode(String userEmail, String code) throws MessagingException {
         Context context = new Context();
-        context.setVariable("title","Get verify code to reset your password");
+        context.setVariable("title", "Get new password for your Account at LiDiOKRs");
         context.setVariable("code", code);
 
-        String body = templateEngine.process("getVerificationCodeTempl",context);
+        String body = templateEngine.process("getVerificationCodeTempl", context);
 
         MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,true);
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(userEmail);
-        helper.setSubject("Verify code to reset your password");
-        helper.setText(body,true);
+        helper.setSubject("Get new password for your Account at LiDiOKRs");
+        helper.setText(body, true);
         javaMailSender.send(message);
-        logger.info("email sent to email: "+ userEmail);
+        logger.info("email sent to email: " + userEmail);
     }
 }

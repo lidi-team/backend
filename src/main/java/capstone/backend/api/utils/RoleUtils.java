@@ -18,18 +18,18 @@ public class RoleUtils {
 
     public static final String ROLE_USER = "ROLE_USER";
 
-    public Set<Role> getUserRoles(Set<String> strRoles){
+    public Set<Role> getUserRoles(Set<String> strRoles) {
         Set<Role> roles = new HashSet<>();
 
-        if(strRoles == null){
+        if (strRoles == null) {
             Role role = roleRepository.findRoleByName(RoleUtils.ROLE_USER).get();
             logger.info("add role USER");
             roles.add(role);
-        } else{
-            strRoles.forEach(role->{
+        } else {
+            strRoles.forEach(role -> {
                 Role roleDb = roleRepository.findRoleByName(role).orElse(null);
-                if(roleDb != null){
-                    logger.info("add role "+role);
+                if (roleDb != null) {
+                    logger.info("add role " + role);
                     roles.add(roleDb);
                 }
             });

@@ -1,6 +1,5 @@
 package capstone.backend.api.service.impl.security;
 
-import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
 import capstone.backend.api.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElse(null);
-        if(user != null){
+        if (user != null) {
             Set<GrantedAuthority> authorities = user.getRoles().stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
                     .collect(Collectors.toSet());

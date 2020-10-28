@@ -25,7 +25,7 @@ public class JwtUtils {
 
     private CommonProperties commonProperties;
 
-    public String generateJwtToken(Authentication authentication){
+    public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         Date now = new Date();
@@ -35,11 +35,11 @@ public class JwtUtils {
                 .setSubject((userDetails.getUsername()))
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512,commonProperties.getSecret())
+                .signWith(SignatureAlgorithm.HS512, commonProperties.getSecret())
                 .compact();
     }
 
-    public String getUserNameFromJwtToken(String token){
+    public String getUserNameFromJwtToken(String token) {
         return Jwts.parser()
                 .setSigningKey(commonProperties.getSecret())
                 .parseClaimsJws(token)
@@ -47,8 +47,8 @@ public class JwtUtils {
                 .getSubject();
     }
 
-    public boolean validateJwtToken(String authToken){
-        try{
+    public boolean validateJwtToken(String authToken) {
+        try {
             Jwts.parser()
                     .setSigningKey(commonProperties.getSecret())
                     .parseClaimsJws(authToken);
@@ -67,7 +67,7 @@ public class JwtUtils {
         return false;
     }
 
-    public TokenResponseInfo generateTokenResponseInfo(String email, String password,AuthenticationManager authenticationManager) {
+    public TokenResponseInfo generateTokenResponseInfo(String email, String password, AuthenticationManager authenticationManager) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -82,10 +82,9 @@ public class JwtUtils {
                 .collect(Collectors.toSet());
 
 
-
         return TokenResponseInfo.builder()
                 .jwtToken(jwt)
-                .user(new TokenResponseInfo().userResponse(userDetails,roles)).build();
+                .user(new TokenResponseInfo().userResponse(userDetails, roles)).build();
     }
 
 }

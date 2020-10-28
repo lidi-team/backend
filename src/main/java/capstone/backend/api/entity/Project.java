@@ -22,7 +22,7 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name = "parentId")
-    private Project parentProject;
+    private Project parentId;
 
     @NonNull
     private String name;
@@ -40,8 +40,7 @@ public class Project {
     private Date endDate;
 
     @OneToMany
-    @Builder.Default
-    private Set<Project> projects = new HashSet<>();
+    private Set<Project> childProject = new HashSet<>();
 
     @Builder.Default
     private boolean isDelete = false;

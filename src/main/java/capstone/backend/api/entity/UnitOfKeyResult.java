@@ -9,7 +9,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table( name = "UnitOfKeyResult",
+@Table(name = "UnitOfKeyResult",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "name")
         })

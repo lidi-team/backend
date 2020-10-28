@@ -1,7 +1,8 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
-import capstone.backend.api.dto.*;
+import capstone.backend.api.dto.UserLoginDto;
+import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.AuthenticationService;
 import io.swagger.annotations.Api;
@@ -10,7 +11,6 @@ import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -45,7 +45,7 @@ public class AuthenticationController {
                             .code(commonProperties.getCODE_AUTH_FAILED())
                             .message(commonProperties.getMESSAGE_AUTH_FAILED()).build()
             );
-        } catch (Exception e){
+        } catch (Exception e) {
             logger.error("Undefined error");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
@@ -56,10 +56,10 @@ public class AuthenticationController {
         }
     }
 
-    @ApiOperation(value = "Đăng ký")
+    @ApiOperation(value = "Đăng kí")
     @PostMapping("/signup")
     public ResponseEntity<?> register(
-            @ApiParam(value = "Thông tin đăng ký một tài khoản", required = true)
+            @ApiParam(value = "Thông tin đăng kí tài khoản", required = true)
             @Valid @RequestBody UserRegisterDto userRegisterDto) {
         try {
             return authenticationService.register(userRegisterDto);
@@ -73,50 +73,13 @@ public class AuthenticationController {
             );
         }
     }
-
-    @ApiOperation(value = "Lấy mã xác thực")
-    @GetMapping("/get-verify-code")
-    public ResponseEntity<?> getVerifyCode(
-            @ApiParam(value = "Địa chỉ để gửi mail", required = true)
-            @Valid @Param("email") String email) {
+    @ApiOperation(value = "Reset lại mật khẩu")
+    @GetMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(
+            @ApiParam(value = "Thông tin email để gửi mật khẩu mới", required = true)
+            @RequestParam(name = "email") String email) {
         try {
             return authenticationService.getVerifyCode(email);
-        } catch (Exception e) {
-            logger.error("Send code failed!");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @ApiOperation(value = "Xác thực bằng mã")
-    @PostMapping("/verify-code")
-    public ResponseEntity<?> verifyCode(
-            @ApiParam(value = "Mã xác thực", required = true)
-            @Valid @RequestBody VerifyCodeDto verifyCodeDto) {
-        try {
-            return authenticationService.verifyCode(verifyCodeDto);
-        } catch (Exception e) {
-            logger.error("verify code failed!");
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
-
-    @ApiOperation(value = "Reset password")
-    @PostMapping("/reset-password")
-    public ResponseEntity<?> resetPassword(
-            @ApiParam(value = "Password cũ và mới", required = true)
-            @Valid @RequestBody ResetPasswordDto resetPasswordDto) {
-        try {
-            return authenticationService.resetPassword(resetPasswordDto);
         } catch (Exception e) {
             logger.error("Reset password failed!");
             logger.error(e.getMessage());

@@ -35,7 +35,7 @@ pipeline {
         success {
             mail to: 'dinhlehoang35@gmail.com, hoangledinh65@gmail.com',
              subject: "Success notification from Jenkins!",
-             body: "Congratulation!"
+             body: "Success!"
         }
     }
 }

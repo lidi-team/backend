@@ -8,7 +8,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 @Repository
-public interface KeyResultRepository extends JpaRepository<KeyResult,Long> {
+public interface KeyResultRepository extends JpaRepository<KeyResult, Long> {
 
     @Transactional
     void deleteKeyResultsByObjectiveId(long id);

@@ -1,6 +1,7 @@
 package capstone.backend.api.service;
 
-import capstone.backend.api.dto.*;
+import capstone.backend.api.dto.UserLoginDto;
+import capstone.backend.api.dto.UserRegisterDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
@@ -12,8 +13,4 @@ public interface AuthenticationService {
     ResponseEntity<?> register(UserRegisterDto userRegisterDto) throws AuthenticationException;
 
     ResponseEntity<?> getVerifyCode(String email) throws Exception;
-
-    ResponseEntity<?> verifyCode(VerifyCodeDto verifyCodeDto) throws Exception;
-
-    ResponseEntity<?> resetPassword(ResetPasswordDto resetPass) throws Exception;
 }

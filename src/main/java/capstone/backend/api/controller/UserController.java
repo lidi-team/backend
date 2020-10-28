@@ -25,7 +25,7 @@ public class UserController {
 
     private CommonProperties commonProperties;
 
-    @ApiOperation(value = "Thông tin tài khoản đang đăng nhập")
+    @ApiOperation(value = "Thông tin tài khoản đăng nhập")
     @GetMapping("me")
     public ResponseEntity<?> getUserInformation(
             @ApiParam(value = "", required = true)
@@ -44,10 +44,10 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Thay đổi password tài khoản đang đăng nhập")
+    @ApiOperation(value = "Thay đổi mật khẩu của tài khoản hiện tại")
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
-            @ApiParam(value = "Thông tin tài khoản cần đổi password", required = true)
+            @ApiParam(value = "Thông tin password mới", required = true)
             @Valid @RequestBody UserChangePasswordDto userPassDto,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Change password:");
@@ -55,6 +55,23 @@ public class UserController {
             return userService.changePassword(userPassDto, jwtToken);
         } catch (Exception e) {
             logger.error("change password failed for user: ");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "lưu avatar link của tài khoản")
+    @PutMapping("/upload-avatar")
+    public ResponseEntity<?> uploadAvatar(@Valid @RequestParam(name = "avatarUrl") String url,
+                                          @RequestHeader(value = "Authorization") String token) {
+        try {
+            return userService.saveAvatarLink(url, token);
+        } catch (Exception e) {
+            logger.error("upload image failed!");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -82,7 +99,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Danh sách toàn bộ user, có phân trang")
+    @ApiOperation(value = "Danh sách toàn bộ user có phân trang")
     @GetMapping("/allPaging")
     public ResponseEntity<?> getAllUserPaging(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
@@ -106,7 +123,7 @@ public class UserController {
     @ApiOperation(value = "Thông tin tài khoản theo ID")
     @GetMapping("")
     public ResponseEntity<?> getUserById(
-            @ApiParam(value = "ID của tài khoản cần lấy thông tin", required = true)
+            @ApiParam(value = "ID của tài khoản cần lấy id", required = true)
             @RequestParam(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get info id: " + id);
@@ -123,7 +140,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Số lượng PM và Staff trên hệ thống")
+    @ApiOperation(value = "số lượng pm và staff trên hệ thống")
     @GetMapping("/admin")
     public ResponseEntity<?> getNumberStaff(
             @RequestHeader(value = "Authorization") String jwtToken) {
@@ -163,7 +180,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "Cập nhật thông tin của tài khoản Staff")
+    @ApiOperation(value = "cập nhật thông tin tài khoản Staff")
     @PutMapping("")
     public ResponseEntity<?> updateInfoStaff(
             @ApiParam(value = "", required = true)
