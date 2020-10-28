@@ -2,6 +2,7 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
+import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.UnitOfKeyResult;
 import capstone.backend.api.repository.UnitOfKeyResultRepository;
 import capstone.backend.api.service.UnitOfKeyResultService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -97,6 +99,26 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(unitOfKeyResults).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListMetaDataMeasureUnit() throws Exception {
+        List<UnitOfKeyResult> units = unitRepository.findAll();
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        units.forEach(unit -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(unit.getId())
+                            .name(unit.getName())
+                            .build()
+            );
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses).build()
         );
     }
 
