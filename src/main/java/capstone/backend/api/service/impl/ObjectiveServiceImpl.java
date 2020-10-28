@@ -269,7 +269,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             if (objective.getType() == 1) {
                 Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
                 long cycleId = parentObjective.getCycle().getId();
-                if (objective.getExecute().getProject().getParentId().getId() == 0) {
+                if (objective.getExecute().getProject().getParent() == null) {
                     objectives = objectiveRepository.
                             findAllByCycleIdAndParentId(cycleId, 0);
                     objectives.forEach(objective1 -> {
@@ -281,7 +281,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         );
                     });
                 } else {
-                    long parentProjectId = objective.getExecute().getProject().getParentId().getId();
+                    long parentProjectId = objective.getExecute().getProject().getParent().getId();
                     objectives = objectiveRepository.
                             findAllByProjectIdAndCycleIdAndType(parentProjectId, cycleId, 1);
                     objectives.forEach(objective1 -> {

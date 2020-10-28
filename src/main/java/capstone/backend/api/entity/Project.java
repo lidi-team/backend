@@ -22,7 +22,7 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name = "parentId")
-    private Project parentId;
+    private Project parent;
 
     @NonNull
     private String name;
