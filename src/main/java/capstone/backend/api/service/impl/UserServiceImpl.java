@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
+        Department department = departmentService.getDepartmentById(user.getDepartment().getId());
         Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
         ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
 

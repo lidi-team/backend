@@ -17,9 +17,7 @@ public class ExecuteServiceImpl implements ExecuteService {
     @Override
     public ArrayList<Execute> getListExecuteByUserId(long id) {
 
-        return executeRepository.findAllByUserId(id)
-                .map(Arrays::asList).map(ArrayList::new)
-                .orElseGet(ArrayList::new);
+        return executeRepository.findAllByUserId(id);
     }
 
     @Override
