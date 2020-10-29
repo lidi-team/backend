@@ -46,7 +46,7 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "lấy tất cả cycle, có phân trang")
     @GetMapping(path = "/all")
     public ResponseEntity<?> viewListCycles(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
@@ -66,7 +66,7 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "tạo cycle mới")
     @PostMapping(path = "create")
     public ResponseEntity<?> createCycle(
             @ApiParam(value = "", required = true) @Valid @RequestBody Cycle cycle,
@@ -85,7 +85,7 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "cập nhật thông tin cycle")
     @PutMapping(path = "update")
     public ResponseEntity<?> updateCycle(
             @ApiParam(required = true) @Valid @RequestBody Cycle cycle,
@@ -103,7 +103,7 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "xoá một cycle theo id")
     @DeleteMapping(path = "delete")
     public ResponseEntity<?> deleteCycle(
             @ApiParam(required = true) @RequestParam(name = "id") long id,
@@ -121,7 +121,7 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "")
+    @ApiOperation(value = "tìm kiếm cycle, có sắp xếp")
     @GetMapping(path = "search")
     public ResponseEntity<?> searchByDate(
             @ApiParam(value = "", required = true) @RequestParam(name = "date") String date,
