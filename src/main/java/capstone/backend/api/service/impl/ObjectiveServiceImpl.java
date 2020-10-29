@@ -431,6 +431,39 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception {
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+
+        if (objective == null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+        ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
+
+        keyResults.forEach(keyResult -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(keyResult.getId())
+                            .name(keyResult.getContent())
+                            .build()
+            );
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty() &&
                 !objectvieDto.getContent().trim().isEmpty() &&
