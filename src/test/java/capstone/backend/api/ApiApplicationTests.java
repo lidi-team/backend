@@ -10,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.jayway.restassured.RestAssured.*;
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.path.json.JsonPath;
-import com.jayway.restassured.response.Response;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -35,36 +33,35 @@ class ApiApplicationTests {
 	}
 	
 	// Test trong truong hop so sanh 2 ket qua cuoi cung
-	@Test
-	public void test1() throws Exception {
-		Assert.assertEquals("Video Size is not equal to 4", "ab");
-		Assert.assertTrue(false, "abc");
-		Assert.assertEquals(34, 23);
-	}
+	// @Test
+	// public void test1() throws Exception {
+	// 	Assert.assertEquals("Video Size is not equal to 4", "ab");
+	// 	Assert.assertTrue(false, "abc");
+	// 	Assert.assertEquals(34, 23);
+	// }
 
 	// Test Response API tra ve
 	@Test
 	public void test4() throws Exception {
 		//usecase 1
-		given().
-			when().
-				get("/test/teacherRegister").
-			then().
-				assertThat().
-				body(containsString("hoang5.com"));
+		// given().
+		// 	when().
+		// 		get("/test/teacherRegister").
+		// 	then().
+		// 		assertThat().
+		// 		body(containsString("hoang6.com"));
 
 		//usecase 2
 		get("http://bluemarble97.com:8081/api/test/teacherRegister").then().assertThat()
 			.body(matchesJsonSchemaInClasspath("pattern.json"));
-		
 		//usecase 3
-		given().
-			when().
-				get("/test/teacherRegister").
-			then().
-				assertThat().
-				body("password", equalTo("123445")).
-				body("gender", equalTo(2));
+		// given().
+		// 	when().
+		// 		get("/test/teacherRegister").
+		// 	then().
+		// 		assertThat().
+		// 		body("password", equalTo("123445")).
+		// 		body("gender", equalTo(2));
 
 	}
 

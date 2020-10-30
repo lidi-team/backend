@@ -38,7 +38,8 @@
             "default": "",
             "examples": [
                 "hoang5.com"
-            ]
+            ],
+            "maxLength": 3
         },
         "password": {
             "$id": "#/properties/password",
