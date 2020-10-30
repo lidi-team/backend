@@ -1,93 +1,71 @@
 package capstone.backend.api;
 
-// import static org.testng.annotations.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import capstone.backend.api.utils.RestUtils; 
+
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Test;
+
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.expression.TypedValue;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static com.jayway.restassured.RestAssured.*;
+import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
+import com.jayway.restassured.response.Response;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.jsonschema.JsonSchema;
-import com.fasterxml.jackson.module.jsonSchema.factories.JsonSchemaFactory;
-import com.github.fge.jsonschema.*;
-import com.jayway.jsonpath.JsonPath;
-import com.networknt.schema.SpecVersion;
-import org.junit.jupiter.api.Test;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertTrue;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.testng.Assert;
+import com.jayway.restassured.RestAssured;
 
-import io.restassured.RestAssured;
-import io.restassured.RestAssured.*;
-import io.restassured.matcher.RestAssuredMatchers.*;
-import org.hamcrest.Matchers.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
-import static org.hamcrest.CoreMatchers.is;
-import java.io.*;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 @SpringBootTest
 @AutoConfigureMockMvc
 class ApiApplicationTests {
 
-	@Autowired
-	private MockMvc mockMvc;
-
+	//Setup moi truong test
+	@BeforeSuite
+    public void setup (){
+        //Test Setup
+        RestUtils.setBaseURI("http://bluemarble97.com:8081"); //Setup Base URI
+        RestUtils.setBasePath("api"); //Setup Base Path
+		RestUtils.setContentType(ContentType.JSON); //Setup Content Type
+		RestUtils.createGetQueryPath();
+	}
+	
+	// Test trong truong hop so sanh 2 ket qua cuoi cung
 	@Test
 	public void test1() throws Exception {
-		this.mockMvc.perform(get("/api/test/teacherRegister")).andDo(print()).andExpect(status().isOk())
-				.andExpect(content().string(containsString("hoang12.com")));
+		Assert.assertEquals("Video Size is not equal to 4", "ab");
+		Assert.assertTrue(false, "abc");
+		Assert.assertEquals(34, 23);
 	}
 
-	// @Test
-	// public void test2() throws Exception {
-
-	// 	this.mockMvc.perform(get("/api/test/studentRegister")).andDo(print()).andExpect(status().isOk())
-	// 			.andExpect(content().string(containsString("mothaiba")));
-	// }
-
-	// @Test
-	// public void test3() throws Exception {
-	// 	this.mockMvc.perform(get("/api/test/studentRegister")).andDo(print()).andExpect(status().isOk())
-	// 			.andExpect(content().string(containsString("mothaiba")))
-	// 			// .andExpect(content().json("{\"email\":\"sontung199x@gmail.com\",\"password\":\"123445\",\"dob\":\"22/11/1998\",\"fullName\":Le
-	// 			// Son
-	// 			// Tung\",\"phoneNumber\":\"0342529999\",\"gender\":\"male\",\"roles\":[\"ROLE_EMPLOYEE\"]}"));
-	// 			.andExpect(jsonPath("$.email").value("nguyenminhchau@gmail.com"))
-	// 			.andExpect(jsonPath("$.password").value("mothaiba"))
-	// 			.andExpect(jsonPath("$.fullName").value("Nguyen Minh Chau"))
-	// 			.andExpect(jsonPath("$.phoneNumber").value("0369829999"))
-	// 			.andExpect(jsonPath("$.gender").value("female"));
-	// }
-
+	// Test Response API tra ve
 	@Test
 	public void test4() throws Exception {
-		// InputStream is = new FileInputStream("./jsonschema.json");
-		// BufferedReader buf = new BufferedReader(new InputStreamReader(is));
-		// String line = buf.readLine();
-		// StringBuilder sb = new StringBuilder();
-		// while (line != null) {
-		// 	sb.append(line).append("\n");
-		// 	line = buf.readLine();
-		// }
-		// String fileAsString = sb.toString();
+		//usecase 1
+		given().
+			when().
+				get("/test/teacherRegister").
+			then().
+				assertThat().
+				body(containsString("hoang5.com"));
 
-		// JSONTokener schemaData = new JSONTokener(fileAsString);
-		// // JSONObject jsonschema = new JSONObject(schemaData);
-		// System.out.println(fileAsString);
+		//usecase 2
+		get("http://bluemarble97.com:8081/api/test/teacherRegister").then().assertThat()
+			.body(matchesJsonSchemaInClasspath("pattern.json"));
+		
+		//usecase 3
+		given().
+			when().
+				get("/test/teacherRegister").
+			then().
+				assertThat().
+				body("password", equalTo("123445")).
+				body("gender", equalTo(2));
+
 	}
 
 }
