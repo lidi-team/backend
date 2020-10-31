@@ -137,8 +137,11 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
+
         keyResultService.deleteKeyResultByObjectiveId(id);
-        objectiveRepository.deleteById(id);
+
+        objectiveRepository.updateObjectiveParentId(id);
+        objectiveRepository.deleteObjective(id);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -151,7 +154,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
         Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
-        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
+        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentIdAndDeleteFalse(cycleId, objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
         ChildObjectiveResponse childObject = new ChildObjectiveResponse();
         objectives.forEach(objective -> {
@@ -271,7 +274,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 long cycleId = parentObjective.getCycle().getId();
                 if (objective.getExecute().getProject().getParent() == null) {
                     objectives = objectiveRepository.
-                            findAllByCycleIdAndParentId(cycleId, 0);
+                            findAllByCycleIdAndParentIdAndDeleteFalse(cycleId, 0);
                     objectives.forEach(objective1 -> {
                         objectiveList.add(
                                 MetaDataResponse.builder()
@@ -408,7 +411,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         int type = objective.getType();
 
         if (type == 0) {
-            objectives = objectiveRepository.findAllByTypeAndCycleId(type, cycle.getId());
+            objectives = objectiveRepository.findAllByTypeAndCycleIdAndDeleteFalse(type, cycle.getId());
         } else {
             objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(project.getId(), cycle.getId(), type);
         }

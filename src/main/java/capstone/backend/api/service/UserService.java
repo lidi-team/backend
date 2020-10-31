@@ -1,6 +1,7 @@
 package capstone.backend.api.service;
 
 import capstone.backend.api.dto.UserChangePasswordDto;
+import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,4 +30,6 @@ public interface UserService {
     ResponseEntity<?> isActiveUserById(long id, boolean isActive, String jwtToken) throws Exception;
 
     ResponseEntity<?> searchByName(String name, int page, int size, String sort, String jwtToken) throws Exception;
+
+    ResponseEntity<?> addListUsers(UserRegisterDto userRegisterDto) throws Exception;
 }

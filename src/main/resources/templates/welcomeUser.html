@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .container {
+            padding: 28px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3 th:text="${title}">TITLE</h3>
+    <p>Welcome <p th:text="${fullName}"></p> to LiDi OKRs System, your access password is:</p>
+    <h4 th:text="${code}">code</h4>
+</div>
+</body>
+</html>
