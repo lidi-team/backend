@@ -360,6 +360,11 @@ public class UserServiceImpl implements UserService {
                             UserFailResponse.builder()
                                     .email(userRegister.getEmail())
                                     .reason(validate)
+                                    .departmentId(userRegister.getDepartmentId())
+                                    .dob(userRegister.getDob())
+                                    .fullName(userRegister.getFullName())
+                                    .gender(userRegister.getGender())
+                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;
@@ -369,6 +374,11 @@ public class UserServiceImpl implements UserService {
                             UserFailResponse.builder()
                                     .email(userRegister.getEmail())
                                     .reason("Email đã được sử dụng!")
+                                    .departmentId(userRegister.getDepartmentId())
+                                    .dob(userRegister.getDob())
+                                    .fullName(userRegister.getFullName())
+                                    .gender(userRegister.getGender())
+                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;
@@ -379,6 +389,11 @@ public class UserServiceImpl implements UserService {
                             UserFailResponse.builder()
                                     .email(userRegister.getEmail())
                                     .reason("Không tìm thấy Đơn vị!")
+                                    .departmentId(userRegister.getDepartmentId())
+                                    .dob(userRegister.getDob())
+                                    .fullName(userRegister.getFullName())
+                                    .gender(userRegister.getGender())
+                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;

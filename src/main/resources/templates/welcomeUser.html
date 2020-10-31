@@ -7,12 +7,15 @@
         .container {
             padding: 28px;
         }
+        .name{
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h3 th:text="${title}">TITLE</h3>
-    <p>Welcome <p th:text="${fullName}"></p> to LiDi OKRs System, your access password is:</p>
+    <p>Welcome <span class="name" th:text="${fullName}"></span> to LiDi OKRs System, your access password is:</p>
     <h4 th:text="${code}">code</h4>
 </div>
 </body>

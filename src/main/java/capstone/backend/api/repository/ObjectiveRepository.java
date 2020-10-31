@@ -12,7 +12,8 @@ import java.util.List;
 @Repository
 public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
 
-    List<Objective> findAllByCycleIdAndParentIdAndDeleteFalse(long cycleId, long objectiveId);
+    @Query(value = "select o from Objective o where o.cycle.id = :cycleId and o.parentId = :objectiveId and o.isDelete = false")
+    List<Objective> findAllByCycleIdAndParentId(@Param(value = "cycleId") long cycleId,@Param(value = "objectiveId") long objectiveId);
 
     @Query(value = "select o from Objective o where o.execute.user.id = :userId and o.type = 2 and o.isDelete = false")
     List<Objective> findAllByUserId(@Param(value = "userId") long userId);
@@ -21,8 +22,8 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     List<Objective> findAllByProjectIdAndCycleIdAndType(@Param(value = "projectId") long projectId,
                                                         @Param(value = "cycleId") long cycleId,
                                                         @Param(value = "type") int type);
-
-    List<Objective> findAllByTypeAndCycleIdAndDeleteFalse(int type, long cycle);
+    @Query(value = "select o from Objective o where o.type = :type and o.cycle.id = :cycleId and o.isDelete = false")
+    List<Objective> findAllByTypeAndCycleId(@Param(value = "type")int type,@Param(value = "cycleId") long cycleId);
 
     @Transactional
     @Query(value = "update Objective o set o.parentId = -1 where o.parentId = :id")

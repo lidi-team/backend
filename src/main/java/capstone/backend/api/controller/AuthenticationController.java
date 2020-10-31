@@ -26,9 +26,9 @@ public class AuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     @ApiOperation(value = "Đăng nhập")
     @PostMapping("/signin")

@@ -1,5 +1,10 @@
 package capstone.backend.api.utils;
 
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@AllArgsConstructor
 public class StringUtils {
 
     public String generateRandomCode(int codeSize) {

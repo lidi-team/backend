@@ -27,21 +27,21 @@ import java.util.List;
 @AllArgsConstructor
 public class ObjectiveServiceImpl implements ObjectiveService {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
 
-    private ObjectiveRepository objectiveRepository;
+    private final ObjectiveRepository objectiveRepository;
 
-    private KeyResultServiceImpl keyResultService;
+    private final KeyResultServiceImpl keyResultService;
 
-    private ExecuteServiceImpl executeService;
+    private final ExecuteServiceImpl executeService;
 
-    private CycleServiceImpl cycleService;
+    private final CycleServiceImpl cycleService;
 
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
@@ -154,7 +154,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
         Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
-        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentIdAndDeleteFalse(cycleId, objectiveId);
+        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
         ChildObjectiveResponse childObject = new ChildObjectiveResponse();
         objectives.forEach(objective -> {
@@ -274,7 +274,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 long cycleId = parentObjective.getCycle().getId();
                 if (objective.getExecute().getProject().getParent() == null) {
                     objectives = objectiveRepository.
-                            findAllByCycleIdAndParentIdAndDeleteFalse(cycleId, 0);
+                            findAllByCycleIdAndParentId(cycleId, 0);
                     objectives.forEach(objective1 -> {
                         objectiveList.add(
                                 MetaDataResponse.builder()
@@ -411,7 +411,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         int type = objective.getType();
 
         if (type == 0) {
-            objectives = objectiveRepository.findAllByTypeAndCycleIdAndDeleteFalse(type, cycle.getId());
+            objectives = objectiveRepository.findAllByTypeAndCycleId(type, cycle.getId());
         } else {
             objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(project.getId(), cycle.getId(), type);
         }
