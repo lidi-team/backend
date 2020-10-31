@@ -79,6 +79,7 @@ public class KeyResultServiceImpl implements KeyResultService {
     @Override
     public void deleteKeyResultByObjectiveId(long id) {
         logger.info("deleted key result with objective id : " + id);
+        keyResultRepository.updateKeyResultParentId(id);
         keyResultRepository.deleteKeyResultsByObjectiveId(id);
     }
 

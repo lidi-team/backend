@@ -27,21 +27,21 @@ import java.util.List;
 @AllArgsConstructor
 public class ObjectiveServiceImpl implements ObjectiveService {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
 
-    private ObjectiveRepository objectiveRepository;
+    private final ObjectiveRepository objectiveRepository;
 
-    private KeyResultServiceImpl keyResultService;
+    private final KeyResultServiceImpl keyResultService;
 
-    private ExecuteServiceImpl executeService;
+    private final ExecuteServiceImpl executeService;
 
-    private CycleServiceImpl cycleService;
+    private final CycleServiceImpl cycleService;
 
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
@@ -137,8 +137,11 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
+
         keyResultService.deleteKeyResultByObjectiveId(id);
-        objectiveRepository.deleteById(id);
+
+        objectiveRepository.updateObjectiveParentId(id);
+        objectiveRepository.deleteObjective(id);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
