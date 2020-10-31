@@ -5,6 +5,7 @@ import capstone.backend.api.dto.CheckinDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.ReportServiceImpl;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +17,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/checkin")
 public class ReportController {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(ReportController.class);
 
-    private ReportServiceImpl reportService;
+    private final ReportServiceImpl reportService;
 
 
     @ApiOperation(value = "danh sách lịch sử check in của 1 objective")
@@ -55,12 +56,16 @@ public class ReportController {
         }
     }
 
-    @ApiOperation(value = "Danh sách objective cá nhân của user theo chu kì")
+    @ApiOperation(value = "Danh sách objective của user theo chu kì")
     @GetMapping(path = "/list-objective")
     public ResponseEntity<?> getListObjectiveByCycleId(@RequestHeader(name = "Authorization") String token,
-                                                       @RequestParam(name = "cycleId") long id) {
+                                                       @ApiParam(value = "id của chu kì hiện tại")
+                                                       @RequestParam(name = "cycleId") long id,
+                                                       @ApiParam(value = "phân loại request. type = 1 là list objective project," +
+                                                               " type = 2 là list objective cá nhân")
+                                                       @RequestParam(name = "type") int type) {
         try {
-            return reportService.getListObjectiveByCycleId(token, id);
+            return reportService.getListObjectiveByCycleId(token, id, type);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
@@ -71,4 +76,5 @@ public class ReportController {
             );
         }
     }
+
 }

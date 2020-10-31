@@ -91,46 +91,23 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId) throws Exception {
+    public ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId, int type) throws Exception {
         List<ProjectObjectiveResponse> responses = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
-        }
+        User user = userRepository.findByEmail(email).get();
 
         List<Execute> executes = executeRepository.findAllByUserIdAndOpenProject(user.getId());
 
         executes.forEach(execute -> {
             List<ObjectiveResponse> objectivesResponse = new ArrayList<>();
-            List<Objective> objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(), cycleId, 2);
+            List<Objective> objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(), cycleId, type);
 
-            objectives.forEach(objective -> {
-                List<KeyResultResponse> keyResultResponses = new ArrayList<>();
-                List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
-
-                keyResults.forEach(keyResult -> {
-                    KeyResultResponse keyResultResponse = objectiveService.setKeyResult(keyResult);
-                    keyResultResponses.add(keyResultResponse);
-                });
-
-                ObjectiveResponse objectiveResponse = objectiveService.setObjective(objective, keyResultResponses);
-                objectivesResponse.add(objectiveResponse);
-            });
-
-
-            responses.add(
-                    ProjectObjectiveResponse.builder()
-                            .id(execute.getProject() == null ? 0 : execute.getProject().getId())
-                            .name(execute.getProject() == null ? "Objective Công ty" : execute.getProject().getName())
-                            .position(execute.getPosition().getName())
-                            .objectives(objectivesResponse)
-                            .build()
-            );
+            if(type == 1 && execute.getPosition().getName().equalsIgnoreCase("project manager")){
+                setProjectResponse(responses, execute, objectivesResponse, objectives);
+            } else if(type == 2){
+                setProjectResponse(responses, execute, objectivesResponse, objectives);
+            }
         });
 
         return ResponseEntity.ok().body(
@@ -138,6 +115,31 @@ public class ReportServiceImpl implements ReportService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(responses)
+                        .build()
+        );
+    }
+
+    private void setProjectResponse(List<ProjectObjectiveResponse> responses, Execute execute,
+                                    List<ObjectiveResponse> objectivesResponse, List<Objective> objectives) {
+        objectives.forEach(objective -> {
+            List<KeyResultResponse> keyResultResponses = new ArrayList<>();
+            List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
+
+            keyResults.forEach(keyResult -> {
+                KeyResultResponse keyResultResponse = objectiveService.setKeyResult(keyResult);
+                keyResultResponses.add(keyResultResponse);
+            });
+
+            ObjectiveResponse objectiveResponse = objectiveService.setObjective(objective, keyResultResponses);
+            objectivesResponse.add(objectiveResponse);
+        });
+
+        responses.add(
+                ProjectObjectiveResponse.builder()
+                        .id(execute.getProject() == null ? 0 : execute.getProject().getId())
+                        .name(execute.getProject() == null ? "Objective Công ty" : execute.getProject().getName())
+                        .position(execute.getPosition().getName())
+                        .objectives(objectivesResponse)
                         .build()
         );
     }
