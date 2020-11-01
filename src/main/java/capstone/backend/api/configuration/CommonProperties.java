@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@PropertySource("classpath:CommonProperties.properties")
+@PropertySource(value = "classpath:CommonProperties.properties",encoding = "utf-8")
 @ConfigurationProperties(prefix = "information")
 public class CommonProperties {
 

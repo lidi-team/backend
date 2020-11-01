@@ -6,6 +6,7 @@ import capstone.backend.api.dto.UserRegister;
 import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.User.UserFailResponse;
+import capstone.backend.api.entity.ApiResponse.User.UserFailedItem;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
 import capstone.backend.api.entity.Department;
 import capstone.backend.api.entity.Execute;
@@ -310,12 +311,18 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> addListUsers(UserRegisterDto userDto) throws Exception {
         HashMap<User, String> map = new HashMap<>();
         List<UserRegister> userRegisters = userDto.getUsers();
-        List<UserFailResponse> fails = new ArrayList<>();
+        List<UserFailedItem> fails = new ArrayList<>();
         List<User> successes = new ArrayList<>();
 
         divineList(successes, fails, userRegisters, map);
 
         userRepository.saveAll(successes);
+
+        UserFailResponse failResponse = UserFailResponse.builder()
+                .numberOfSuccess(successes.size())
+                .numberOfFailed(fails.size())
+                .list(fails)
+                .build();
 
         (new Thread(() -> {
             try {
@@ -329,7 +336,7 @@ public class UserServiceImpl implements UserService {
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(fails)
+                        .data(failResponse)
                         .build()
         );
     }
@@ -350,14 +357,14 @@ public class UserServiceImpl implements UserService {
         return "";
     }
 
-    private void divineList(List<User> users, List<UserFailResponse> fails,
+    private void divineList(List<User> users, List<UserFailedItem> fails,
                             List<UserRegister> userRegisters, HashMap<User, String> map) {
         for (UserRegister userRegister : userRegisters) {
             try {
                 String validate = validateRegisterInformation(userRegister);
                 if (!validate.equals("")) {
                     fails.add(
-                            UserFailResponse.builder()
+                            UserFailedItem.builder()
                                     .email(userRegister.getEmail())
                                     .reason(validate)
                                     .departmentId(userRegister.getDepartmentId())
@@ -371,7 +378,7 @@ public class UserServiceImpl implements UserService {
                 }
                 if (userRepository.existsUserByEmail(userRegister.getEmail())) {
                     fails.add(
-                            UserFailResponse.builder()
+                            UserFailedItem.builder()
                                     .email(userRegister.getEmail())
                                     .reason("Email đã được sử dụng!")
                                     .departmentId(userRegister.getDepartmentId())
@@ -386,7 +393,7 @@ public class UserServiceImpl implements UserService {
                 Department department = departmentService.getDepartmentById(userRegister.getDepartmentId());
                 if (department == null) {
                     fails.add(
-                            UserFailResponse.builder()
+                            UserFailedItem.builder()
                                     .email(userRegister.getEmail())
                                     .reason("Không tìm thấy Đơn vị!")
                                     .departmentId(userRegister.getDepartmentId())
@@ -420,9 +427,13 @@ public class UserServiceImpl implements UserService {
                 map.put(user, password);
             } catch (Exception e) {
                 fails.add(
-                        UserFailResponse.builder()
+                        UserFailedItem.builder()
                                 .email(userRegister.getEmail())
-                                .reason(e.getMessage())
+                                .departmentId(userRegister.getDepartmentId())
+                                .dob(userRegister.getDob())
+                                .fullName(userRegister.getFullName())
+                                .gender(userRegister.getGender())
+                                .phoneNumber(userRegister.getPhoneNumber())
                                 .build()
                 );
             }
