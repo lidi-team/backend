@@ -71,7 +71,10 @@ public class KeyResultServiceImpl implements KeyResultService {
                     keyResultOlds.remove(keyResultOlds.get(i));
                 }
             }
-            keyResultRepository.deleteInBatch(keyResultOlds);
+            keyResultOlds.forEach(keyResult -> {
+                keyResult.setDelete(true);
+            });
+            keyResultRepository.saveAll(keyResultOlds);
         }
         return (ArrayList<KeyResult>) keyResultRepository.saveAll(keyResults);
     }

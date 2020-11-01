@@ -2,6 +2,7 @@ package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.KeyResult;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,12 +13,19 @@ import java.util.ArrayList;
 @Repository
 public interface KeyResultRepository extends JpaRepository<KeyResult, Long> {
 
+    @Modifying
     @Transactional
-    void deleteKeyResultsByObjectiveId(long id);
+    @Query(value = "update KeyResult set isDelete = true where objective.id = :id")
+    void deleteKeyResultsByObjectiveId(@Param(value = "id") long id);
 
-    ArrayList<KeyResult> findAllByObjectiveId(long id);
+    @Query(value = "select k from KeyResult k where k.objective.id = :id and k.isDelete = false ")
+    ArrayList<KeyResult> findAllByObjectiveId(@Param(value = "id") long id);
 
+    @Modifying
     @Transactional
-    @Query(value = "update KeyResult k set k.parentId = -1 where k.parentId = :id")
+    @Query(value = "update key_results set parent_id = 0 where id in (" +
+                    " select c.id from( \n" +
+                        " select id from key_results where parent_id = :id) " +
+                    " as c)",nativeQuery = true)
     void updateKeyResultParentId(@Param(value = "id") long id);
 }
