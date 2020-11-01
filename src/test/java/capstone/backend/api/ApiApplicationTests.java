@@ -1,15 +1,16 @@
 package capstone.backend.api;
-
-import capstone.backend.api.utils.RestUtils; 
-
+import  capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.utils.RestUtils;
+import java.util.*;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
-
+import org.json.simple.JSONObject;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static com.jayway.restassured.RestAssured.*;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Header;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertTrue;
@@ -18,51 +19,39 @@ import org.testng.Assert;
 import com.jayway.restassured.RestAssured;
 
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class ApiApplicationTests {
 
-	//Setup moi truong test
+	private CommonProperties commonProperties;
+
+	String token = "";
+	// String email = commonProperties.getEmail();
+	// String password = commonProperties.getPassword();
 	@BeforeSuite
-    public void setup (){
-        //Test Setup
-        RestUtils.setBaseURI("http://bluemarble97.com:8081"); //Setup Base URI
-        RestUtils.setBasePath("api"); //Setup Base Path
-		RestUtils.setContentType(ContentType.JSON); //Setup Content Type
-		RestUtils.createGetQueryPath();
+	public void setup() {
+		// Test Setup
+		RestUtils.setBaseURI("http://bluemarble97.com:8081"); // Setup Base URI
+		RestUtils.setBasePath("api"); // Setup Base Path
+		RestUtils.setContentType(ContentType.JSON); // Setup Content Type
+		String requestBody = "{\"email\" : \"sontung199x@gmail.com\" , \"password\" : \"123445\"} ";
+		
+		token = given().contentType(ContentType.JSON)
+		.body(requestBody).when().post("auth/signin/")
+		.jsonPath().get("data.jwtToken");
 	}
-	
-	// Test trong truong hop so sanh 2 ket qua cuoi cung
-	// @Test
-	// public void test1() throws Exception {
-	// 	Assert.assertEquals("Video Size is not equal to 4", "ab");
-	// 	Assert.assertTrue(false, "abc");
-	// 	Assert.assertEquals(34, 23);
-	// }
 
-	// Test Response API tra ve
 	@Test
-	public void test4() throws Exception {
-		//usecase 1
-		// given().
-		// 	when().
-		// 		get("/test/teacherRegister").
-		// 	then().
-		// 		assertThat().
-		// 		body(containsString("hoang6.com"));
-
-		//usecase 2
-		get("http://bluemarble97.com:8081/api/test/teacherRegister").then().assertThat()
-			.body(matchesJsonSchemaInClasspath("pattern.json"));
-		//usecase 3
-		// given().
-		// 	when().
-		// 		get("/test/teacherRegister").
-		// 	then().
-		// 		assertThat().
-		// 		body("password", equalTo("123445")).
-		// 		body("gender", equalTo(2));
-
+	public void submitForm() {
+		Header headers = new Header("Authorization", "lidi " +token);
+		given().header(headers).when()
+		.get("http://bluemarble97.com:8081/api/objective/key_result/23/")
+		.then()
+		.assertThat()
+		.body("message", equalTo("Thành công"))
+		.body("code", equalTo(200))
+		.body(matchesJsonSchemaInClasspath("jsonschema.json"));
 	}
 
 }

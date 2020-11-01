@@ -36,6 +36,8 @@ public class CommonProperties {
     private int CODE_UNDEFINE_ERROR;
     private int CODE_PARAM_FORMAT_INVALID;
     private int CODE_EXIST_VALUE;
+    private String email;
+    private String password;
 
 
 }

@@ -228,55 +228,76 @@
             <artifactId>json-path</artifactId>
             <version>4.2.0</version>
             <scope>test</scope>
-            </dependency>
-            
-            
-            <dependency>
+        </dependency>
+
+
+        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>xml-path</artifactId>
             <version>4.2.0</version>
             <scope>test</scope>
-            </dependency>
-            
-            
-            <dependency>
+        </dependency>
+
+
+        <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
             <version>4.2.0</version>
             <scope>test</scope>
-            </dependency>
-    
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.12</version>
-      </dependency>
-    
-      <dependency>
-        <groupId>io.rest-assured</groupId>
-        <artifactId>rest-assured</artifactId>
-        <version>4.0.0</version>
-      </dependency>
-    
-      <dependency>
-        <groupId>com.jayway.restassured</groupId>
-        <artifactId>rest-assured</artifactId>
-        <version>2.9.0</version>
-      </dependency>
-      <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-<dependency>
-    <groupId>com.google.guava</groupId>
-    <artifactId>guava</artifactId>
-    <version>30.0-jre</version>
-</dependency>
+        </dependency>
 
-      <!-- https://mvnrepository.com/artifact/org.testng/testng -->
-<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>7.3.0</version>
-    <scope>test</scope>
-</dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.0-jre</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.3.0</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 
     </dependencies>
 
