@@ -245,7 +245,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "thêm mới danh sách staff vào hệ thống")
-    @PutMapping("/add-staff")
+    @PutMapping(value = "/add-staff")
     public ResponseEntity<?> addListStaff(
             @ApiParam(value = "danh sach staff",required = true)
             @RequestBody UserRegisterDto users) {
