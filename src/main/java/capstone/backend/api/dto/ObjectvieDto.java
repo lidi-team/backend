@@ -13,7 +13,6 @@ public class ObjectvieDto {
 
     private long id;
     private String title;
-    private String content;
     private long userId;
     private long projectId;
     private long parentId;
