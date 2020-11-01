@@ -62,7 +62,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if (objectvieDto.getId() == 0) {
             objective = Objective.builder()
                     .name(objectvieDto.getTitle())
-                    .content(objectvieDto.getContent())
                     .cycle(cycle)
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
@@ -77,7 +76,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             objective = Objective.builder()
                     .id(objectvieDto.getId())
                     .name(objectvieDto.getTitle())
-                    .content(objectvieDto.getContent())
                     .cycle(cycle)
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
@@ -476,7 +474,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty() &&
-                !objectvieDto.getContent().trim().isEmpty() &&
                 objectvieDto.getUserId() != 0;
     }
 
@@ -504,7 +501,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ObjectiveResponse setObjective(Objective objective, List<KeyResultResponse> keyResults) {
         return ObjectiveResponse.builder().id(objective.getId())
                 .title(objective.getName())
-                .content(objective.getContent())
                 .userId(objective.getExecute().getUser().getId())
                 .projectId(objective.getExecute().getProject() == null ? 0 :
                         objective.getExecute().getProject().getId())

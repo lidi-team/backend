@@ -47,9 +47,6 @@ public class Objective {
 
     private String history;
 
-    @NonNull
-    private String content;
-
     @NumberFormat(pattern = "#.#")
     private double progress;
 
