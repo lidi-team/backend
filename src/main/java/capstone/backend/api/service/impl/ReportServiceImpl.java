@@ -73,7 +73,7 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ResponseEntity<?> addCheckin(CheckinDto checkinDto) throws Exception {
 
-        Objective objective = objectiveRepository.findById(checkinDto.getObjectiveId()).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(checkinDto.getObjectiveId());
 
         Report report = Report.builder()
                 .id(checkinDto.getId())

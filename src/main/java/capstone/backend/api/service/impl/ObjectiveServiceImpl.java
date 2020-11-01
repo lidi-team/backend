@@ -127,7 +127,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> deleteObjective(long id) {
 
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             logger.error("Objective not found!");
             return ResponseEntity.badRequest().body(
@@ -137,10 +137,17 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
+        if ((objective.getType() == commonProperties.getOBJ_PROJECT() ||
+             objective.getType() == commonProperties.getOBJ_COMPANY())
+                && objectiveRepository.findFirstByParentId(objective.getId()) != null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message("Không thể xóa mục tiêu của công ty/dự án khi nó đã có mục tiêu con").build()
+            );
+        }
 
         keyResultService.deleteKeyResultByObjectiveId(id);
-
-        objectiveRepository.updateObjectiveParentId(id);
         objectiveRepository.deleteObjective(id);
 
         return ResponseEntity.ok().body(
@@ -153,7 +160,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     @Override
     public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
-        Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
+        Objective objectiveCurrent = objectiveRepository.findByIdAndDelete(objectiveId);
         List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
         ChildObjectiveResponse childObject = new ChildObjectiveResponse();
@@ -220,7 +227,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception {
         ObjectiveTitleResponse response = new ObjectiveTitleResponse();
         List<MetaDataResponse> objectiveList = new ArrayList<>();
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
@@ -270,7 +277,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             long projectId = objective.getExecute().getProject().getId();
             Execute execute1 = executeService.getExecuteByUserIdAndProjectId(user.getId(), projectId);
             if (objective.getType() == 1) {
-                Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
+                Objective parentObjective = objectiveRepository.findByIdAndDelete(objective.getParentId());
                 long cycleId = parentObjective.getCycle().getId();
                 if (objective.getExecute().getProject().getParent() == null) {
                     objectives = objectiveRepository.
@@ -347,7 +354,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .build()
             );
         }
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
             return ResponseEntity.badRequest().body(
@@ -357,7 +364,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .build()
             );
         }
-        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
+        Objective parentObjective = objectiveRepository.findByIdAndDelete(objective.getParentId());
         if (parentObjective != null) {
             ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(parentObjective.getId());
 
@@ -395,7 +402,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
@@ -437,7 +444,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception {
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
             return ResponseEntity.badRequest().body(

@@ -2,6 +2,7 @@ package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.Objective;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,10 +26,13 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     @Query(value = "select o from Objective o where o.type = :type and o.cycle.id = :cycleId and o.isDelete = false")
     List<Objective> findAllByTypeAndCycleId(@Param(value = "type")int type,@Param(value = "cycleId") long cycleId);
 
+    @Modifying
     @Transactional
-    @Query(value = "update Objective o set o.parentId = -1 where o.parentId = :id")
-    void updateObjectiveParentId(@Param(value = "id") long id);
-
     @Query("update Objective o set o.isDelete = true where o.id = :id")
     void deleteObjective(@Param(value = "id") long id);
+
+    Objective findFirstByParentId(long parentId);
+
+    @Query(value = "select o from Objective o where o.id = :id and o.isDelete = false")
+    Objective findByIdAndDelete(long id);
 }
