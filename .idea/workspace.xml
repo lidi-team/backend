@@ -33,7 +33,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="" />
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="Google Cloud (No Merge)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +65,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="gcp" />
+        <entry key="$PROJECT_DIR$" value="developer" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -173,6 +173,14 @@
       <workItem from="1600059422632" duration="12189000" />
       <workItem from="1602994701666" duration="59000" />
     </task>
+    <task id="LOCAL-00001" summary="Google Cloud (No Merge)">
+      <created>1604293664140</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1604293664140</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -189,6 +197,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Google Cloud (No Merge)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Google Cloud (No Merge)" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#Notifications" timestamp="1599578884491">
@@ -221,6 +233,10 @@
     </state>
     <state width="603" height="656" key="DebuggerActiveHint/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1600069999789" />
     <state width="429" height="459" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1599069390200" />
+    <state x="100" y="123" width="1720" height="977" key="DiffContextDialog" timestamp="1604293730272">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="100" y="123" width="1720" height="977" key="DiffContextDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1604293730272" />
     <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1599115724200">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -289,6 +305,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="200" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1599885956073" />
+    <state x="560" y="333" key="Vcs.Push.Dialog.v2" timestamp="1604293694094">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="560" y="333" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604293694094" />
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598515779060">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
