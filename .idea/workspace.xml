@@ -33,7 +33,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="Google Cloud (No Merge)" />
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="Google Cloud (No Merge)">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cloudbuild.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/cloudbuild.yaml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,6 +143,7 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.ApiApplication" />
         <item itemvalue="Application.ApiApplication" />
         <item itemvalue="Application.ApiApplication" />
       </list>

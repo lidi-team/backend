@@ -12,4 +12,4 @@ steps:
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [ 'run', 'deploy', 'orksproject', '--image', 'gcr.io/$PROJECT_ID/orksproject', '--region', 'asia-southeast1', '--platform', 'managed', '--allow-unauthenticated' ]
-images: ["gcr.io/$PROJECT_ID/baseproject"]
+images: ["gcr.io/$PROJECT_ID/orksproject"]
