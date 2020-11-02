@@ -10,7 +10,5 @@ import org.springframework.stereotype.Service;
 public interface AuthenticationService {
     ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException;
 
-    ResponseEntity<?> register(UserRegisterDto userRegisterDto) throws AuthenticationException;
-
     ResponseEntity<?> getVerifyCode(String email) throws Exception;
 }

@@ -1,0 +1,77 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "timestamp": "2020-11-02T03:56:11.772+0000",
+            "status": 400,
+            "error": "Bad Request",
+            "message": "",
+            "path": "/api/objective/key_result/sa"
+        }
+    ],
+    "required": [
+        "timestamp",
+        "status",
+        "error",
+        "message",
+        "path"
+    ],
+    "properties": {
+        "timestamp": {
+            "$id": "#/properties/timestamp",
+            "type": "string",
+            "title": "The timestamp schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "2020-11-02T03:56:11.772+0000"
+            ]
+        },
+        "status": {
+            "$id": "#/properties/status",
+            "type": "integer",
+            "title": "The status schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                400
+            ]
+        },
+        "error": {
+            "$id": "#/properties/error",
+            "type": "string",
+            "title": "The error schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Bad Request"
+            ]
+        },
+        "message": {
+            "$id": "#/properties/message",
+            "type": "string",
+            "title": "The message schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                ""
+            ]
+        },
+        "path": {
+            "$id": "#/properties/path",
+            "type": "string",
+            "title": "The path schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "/api/objective/key_result/sa"
+            ]
+        }
+    },
+    "additionalProperties": true
+}

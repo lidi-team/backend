@@ -48,6 +48,7 @@ public class UserInforResponse {
                     projectResponses.add(ProjectResponse.builder()
                             .id(execute.getProject().getId())
                             .name(execute.getProject().getName())
+                            .position(execute.getPosition().getName())
                             .isPm(execute.isPm()).build());
                 }
             });
@@ -73,5 +74,6 @@ class DepartmentResponse {
 class ProjectResponse {
     private long id;
     private String name;
+    private String position;
     private boolean isPm;
 }

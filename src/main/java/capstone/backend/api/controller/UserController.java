@@ -2,6 +2,7 @@ package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.UserChangePasswordDto;
+import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
 import capstone.backend.api.service.impl.UserServiceImpl;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping(value = "/api/user")
 @RestController
@@ -238,6 +240,25 @@ public class UserController {
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
                             .message("Ngu Controller").build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "thêm mới danh sách staff vào hệ thống")
+    @PutMapping(value = "/add-staff")
+    public ResponseEntity<?> addListStaff(
+            @ApiParam(value = "danh sach staff",required = true)
+            @RequestBody UserRegisterDto users) {
+
+        try {
+            return userService.addListUsers(users);
+        } catch (Exception e) {
+            logger.error("Get all user information");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }
     }

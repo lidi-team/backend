@@ -71,7 +71,10 @@ public class KeyResultServiceImpl implements KeyResultService {
                     keyResultOlds.remove(keyResultOlds.get(i));
                 }
             }
-            keyResultRepository.deleteInBatch(keyResultOlds);
+            keyResultOlds.forEach(keyResult -> {
+                keyResult.setDelete(true);
+            });
+            keyResultRepository.saveAll(keyResultOlds);
         }
         return (ArrayList<KeyResult>) keyResultRepository.saveAll(keyResults);
     }
@@ -79,6 +82,7 @@ public class KeyResultServiceImpl implements KeyResultService {
     @Override
     public void deleteKeyResultByObjectiveId(long id) {
         logger.info("deleted key result with objective id : " + id);
+        keyResultRepository.updateKeyResultParentId(id);
         keyResultRepository.deleteKeyResultsByObjectiveId(id);
     }
 

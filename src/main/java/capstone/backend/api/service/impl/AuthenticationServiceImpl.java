@@ -32,21 +32,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private RoleUtils roleUtils;
+    private final JwtUtils jwtUtils;
 
-    private JwtUtils jwtUtils;
+    private final CommonProperties commonProperties;
 
-    private CommonProperties commonProperties;
+    private final MailServiceImpl mailService;
 
-    private MailServiceImpl mailService;
+    private final AuthenticationManager authenticationManager;
 
-    private DateUtils dateUtils;
-
-    private AuthenticationManager authenticationManager;
+    private final capstone.backend.api.utils.StringUtils stringUtils;
 
     @Override
     public ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException {
@@ -73,60 +71,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ResponseEntity<?> register(UserRegisterDto userRegisterDto) throws AuthenticationException {
-        if (!validateRegisterInformation(userRegisterDto)) {
-            logger.error("Parameter is empty!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
-            );
-        }
-        if (userRepository.existsUserByEmail(userRegisterDto.getEmail())) {
-            logger.error("email is already in used!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_EXIST_VALUE())
-                            .message(commonProperties.getMESSAGE_EXIST_VALUE()).build()
-            );
-        }
-        String passwordEncode = passwordEncoder.encode(userRegisterDto.getPassword());
-        String dobStr = userRegisterDto.getDob();
-        Date dob;
-        try {
-            dob = dateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
-        } catch (ParseException e) {
-            logger.error("parse dob in register of user failed!");
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_FORMAT_INVALID())
-                            .message(commonProperties.getMESSAGE_PARAM_FORMAT_INVALID()).build()
-            );
-        }
-        Set<String> strRoles = userRegisterDto.getRoles();
-        Set<Role> roles = roleUtils.getUserRoles(strRoles);
-
-        userRepository.save(
-                User.builder()
-                        .email(userRegisterDto.getEmail())
-                        .password(passwordEncode).dob(dob)
-                        .fullName(userRegisterDto.getFullName())
-                        .roles(roles)
-                        .build());
-        logger.info("user " + userRegisterDto.getEmail() + " register successfully!");
-
-        TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(
-                userRegisterDto.getEmail(), userRegisterDto.getPassword(), authenticationManager);
-
-        return ResponseEntity.ok().body(
-                ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(tokenResponseInfo).build()
-        );
-    }
-
-    @Override
     public ResponseEntity<?> getVerifyCode(String email) throws Exception {
         if (StringUtils.isEmpty(email.trim())) {
             logger.error("Parameter invalid!");
@@ -148,7 +92,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
 
-        String verifyCode = generateRandomCode(commonProperties.getCodeSize());
+        String verifyCode = stringUtils.generateRandomCode(commonProperties.getCodeSize());
 
         try {
             mailService.CreateMailVerifyCode(email, verifyCode);
@@ -171,28 +115,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
     }
 
-    private boolean validateRegisterInformation(UserRegisterDto user) {
-        return !user.getEmail().trim().isEmpty() &&
-                !user.getPassword().trim().isEmpty() &&
-                !user.getFullName().trim().isEmpty() &&
-                !user.getDob().trim().isEmpty() &&
-                !user.getPhoneNumber().trim().isEmpty();
-    }
-
-    private String generateRandomCode(int codeSize) {
-        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                + "0123456789"
-                + "abcdefghijklmnopqrstuvxyz";
-        StringBuilder sb = new StringBuilder(codeSize);
-
-        for (int i = 0; i < codeSize; i++) {
-            int index
-                    = (int) (AlphaNumericString.length()
-                    * Math.random());
-            sb.append(AlphaNumericString.charAt(index));
-        }
-        return sb.toString();
-    }
 
 
 }

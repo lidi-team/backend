@@ -27,21 +27,21 @@ import java.util.List;
 @AllArgsConstructor
 public class ObjectiveServiceImpl implements ObjectiveService {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveServiceImpl.class);
 
-    private ObjectiveRepository objectiveRepository;
+    private final ObjectiveRepository objectiveRepository;
 
-    private KeyResultServiceImpl keyResultService;
+    private final KeyResultServiceImpl keyResultService;
 
-    private ExecuteServiceImpl executeService;
+    private final ExecuteServiceImpl executeService;
 
-    private CycleServiceImpl cycleService;
+    private final CycleServiceImpl cycleService;
 
-    private JwtUtils jwtUtils;
+    private final JwtUtils jwtUtils;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
@@ -62,7 +62,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if (objectvieDto.getId() == 0) {
             objective = Objective.builder()
                     .name(objectvieDto.getTitle())
-                    .content(objectvieDto.getContent())
                     .cycle(cycle)
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
@@ -77,7 +76,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             objective = Objective.builder()
                     .id(objectvieDto.getId())
                     .name(objectvieDto.getTitle())
-                    .content(objectvieDto.getContent())
                     .cycle(cycle)
                     .progress(objectvieDto.getProgress())
                     .changing(objectvieDto.getChanging())
@@ -127,7 +125,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<ApiResponse> deleteObjective(long id) {
 
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             logger.error("Objective not found!");
             return ResponseEntity.badRequest().body(
@@ -137,8 +135,18 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
+        if ((objective.getType() == commonProperties.getOBJ_PROJECT() ||
+             objective.getType() == commonProperties.getOBJ_COMPANY())
+                && objectiveRepository.findFirstByParentId(objective.getId()) != null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message("Không thể xóa mục tiêu của công ty/dự án khi nó đã có mục tiêu con").build()
+            );
+        }
+
         keyResultService.deleteKeyResultByObjectiveId(id);
-        objectiveRepository.deleteById(id);
+        objectiveRepository.deleteObjective(id);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -150,7 +158,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     @Override
     public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
-        Objective objectiveCurrent = objectiveRepository.findById(objectiveId).orElse(null);
+        Objective objectiveCurrent = objectiveRepository.findByIdAndDelete(objectiveId);
         List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
         ChildObjectiveResponse childObject = new ChildObjectiveResponse();
@@ -217,7 +225,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception {
         ObjectiveTitleResponse response = new ObjectiveTitleResponse();
         List<MetaDataResponse> objectiveList = new ArrayList<>();
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
@@ -267,7 +275,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             long projectId = objective.getExecute().getProject().getId();
             Execute execute1 = executeService.getExecuteByUserIdAndProjectId(user.getId(), projectId);
             if (objective.getType() == 1) {
-                Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
+                Objective parentObjective = objectiveRepository.findByIdAndDelete(objective.getParentId());
                 long cycleId = parentObjective.getCycle().getId();
                 if (objective.getExecute().getProject().getParent() == null) {
                     objectives = objectiveRepository.
@@ -344,7 +352,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .build()
             );
         }
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
             return ResponseEntity.badRequest().body(
@@ -354,7 +362,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .build()
             );
         }
-        Objective parentObjective = objectiveRepository.findById(objective.getParentId()).orElse(null);
+        Objective parentObjective = objectiveRepository.findByIdAndDelete(objective.getParentId());
         if (parentObjective != null) {
             ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(parentObjective.getId());
 
@@ -392,7 +400,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
-        Objective objective = objectiveRepository.findById(id).orElse(null);
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
@@ -431,9 +439,41 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception {
+        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        Objective objective = objectiveRepository.findByIdAndDelete(id);
+
+        if (objective == null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
+        ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
+
+        keyResults.forEach(keyResult -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(keyResult.getId())
+                            .name(keyResult.getContent())
+                            .build()
+            );
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty() &&
-                !objectvieDto.getContent().trim().isEmpty() &&
                 objectvieDto.getUserId() != 0;
     }
 
@@ -461,7 +501,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ObjectiveResponse setObjective(Objective objective, List<KeyResultResponse> keyResults) {
         return ObjectiveResponse.builder().id(objective.getId())
                 .title(objective.getName())
-                .content(objective.getContent())
                 .userId(objective.getExecute().getUser().getId())
                 .projectId(objective.getExecute().getProject() == null ? 0 :
                         objective.getExecute().getProject().getId())

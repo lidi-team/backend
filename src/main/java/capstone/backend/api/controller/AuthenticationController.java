@@ -26,9 +26,9 @@ public class AuthenticationController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     @ApiOperation(value = "Đăng nhập")
     @PostMapping("/signin")
@@ -56,23 +56,6 @@ public class AuthenticationController {
         }
     }
 
-    @ApiOperation(value = "Đăng kí")
-    @PostMapping("/signup")
-    public ResponseEntity<?> register(
-            @ApiParam(value = "Thông tin đăng kí tài khoản", required = true)
-            @Valid @RequestBody UserRegisterDto userRegisterDto) {
-        try {
-            return authenticationService.register(userRegisterDto);
-        } catch (Exception e) {
-            logger.error("Register failed for user: " + userRegisterDto.getEmail());
-            logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
-            );
-        }
-    }
     @ApiOperation(value = "Reset lại mật khẩu")
     @GetMapping("/reset-password")
     public ResponseEntity<?> resetPassword(

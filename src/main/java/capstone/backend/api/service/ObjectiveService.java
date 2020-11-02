@@ -20,4 +20,6 @@ public interface ObjectiveService {
     ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
 
     ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception;
+
+    ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception;
 }

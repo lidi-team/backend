@@ -152,4 +152,20 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách key result cha của objective hiện tại")
+    @GetMapping(path = "/key_result/{id}")
+    public ResponseEntity<?> getListKeyResultByObjectiveId(@PathVariable(value = "id") long id) {
+        try {
+            return objectiveService.getKeyResultTitleByObjectiveId(id);
+        } catch (Exception e) {
+            logger.error("get list key result failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }
