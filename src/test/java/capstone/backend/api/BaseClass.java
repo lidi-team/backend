@@ -7,19 +7,19 @@ import org.junit.Before;
 
 public class BaseClass {
 
-    //  String token = "";
-    //  @Before
-    //  public void setup() {
-	//  	// // Test Setup
-	//  	RestUtils.setBaseURI("http://bluemarble97.com"); // Setup Base URI
-	//  	RestUtils.setPort(8081);
-	//  	RestUtils.setBasePath("api"); // Setup Base Path
-	//  	RestUtils.setContentType(ContentType.JSON); // Setup Content Type
-	//  	String requestBody = "{\"email\" : \"sontung199x@gmail.com\" , \"password\" : \"123445\"} ";
+     String token = "";
+     @Before
+     public void setup() {
+	 	// // Test Setup
+	 	RestUtils.setBaseURI("http://bluemarble97.com"); // Setup Base URI
+	 	RestUtils.setPort(8081);
+	 	RestUtils.setBasePath("api"); // Setup Base Path
+	 	RestUtils.setContentType(ContentType.JSON); // Setup Content Type
+	 	String requestBody = "{\"email\" : \"sontung199x@gmail.com\" , \"password\" : \"123445\"} ";
 
-	//  	token = given().contentType(ContentType.JSON)
-	//  	.body(requestBody).when().post("auth/signin/")
-	//  	.jsonPath().get("data.jwtToken");
-	//  }
+	 	token = given().contentType(ContentType.JSON)
+	 	.body(requestBody).when().post("auth/signin/")
+	 	.jsonPath().get("data.jwtToken");
+	 }
 
 }
