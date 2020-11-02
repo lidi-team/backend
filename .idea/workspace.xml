@@ -33,12 +33,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/CycleController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/CycleController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/MeasureController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/MeasureController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -68,6 +63,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="gcp" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
@@ -88,6 +88,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -140,6 +141,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.ApiApplication" />
+        <item itemvalue="Application.ApiApplication" />
       </list>
     </recent_temporary>
   </component>
@@ -177,6 +179,15 @@
     <option name="version" value="1" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
@@ -214,26 +225,26 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1878" height="295" key="GridCell.Tab.0.bottom" timestamp="1603877703119">
+    <state width="1878" height="326" key="GridCell.Tab.0.bottom" timestamp="1604292864853">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="295" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1603877703119" />
-    <state width="1878" height="295" key="GridCell.Tab.0.center" timestamp="1603877703118">
+    <state width="1878" height="326" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
+    <state width="1878" height="326" key="GridCell.Tab.0.center" timestamp="1604292864853">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="295" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1603877703118" />
-    <state width="1878" height="295" key="GridCell.Tab.0.left" timestamp="1603877703118">
+    <state width="1878" height="326" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
+    <state width="1878" height="326" key="GridCell.Tab.0.left" timestamp="1604292864852">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
-    <state width="1878" height="295" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1603877703118" />
-    <state width="1878" height="295" key="GridCell.Tab.0.right" timestamp="1603877703119">
+    <state width="1878" height="326" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864852" />
+    <state width="1878" height="326" key="GridCell.Tab.0.right" timestamp="1604292864853">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="295" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1603877703119" />
+    <state width="1878" height="326" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
