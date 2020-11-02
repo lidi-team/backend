@@ -142,7 +142,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation(value = "số lượng pm và staff trên hệ thống")
+    @ApiOperation(value = "Số lượng pm và staff trên hệ thống")
     @GetMapping("/admin")
     public ResponseEntity<?> getNumberStaff(
             @RequestHeader(value = "Authorization") String jwtToken) {
