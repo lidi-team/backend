@@ -28,4 +28,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByFullNameContainsAndRoles(String name, Role role);
 
+    List<User> findByFullNameContains(String name, Pageable pageable);
+
+    List<User> findByFullNameContains(String name);
+
 }
