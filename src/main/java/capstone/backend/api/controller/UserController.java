@@ -102,17 +102,17 @@ public class UserController {
     }
 
     @ApiOperation(value = "Danh sách toàn bộ user có phân trang")
-    @GetMapping("/allPaging")
+    @GetMapping("/all-paging")
     public ResponseEntity<?> getAllUserPaging(
-            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = false) @RequestParam(name = "name", required = false) String name,
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = false) @RequestParam(name = "text", required = false) String text,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "page") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get user in paging: " + page);
-        if(name==null) name = "";
+        if(text==null) text = "";
         try {
-            return userService.getAllUsers(name, page, size, sort, jwtToken);
+            return userService.getAllUsers(text, page, limit, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());
@@ -164,17 +164,17 @@ public class UserController {
     }
 
     @ApiOperation(value = "Danh sách Staff, có phân trang")
-    @GetMapping("/listStaffPaging")
+    @GetMapping("/list-staff-paging")
     public ResponseEntity<?> getStaffPaging(
-            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = false) @RequestParam(name = "name", required = false) String name,
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = false) @RequestParam(name = "text", required = false) String text,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "page") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get list staff in paging: " + page);
-        if(name == null) name = "";
+        if(text == null) text = "";
         try {
-            return userService.getStaffPaging(name, page, size, sort, jwtToken);
+            return userService.getStaffPaging(text, page, limit, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());
@@ -207,7 +207,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "Kích hoạt/ Huỷ kích hoạt tài khoản theo ID")
-    @GetMapping("isActive")
+    @GetMapping("is-active")
     public ResponseEntity<?> activeStaff(
             @ApiParam(value = "ID của tài khoản cần kích hoạt/ huỷ", required = true) @RequestParam(name = "id") long id,
             @ApiParam(value = "true: kích hoạt, false: huỷ kích hoạt", required = true) @RequestParam(name = "isActive") boolean isActive,
@@ -229,14 +229,14 @@ public class UserController {
     @ApiOperation(value = "Tìm nhân viên theo tên, có phân trang")
     @GetMapping("search")
     public ResponseEntity<?> searchByName(
-            @ApiParam(value = "Tên nhân vật cần tìm", required = true) @RequestParam(name = "name") String name,
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
+            @ApiParam(value = "Tên nhân vật cần tìm", required = true) @RequestParam(name = "text") String text,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "page") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Search user by name: " + name);
+        logger.info("Search user by name: " + text);
         try {
-            return userService.searchByName(name, page, size, sort, jwtToken);
+            return userService.searchByName(text, page, limit, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());
