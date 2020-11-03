@@ -215,11 +215,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> getAllUsers(int page, int size, String sort, String jwtToken) throws Exception {
         List<User> users = userRepository.findAll(PageRequest.of(page, size, Sort.by(sort).ascending())).toList();
+        Long count = userRepository.count();
         List<UserInforResponse> listUserInforResponse = setUserInformation(users);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("listUser", listUserInforResponse);
+        response.put("totalItems", count);
+        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(listUserInforResponse).build()
+                        .data(response).build()
         );
     }
 
@@ -228,11 +235,17 @@ public class UserServiceImpl implements UserService {
         Optional<Role> roleStaff = roleRepository.findById(5L);
 
         List<User> users = userRepository.findAllByRolesContains(roleStaff.get(), PageRequest.of(page, size, Sort.by(sort)));
+        int count = userRepository.findAllByRolesContains(roleStaff.get()).size();
         List<UserInforResponse> listUserInforResponse = setUserInformation(users);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("listUser", listUserInforResponse);
+        response.put("totalItems", count);
+        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(listUserInforResponse).build()
+                        .data(response).build()
         );
     }
 
@@ -271,11 +284,18 @@ public class UserServiceImpl implements UserService {
         Role roleStaff = roleRepository.findById(5L).get();
         List<User> listUser = userRepository.
                 findByFullNameContainsAndRoles(name, roleStaff, PageRequest.of(page, size, Sort.by(sort)));
+        int count = userRepository.findByFullNameContainsAndRoles(name, roleStaff).size();
         List<UserInforResponse> listUserInforResponse = setUserInformation(listUser);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("listUser", listUserInforResponse);
+        response.put("totalItems", count);
+        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(listUserInforResponse).build()
+                        .data(response).build()
         );
     }
 
