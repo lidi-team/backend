@@ -33,9 +33,8 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="Google Cloud (No Merge)">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cloudbuild.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/cloudbuild.yaml" afterDir="false" />
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="add totalItems">
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,6 +107,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -144,11 +144,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.ApiApplication" />
-        <item itemvalue="Application.ApiApplication" />
-        <item itemvalue="Application.ApiApplication" />
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SpringBeansView">
     <option name="beanDetailsProportion" value="0.3" />
   </component>
@@ -176,19 +175,28 @@
       <workItem from="1600006958610" duration="2018000" />
       <workItem from="1600059422632" duration="12189000" />
       <workItem from="1602994701666" duration="59000" />
+      <workItem from="1604336406546" duration="3179000" />
+      <workItem from="1604386832327" duration="2984000" />
     </task>
-    <task id="LOCAL-00001" summary="Google Cloud (No Merge)">
-      <created>1604293664140</created>
+    <task id="LOCAL-00001" summary="add totalItems">
+      <created>1604339292882</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1604293664140</updated>
+      <updated>1604339292882</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add totalItems">
+      <created>1604389670220</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1604389670220</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -203,8 +211,8 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Google Cloud (No Merge)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Google Cloud (No Merge)" />
+    <MESSAGE value="add totalItems" />
+    <option name="LAST_COMMIT_MESSAGE" value="add totalItems" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#Notifications" timestamp="1599578884491">
@@ -237,34 +245,30 @@
     </state>
     <state width="603" height="656" key="DebuggerActiveHint/0.0.1366.728/1366.0.1920.1040@1366.0.1920.1040" timestamp="1600069999789" />
     <state width="429" height="459" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1599069390200" />
-    <state x="100" y="123" width="1720" height="977" key="DiffContextDialog" timestamp="1604293730272">
-      <screen x="0" y="23" width="1920" height="1177" />
-    </state>
-    <state x="100" y="123" width="1720" height="977" key="DiffContextDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1604293730272" />
     <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1599115724200">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1878" height="326" key="GridCell.Tab.0.bottom" timestamp="1604292864853">
+    <state width="1878" height="393" key="GridCell.Tab.0.bottom" timestamp="1604389807271">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="326" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
-    <state width="1878" height="326" key="GridCell.Tab.0.center" timestamp="1604292864853">
+    <state width="1878" height="393" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807271" />
+    <state width="1878" height="393" key="GridCell.Tab.0.center" timestamp="1604389807270">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="326" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
-    <state width="1878" height="326" key="GridCell.Tab.0.left" timestamp="1604292864852">
+    <state width="1878" height="393" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807270" />
+    <state width="1878" height="393" key="GridCell.Tab.0.left" timestamp="1604389807269">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
-    <state width="1878" height="326" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864852" />
-    <state width="1878" height="326" key="GridCell.Tab.0.right" timestamp="1604292864853">
+    <state width="1878" height="393" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807269" />
+    <state width="1878" height="393" key="GridCell.Tab.0.right" timestamp="1604389807271">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="326" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1604292864853" />
+    <state width="1878" height="393" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807271" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
@@ -309,18 +313,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="200" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1599885956073" />
-    <state x="560" y="333" key="Vcs.Push.Dialog.v2" timestamp="1604293694094">
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2" timestamp="1604389675163">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
-    <state x="560" y="333" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604293694094" />
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604389675163" />
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598515779060">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1366.728@0.0.1366.728" timestamp="1598515779060" />
-    <state x="659" y="350" width="602" height="522" key="find.popup" timestamp="1603877816617">
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604295243866">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
-    <state x="659" y="350" width="602" height="522" key="find.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1603877816617" />
+    <state x="756" y="528" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604295243866" />
+    <state x="659" y="350" width="602" height="522" key="find.popup" timestamp="1604387174836">
+      <screen x="0" y="23" width="1920" height="1177" />
+    </state>
+    <state x="659" y="350" width="602" height="522" key="find.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1604387174836" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1599884553235">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
