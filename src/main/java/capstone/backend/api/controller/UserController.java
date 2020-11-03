@@ -104,7 +104,7 @@ public class UserController {
     @ApiOperation(value = "Danh sách toàn bộ user có phân trang")
     @GetMapping("/allPaging")
     public ResponseEntity<?> getAllUserPaging(
-            @ApiParam(value = "Tên nhân viên cần tìm", required = true) @RequestParam(name = "name") String name,
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
@@ -165,7 +165,7 @@ public class UserController {
     @ApiOperation(value = "Danh sách Staff, có phân trang")
     @GetMapping("/listStaffPaging")
     public ResponseEntity<?> getStaffPaging(
-            @ApiParam(value = "Tên nhân viên cần tìm", required = true) @RequestParam(name = "name") String name,
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
