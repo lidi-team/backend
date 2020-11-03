@@ -230,9 +230,11 @@ public class UserServiceImpl implements UserService {
         });
 
         Map<String, Object> response = new HashMap<>();
-        response.put("listUser", listUser);
-        response.put("totalItems", count);
-        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("data", listUser);
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalItems", count);
+        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("meta", meta);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -262,9 +264,11 @@ public class UserServiceImpl implements UserService {
         });
 
         Map<String, Object> response = new HashMap<>();
-        response.put("listUser", listUser);
-        response.put("totalItems", count);
-        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("data", listUser);
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalItems", count);
+        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("meta", meta);
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
@@ -311,9 +315,11 @@ public class UserServiceImpl implements UserService {
         List<UserInforResponse> listUserInforResponse = setUserInformation(listUser);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("listUser", listUserInforResponse);
-        response.put("totalItems", count);
-        response.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("data", listUser);
+        Map<String, Object> meta = new HashMap<>();
+        meta.put("totalItems", count);
+        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        response.put("meta", meta);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())

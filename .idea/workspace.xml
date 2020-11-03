@@ -11,30 +11,38 @@
       </path>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:github" type="e8cecc67:BranchNodeDescriptor" />
       </path>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
         <item name="GROUP_NODE:feature" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:usercase" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </expand>
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="add totalItems">
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="fix required">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +75,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="developer" />
+        <entry key="$PROJECT_DIR$" value="gcp" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -90,7 +98,6 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="ExpandSpringBootJavaOptionsPanel" value="true" />
-    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RequestMappingsPanelOrder0" value="0" />
     <property name="RequestMappingsPanelOrder1" value="1" />
     <property name="RequestMappingsPanelWidth0" value="75" />
@@ -177,6 +184,7 @@
       <workItem from="1602994701666" duration="59000" />
       <workItem from="1604336406546" duration="3179000" />
       <workItem from="1604386832327" duration="2984000" />
+      <workItem from="1604412691786" duration="2104000" />
     </task>
     <task id="LOCAL-00001" summary="add totalItems">
       <created>1604339292882</created>
@@ -192,7 +200,21 @@
       <option name="project" value="LOCAL" />
       <updated>1604389670220</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="merge Dev">
+      <created>1604391376280</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1604391376280</updated>
+    </task>
+    <task id="LOCAL-00004" summary="fix required">
+      <created>1604413189080</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1604413189080</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -212,7 +234,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add totalItems" />
-    <option name="LAST_COMMIT_MESSAGE" value="add totalItems" />
+    <MESSAGE value="merge Dev" />
+    <MESSAGE value="fix required" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix required" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="22" key="#Notifications" timestamp="1599578884491">
@@ -249,26 +273,26 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1878" height="393" key="GridCell.Tab.0.bottom" timestamp="1604389807271">
+    <state width="1878" height="271" key="GridCell.Tab.0.bottom" timestamp="1604414918385">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="393" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807271" />
-    <state width="1878" height="393" key="GridCell.Tab.0.center" timestamp="1604389807270">
+    <state width="1878" height="271" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1604414918385" />
+    <state width="1878" height="271" key="GridCell.Tab.0.center" timestamp="1604414918384">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="393" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807270" />
-    <state width="1878" height="393" key="GridCell.Tab.0.left" timestamp="1604389807269">
+    <state width="1878" height="271" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1604414918384" />
+    <state width="1878" height="271" key="GridCell.Tab.0.left" timestamp="1604414918383">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
-    <state width="1878" height="393" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807269" />
-    <state width="1878" height="393" key="GridCell.Tab.0.right" timestamp="1604389807271">
+    <state width="1878" height="271" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1604414918383" />
+    <state width="1878" height="271" key="GridCell.Tab.0.right" timestamp="1604414918385">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
-    <state width="1878" height="393" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1604389807271" />
+    <state width="1878" height="271" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1604414918385" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
@@ -313,10 +337,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="200" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1599885956073" />
-    <state x="560" y="347" key="Vcs.Push.Dialog.v2" timestamp="1604389675163">
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2" timestamp="1604413190865">
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
-    <state x="560" y="347" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604389675163" />
+    <state x="560" y="347" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1604413190865" />
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598515779060">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
