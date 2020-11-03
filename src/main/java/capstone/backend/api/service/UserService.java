@@ -21,9 +21,9 @@ public interface UserService {
 
     ResponseEntity<?> getNumberStaff(String jwtToken) throws Exception;
 
-    ResponseEntity<?> getAllUsers(int page, int size, String sort, String jwtToken) throws Exception;
+    ResponseEntity<?> getAllUsers(String name, int page, int size, String sort, String jwtToken) throws Exception;
 
-    ResponseEntity<?> getStaffPaging(int page, int size, String sort, String jwtToken) throws Exception;
+    ResponseEntity<?> getStaffPaging(String name, int page, int size, String sort, String jwtToken) throws Exception;
 
     ResponseEntity<?> putUserInformationById(UserInforResponse userInfo, String jwtToken) throws Exception;
 

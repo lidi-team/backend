@@ -104,13 +104,14 @@ public class UserController {
     @ApiOperation(value = "Danh sách toàn bộ user có phân trang")
     @GetMapping("/allPaging")
     public ResponseEntity<?> getAllUserPaging(
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get user in paging: " + page);
         try {
-            return userService.getAllUsers(page, size, sort, jwtToken);
+            return userService.getAllUsers(name, page, size, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());
@@ -164,13 +165,14 @@ public class UserController {
     @ApiOperation(value = "Danh sách Staff, có phân trang")
     @GetMapping("/listStaffPaging")
     public ResponseEntity<?> getStaffPaging(
+            @ApiParam(value = "Tên nhân viên cần tìm, name = null là tìm tất cả", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Get list staff in paging: " + page);
         try {
-            return userService.getStaffPaging(page, size, sort, jwtToken);
+            return userService.getStaffPaging(name, page, size, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());
