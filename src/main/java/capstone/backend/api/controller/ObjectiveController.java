@@ -30,9 +30,11 @@ public class ObjectiveController {
     @PostMapping(path = "/add")
     public ResponseEntity<?> addObjective(
             @ApiParam(value = "Thông tin của một Objective", required = true)
-            @Valid @RequestBody ObjectvieDto objectvieDto) {
+            @Valid @RequestBody ObjectvieDto objectvieDto,
+            @ApiParam(value = "Thông tin của user", required = true)
+            @RequestHeader(value = "Authorization") String token) {
         try {
-            return objectiveService.addObjective(objectvieDto);
+            return objectiveService.addObjective(objectvieDto,token);
         } catch (Exception e) {
             logger.error("add objective failed : " + objectvieDto.getTitle());
             logger.error(e.getMessage());
