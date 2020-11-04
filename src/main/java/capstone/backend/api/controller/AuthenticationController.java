@@ -40,7 +40,7 @@ public class AuthenticationController {
         } catch (AuthenticationException e) {
             logger.error("Authenticate failed for email: " + userLoginDto.getEmail());
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_AUTH_FAILED())
                             .message(commonProperties.getMESSAGE_AUTH_FAILED()).build()
@@ -48,7 +48,7 @@ public class AuthenticationController {
         } catch (Exception e) {
             logger.error("Undefined error");
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
