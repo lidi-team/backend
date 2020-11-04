@@ -43,7 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
                 || StringUtils.isEmpty(userLoginDto.getPassword().trim())) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -53,7 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!user.isActive() || user.isDelete()) {
             logger.error("Account locked!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message("Tài khoản bị khóa!").build()
