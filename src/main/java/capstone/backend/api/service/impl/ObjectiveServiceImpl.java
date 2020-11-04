@@ -44,7 +44,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception {
+    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto,String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
             return ResponseEntity.badRequest().body(
@@ -54,7 +54,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             );
         }
 
-        Execute execute = executeService.getExecuteByUserIdAndProjectId(objectvieDto.getUserId(), objectvieDto.getProjectId());
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        Execute execute = executeService.getExecuteByUserIdAndProjectId(user.getId(), objectvieDto.getProjectId());
         String alignmentObjectives = arrayToString(objectvieDto.getAlignmentObjectives());
         Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
 
@@ -63,12 +66,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             objective = Objective.builder()
                     .name(objectvieDto.getTitle())
                     .cycle(cycle)
-                    .progress(objectvieDto.getProgress())
-                    .changing(objectvieDto.getChanging())
                     .alignmentObjectives(alignmentObjectives)
                     .parentId(objectvieDto.getParentId())
                     .execute(execute)
-                    .status(objectvieDto.getStatus())
+                    .status(commonProperties.getOBJ_RUNNING())
                     .type(objectvieDto.getType())
                     .weight(objectvieDto.getWeight())
                     .build();
@@ -77,12 +78,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .id(objectvieDto.getId())
                     .name(objectvieDto.getTitle())
                     .cycle(cycle)
-                    .progress(objectvieDto.getProgress())
-                    .changing(objectvieDto.getChanging())
                     .alignmentObjectives(alignmentObjectives)
                     .parentId(objectvieDto.getParentId())
                     .execute(execute)
-                    .status(objectvieDto.getStatus())
+                    .status(commonProperties.getOBJ_RUNNING())
                     .type(objectvieDto.getType())
                     .weight(objectvieDto.getWeight())
                     .build();
@@ -473,8 +472,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
-        return !objectvieDto.getTitle().trim().isEmpty() &&
-                objectvieDto.getUserId() != 0;
+        return !objectvieDto.getTitle().trim().isEmpty();
     }
 
     private ArrayList<Long> stringToArray(String string) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ObjectiveService {
-    ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto) throws Exception;
+    ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto, String token) throws Exception;
 
     ResponseEntity<ApiResponse> deleteObjective(long id);
 
