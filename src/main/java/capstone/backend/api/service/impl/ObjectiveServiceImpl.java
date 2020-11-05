@@ -2,13 +2,8 @@ package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.ObjectvieDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
-import capstone.backend.api.entity.ApiResponse.DrillDownObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
-import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
-import capstone.backend.api.entity.ApiResponse.Objective.ChildObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveTitleResponse;
+import capstone.backend.api.entity.ApiResponse.*;
+import capstone.backend.api.entity.ApiResponse.Objective.*;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.ObjectiveRepository;
 import capstone.backend.api.repository.UserRepository;
@@ -44,7 +39,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto,String token) throws Exception {
+    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
             return ResponseEntity.badRequest().body(
@@ -135,7 +130,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         }
 
         if ((objective.getType() == commonProperties.getOBJ_PROJECT() ||
-             objective.getType() == commonProperties.getOBJ_COMPANY())
+                objective.getType() == commonProperties.getOBJ_COMPANY())
                 && objectiveRepository.findFirstByParentId(objective.getId()) != null) {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -471,6 +466,80 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getAllObjectiveAndProjectOfUser(String token, long cycleId) throws Exception {
+        List<ProjectOfUserResponse> responses = new ArrayList<>();
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        List<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+
+        for (Execute execute : executes) {
+            if (execute.getProject() != null) {
+                List<ObjectiveProjectItem> objectiveItems = new ArrayList<>();
+                List<Objective> objectives = objectiveRepository
+                        .findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(), cycleId, commonProperties.getOBJ_PROJECT());
+                objectives.forEach(objective -> {
+                    //get list key result objective
+                    List<KeyResultResponse> keyResultResponses = setListKeyResultResponse(objective);
+
+                    //get list child objective of user in project
+                    List<ObjectiveProjectItem> childItems = new ArrayList<>();
+                    List<Objective> childObjectives = objectiveRepository
+                            .findAllByParentIdAndUserIdAndType(objective.getId(), user.getId(), commonProperties.getOBJ_PERSONAL());
+                    childObjectives.forEach(childObjective -> {
+                        //get list key result of child objective
+                        List<KeyResultResponse> childKeyResultResponses = setListKeyResultResponse(childObjective);
+
+                        childItems.add(
+                                ObjectiveProjectItem.builder()
+                                        .id(childObjective.getId())
+                                        .title(childObjective.getName())
+                                        .type(childObjective.getType())
+                                        .weight(childObjective.getWeight())
+                                        .progress(childObjective.getProgress())
+                                        .changing(childObjective.getChanging())
+                                        .keyResults(childKeyResultResponses)
+                                        .childObjectives(new ArrayList<>())
+                                        .build()
+                        );
+                    });
+
+                    objectiveItems.add(
+                            ObjectiveProjectItem.builder()
+                                    .id(objective.getId())
+                                    .title(objective.getName())
+                                    .type(objective.getType())
+                                    .weight(objective.getWeight())
+                                    .progress(objective.getProgress())
+                                    .changing(objective.getChanging())
+                                    .keyResults(keyResultResponses)
+                                    .childObjectives(childItems)
+                                    .build()
+                    );
+
+                });
+                responses.add(
+                        ProjectOfUserResponse.builder()
+                                .id(execute.getProject().getId())
+                                .name(execute.getProject().getName())
+                                .position(execute.getPosition().getName())
+                                .objectives(objectiveItems)
+                                .isPm(execute.isPm())
+                                .build()
+                );
+            }
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty();
     }
@@ -524,5 +593,17 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .valueObtained(keyResult.getValueObtained())
                 .reference(keyResult.getReference())
                 .build();
+    }
+
+    public List<KeyResultResponse> setListKeyResultResponse(Objective objective) {
+        List<KeyResultResponse> keyResultResponses = new ArrayList<>();
+        //get list key result of project objective
+        List<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
+        keyResults.forEach(keyResult -> {
+            KeyResultResponse response = setKeyResult(keyResult);
+            keyResultResponses.add(response);
+        });
+
+        return keyResultResponses;
     }
 }

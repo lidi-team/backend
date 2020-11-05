@@ -22,8 +22,8 @@ public interface CycleService {
 
     ResponseEntity<?> searchCycle(Date date, int page, int size, String sort, String jwtToken) throws Exception;
 
-    ResponseEntity<ApiResponse> getListMetaDataCycle();
+    ResponseEntity<?> getListMetaDataCycle();
 
-    ResponseEntity<ApiResponse> getCurrentCycle(long id);
+    ResponseEntity<?> getCurrentCycle(long id) throws Exception;
 
 }

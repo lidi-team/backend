@@ -170,4 +170,24 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Tất cả objective và project hiện tại user đang tham gia")
+    @GetMapping(path = "/project-list")
+    public ResponseEntity<?> getAllObjectiveAndProjectOfUser(
+            @ApiParam(value = "token",required = true)
+            @RequestHeader(name = "Authorization") String token,
+            @ApiParam(value = "cycle id cua cycle hien tai")
+            @RequestParam(name = "cycleId") long cycleId){
+        try {
+            return objectiveService.getAllObjectiveAndProjectOfUser(token,cycleId);
+        } catch (Exception e) {
+            logger.error("get list objective and project of a user failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

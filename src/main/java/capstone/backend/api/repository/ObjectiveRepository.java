@@ -13,18 +13,39 @@ import java.util.List;
 @Repository
 public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
 
-    @Query(value = "select o from Objective o where o.cycle.id = :cycleId and o.parentId = :objectiveId and o.isDelete = false")
+    @Query(value = "select o from Objective o " +
+            "where o.cycle.id = :cycleId " +
+            "and o.parentId = :objectiveId " +
+            "and o.isDelete = false")
     List<Objective> findAllByCycleIdAndParentId(@Param(value = "cycleId") long cycleId,@Param(value = "objectiveId") long objectiveId);
 
-    @Query(value = "select o from Objective o where o.execute.user.id = :userId and o.type = 2 and o.isDelete = false")
+    @Query(value = "select o from Objective o " +
+            "where o.execute.user.id = :userId " +
+            "and o.type = 2 " +
+            "and o.isDelete = false")
     List<Objective> findAllByUserId(@Param(value = "userId") long userId);
 
-    @Query(value = "select o from Objective o join Execute e on o.execute.id = e.id where e.project.id = :projectId and o.cycle.id = :cycleId and o.type = :type and o.isDelete = false")
+    @Query(value = "select o from Objective o " +
+            "join Execute e on o.execute.id = e.id " +
+            "where e.project.id = :projectId " +
+            "and o.cycle.id = :cycleId " +
+            "and o.type = :type " +
+            "and o.isDelete = false")
     List<Objective> findAllByProjectIdAndCycleIdAndType(@Param(value = "projectId") long projectId,
                                                         @Param(value = "cycleId") long cycleId,
                                                         @Param(value = "type") int type);
     @Query(value = "select o from Objective o where o.type = :type and o.cycle.id = :cycleId and o.isDelete = false")
     List<Objective> findAllByTypeAndCycleId(@Param(value = "type")int type,@Param(value = "cycleId") long cycleId);
+
+    @Query(value = "select o from Objective o " +
+            "join Execute e on o.execute.id = e.id " +
+            "where e.user.id = :userId " +
+            "and o.parentId = :objectiveId " +
+            "and o.type = :type " +
+            "and o.isDelete = false")
+    List<Objective> findAllByParentIdAndUserIdAndType(@Param(value = "objectiveId") long objectiveId,
+                                                        @Param(value = "userId") long userId,
+                                                        @Param(value = "type") int type);
 
     @Modifying
     @Transactional

@@ -22,4 +22,6 @@ public interface ObjectiveService {
     ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception;
 
     ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception;
+
+    ResponseEntity<?> getAllObjectiveAndProjectOfUser(String token,long id) throws Exception;
 }
