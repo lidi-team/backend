@@ -20,13 +20,20 @@ import java.util.List;
 @AllArgsConstructor
 public class CycleServiceImpl implements CycleService {
 
-    private CycleRepository cycleRepository;
+    private final CycleRepository cycleRepository;
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
     @Override
     public Cycle getCycleById(long id) throws Exception {
-        return cycleRepository.findById(id).orElse(null);
+        Cycle cycle;
+        if(id == 0){
+            Date today = new Date();
+            cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
+        } else {
+            cycle = cycleRepository.findById(id).orElse(null);
+        }
+        return cycle;
     }
 
     @Override
@@ -51,14 +58,8 @@ public class CycleServiceImpl implements CycleService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getCurrentCycle(long id) {
-        Cycle cycle;
-        if (id == 0) {
-            Date today = new Date();
-            cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
-        } else {
-            cycle = cycleRepository.findById(id).orElse(null);
-        }
+    public ResponseEntity<ApiResponse> getCurrentCycle(long id) throws Exception{
+        Cycle cycle = getCycleById(id);
         if (cycle == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
