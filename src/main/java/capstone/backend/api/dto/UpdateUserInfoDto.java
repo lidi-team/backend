@@ -10,8 +10,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRegister{
-    private long id;
+public class UpdateUserInfoDto {
     @Email
     private String email;
     @NotNull
@@ -19,9 +18,9 @@ public class UserRegister{
     @NotNull
     private String fullName;
     @NotNull
-    private String phoneNumber;
-    @NotNull
     private int gender;
     @NotNull
     private long departmentId;
+
+    private boolean isActive;
 }
