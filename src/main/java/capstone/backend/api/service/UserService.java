@@ -1,6 +1,8 @@
 package capstone.backend.api.service;
 
+import capstone.backend.api.dto.UpdateUserInfoDto;
 import capstone.backend.api.dto.UserChangePasswordDto;
+import capstone.backend.api.dto.UserRegister;
 import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public interface UserService {
 
     ResponseEntity<?> getStaffPaging(String name, int page, int size, String sort, String jwtToken) throws Exception;
 
-    ResponseEntity<?> putUserInformationById(UserInforResponse userInfo, String jwtToken) throws Exception;
+    ResponseEntity<?> putUserInformationById(UpdateUserInfoDto userInfo,long id) throws Exception;
 
     ResponseEntity<?> isActiveUserById(long id, boolean isActive, String jwtToken) throws Exception;
 

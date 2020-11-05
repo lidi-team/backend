@@ -1,7 +1,9 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.UpdateUserInfoDto;
 import capstone.backend.api.dto.UserChangePasswordDto;
+import capstone.backend.api.dto.UserRegister;
 import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
@@ -187,14 +189,16 @@ public class UserController {
     }
 
     @ApiOperation(value = "cập nhật thông tin tài khoản Staff")
-    @PutMapping("")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateInfoStaff(
-            @ApiParam(value = "", required = true)
-            @Valid @RequestBody UserInforResponse userInfo,
-            @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Update info id: " + userInfo.getId());
+            @ApiParam(value = "Update infor", required = true)
+            @Valid @RequestBody UpdateUserInfoDto userInfo,
+            @ApiParam(value = "id of user", required = true)
+            @PathVariable(value = "id") long id
+            ) {
+        logger.info("Update info id: " + id);
         try {
-            return userService.putUserInformationById(userInfo, jwtToken);
+            return userService.putUserInformationById(userInfo,id);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());

@@ -1,6 +1,7 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.UpdateUserInfoDto;
 import capstone.backend.api.dto.UserChangePasswordDto;
 import capstone.backend.api.dto.UserRegister;
 import capstone.backend.api.dto.UserRegisterDto;
@@ -277,17 +278,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> putUserInformationById(UserInforResponse userInfo, String jwtToken) throws Exception {
-        User currentUser = userRepository.findById(userInfo.getId()).orElse(null);
+    public ResponseEntity<?> putUserInformationById(UpdateUserInfoDto userInfo,long id) throws Exception {
+        UserInforResponse userInforResponse = new UserInforResponse();
+        User currentUser = userRepository.findById(id).orElse(null);
 
         if (currentUser != null) {
+            Department department = departmentService.getDepartmentById(userInfo.getDepartmentId());
+            Date date = dateUtils.stringToDate(userInfo.getDob(),"dd/MM/yyyy");
+
             currentUser.setFullName(userInfo.getFullName());
+            currentUser.setEmail(userInfo.getEmail());
+            currentUser.setGender(userInfo.getGender());
+            currentUser.setDob(date);
+            currentUser.setDepartment(department);
+            currentUser.setActive(userInfo.isActive());
             userRepository.save(currentUser);
+
+            Set<String> roles = currentUser.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+            ArrayList<Execute> executes = executeService.getListExecuteByUserId(currentUser.getId());
+
+            userInforResponse = UserInforResponse.builder().id(currentUser.getId())
+                    .email(currentUser.getEmail())
+                    .fullName(currentUser.getFullName())
+                    .avatarUrl(currentUser.getAvatarImage())
+                    .dob(currentUser.getDob()).gender(currentUser.getGender())
+                    .star(currentUser.getStar()).roles(roles)
+                    .department(department == null ? null
+                            : new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                    .projects(new UserInforResponse().projectResponses(executes)).build();
         }
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(userRepository.findById(userInfo.getId())).build()
+                        .data(userInforResponse).build()
         );
     }
 
