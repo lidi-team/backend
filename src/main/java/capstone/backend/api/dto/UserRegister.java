@@ -19,8 +19,6 @@ public class UserRegister{
     @NotNull
     private String fullName;
     @NotNull
-    private String phoneNumber;
-    @NotNull
     private int gender;
     @NotNull
     private long departmentId;
