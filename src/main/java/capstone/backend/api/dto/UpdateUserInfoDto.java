@@ -22,5 +22,5 @@ public class UpdateUserInfoDto {
     @NotNull
     private long departmentId;
 
-    private boolean isActive;
+    private boolean active;
 }

@@ -449,9 +449,6 @@ public class UserServiceImpl implements UserService {
         if (user.getDob().trim().isEmpty()) {
             return "Ngày sinh bị để trống!";
         }
-        if (user.getPhoneNumber().trim().isEmpty()) {
-            return "Số điện thoại bị để trống!";
-        }
         return "";
     }
 
@@ -469,7 +466,6 @@ public class UserServiceImpl implements UserService {
                                     .dob(userRegister.getDob())
                                     .fullName(userRegister.getFullName())
                                     .gender(userRegister.getGender())
-                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;
@@ -483,7 +479,6 @@ public class UserServiceImpl implements UserService {
                                     .dob(userRegister.getDob())
                                     .fullName(userRegister.getFullName())
                                     .gender(userRegister.getGender())
-                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;
@@ -498,7 +493,6 @@ public class UserServiceImpl implements UserService {
                                     .dob(userRegister.getDob())
                                     .fullName(userRegister.getFullName())
                                     .gender(userRegister.getGender())
-                                    .phoneNumber(userRegister.getPhoneNumber())
                                     .build()
                     );
                     continue;
@@ -531,7 +525,6 @@ public class UserServiceImpl implements UserService {
                                 .dob(userRegister.getDob())
                                 .fullName(userRegister.getFullName())
                                 .gender(userRegister.getGender())
-                                .phoneNumber(userRegister.getPhoneNumber())
                                 .build()
                 );
             }
