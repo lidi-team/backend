@@ -42,7 +42,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private  final CommonUtils commonUtils;
 
     @Override
-    public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
+    public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
             return ResponseEntity.badRequest().body(
@@ -56,7 +56,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         User user = userRepository.findByEmail(email).get();
 
         Execute execute = executeService.getExecuteByUserIdAndProjectId(user.getId(), objectvieDto.getProjectId());
-        String alignmentObjectives = arrayToString(objectvieDto.getAlignmentObjectives());
+        String alignmentObjectives = commonUtils.arrayToString(objectvieDto.getAlignmentObjectives());
         Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
 
         Objective objective;
@@ -120,7 +120,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> deleteObjective(long id) {
+    public ResponseEntity<?> deleteObjective(long id) {
 
         Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
@@ -154,7 +154,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
+    public ResponseEntity<?> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
         Objective objectiveCurrent = objectiveRepository.findByIdAndDelete(objectiveId);
         List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
         List<ChildObjectiveResponse> childObjectiveResponses = new ArrayList<>();
@@ -172,7 +172,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .cycleId(objective.getCycle().getId())
                             .parentObjectiveId(objective.getParentId())
                             .keyResults(childObject.keyResultOfChildObjectives(keyResults))
-                            .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                            .alignmentObjectives(commonUtils.stringToArray(objective.getAlignmentObjectives()))
                             .author(childObject.authorOfChildObjective(user))
                             .type(childObject.setObjectiveType(
                                     objective.getType(),
@@ -197,7 +197,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception {
+    public ResponseEntity<?> getListObjectiveTitleByUserId(long userId) throws Exception {
         List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
 
         List<MetaDataResponse> responses = new ArrayList<>();
@@ -219,7 +219,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception {
+    public ResponseEntity<?> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception {
         ObjectiveTitleResponse response = new ObjectiveTitleResponse();
         List<MetaDataResponse> objectiveList = new ArrayList<>();
         Objective objective = objectiveRepository.findByIdAndDelete(id);
@@ -338,7 +338,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception {
+    public ResponseEntity<?> getParentKeyResultTitleByObjectiveId(long id) throws Exception {
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
         if (id == 0) {
             return ResponseEntity.ok().body(
@@ -383,7 +383,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception {
+    public ResponseEntity<?> getListAlignByObjectiveId(long id) throws Exception {
         List<MetaDataResponse> responses = new ArrayList<>();
         List<Objective> objectives;
 
@@ -437,7 +437,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception {
+    public ResponseEntity<?> getKeyResultTitleByObjectiveId(long id) throws Exception {
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
@@ -543,29 +543,86 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getDetailObjectiveById(long id) throws Exception {
+        Objective objective = objectiveRepository.findById(id).get();
+        List<MetaDataResponse> childrenResponses = new ArrayList<>();
+        List<MetaDataResponse> alignResponses = new ArrayList<>();
+
+        Objective parent = objectiveRepository.findByIdAndDelete(objective.getParentId());
+        MetaDataResponse parentResponse = null;
+        if(parent != null){
+            parentResponse = MetaDataResponse.builder()
+                    .id(parent.getId())
+                    .name(parent.getName())
+                    .build();
+        }
+
+
+        List<Objective> children = objectiveRepository.findAllByParentId(objective.getId());
+        children.forEach(child ->{
+            childrenResponses.add(
+                    MetaDataResponse.builder()
+                            .id(child.getId())
+                            .name(child.getName())
+                            .build()
+            );
+        });
+
+        List<Long> aligns = commonUtils.stringToArray(objective.getAlignmentObjectives());
+        aligns.forEach(item ->{
+            Objective align = objectiveRepository.findByIdAndDelete(item);
+            if(align != null){
+                alignResponses.add(
+                        MetaDataResponse.builder()
+                                .id(align.getId())
+                                .name(align.getName())
+                                .build()
+                );
+            }
+        });
+
+        List<KeyResultResponse> resultResponses = setListKeyResultResponse(objective);
+
+        User user = objective.getExecute().getUser();
+        MetaDataResponse userResponse = MetaDataResponse.builder()
+                .id(user.getId())
+                .name(user.getFullName())
+                .build();
+
+        Project project = objective.getExecute().getProject();
+        MetaDataResponse projectResponse = null;
+        if(project != null){
+            projectResponse = MetaDataResponse.builder()
+                    .id(project.getId())
+                    .name(project.getName())
+                    .build();
+        }
+
+        ObjectiveDetailResponse response = ObjectiveDetailResponse.builder()
+                .id(objective.getId())
+                .title(objective.getName())
+                .progress(objective.getProgress())
+                .weight(objective.getWeight())
+                .parentObjective(parentResponse)
+                .user(userResponse)
+                .project(projectResponse)
+                .childObjectives(childrenResponses)
+                .alignmentObjectives(alignResponses)
+                .keyResults(resultResponses)
+                .build();
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty();
-    }
-
-    private ArrayList<Long> stringToArray(String string) {
-        ArrayList<Long> longArray = new ArrayList<>();
-        if (string != null && !string.trim().isEmpty()) {
-            String[] array = string.split(",");
-            for (String item : array) {
-                if (!item.trim().isEmpty()) {
-                    longArray.add(Long.parseLong(item.trim()));
-                }
-            }
-        }
-        return longArray;
-    }
-
-    private String arrayToString(List<Long> longArray) {
-        StringBuilder string = new StringBuilder(",");
-        for (Long along : longArray) {
-            string.append(along).append(",");
-        }
-        return string.toString();
     }
 
     public ObjectiveResponse setObjective(Objective objective, List<KeyResultResponse> keyResults) {
@@ -574,7 +631,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .userId(objective.getExecute().getUser().getId())
                 .projectId(objective.getExecute().getProject() == null ? 0 :
                         objective.getExecute().getProject().getId())
-                .alignmentObjectives(stringToArray(objective.getAlignmentObjectives()))
+                .alignmentObjectives(commonUtils.stringToArray(objective.getAlignmentObjectives()))
                 .changing(objective.getChanging())
                 .cycleId(objective.getCycle().getId())
                 .parentId(objective.getParentId())

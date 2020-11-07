@@ -7,21 +7,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ObjectiveService {
-    ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto, String token) throws Exception;
+    ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception;
 
-    ResponseEntity<ApiResponse> deleteObjective(long id);
+    ResponseEntity<?> deleteObjective(long id);
 
-    ResponseEntity<ApiResponse> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception;
+    ResponseEntity<?> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception;
 
-    ResponseEntity<ApiResponse> getListObjectiveTitleByUserId(long userId) throws Exception;
+    ResponseEntity<?> getListObjectiveTitleByUserId(long userId) throws Exception;
 
-    ResponseEntity<ApiResponse> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception;
+    ResponseEntity<?> getParentObjectiveTitleByObjectiveId(long id, String token) throws Exception;
 
-    ResponseEntity<ApiResponse> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
+    ResponseEntity<?> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
 
-    ResponseEntity<ApiResponse> getListAlignByObjectiveId(long id) throws Exception;
+    ResponseEntity<?> getListAlignByObjectiveId(long id) throws Exception;
 
-    ResponseEntity<ApiResponse> getKeyResultTitleByObjectiveId(long id) throws Exception;
+    ResponseEntity<?> getKeyResultTitleByObjectiveId(long id) throws Exception;
 
     ResponseEntity<?> getAllObjectiveAndProjectOfUser(String token,long id) throws Exception;
+
+    ResponseEntity<?> getDetailObjectiveById(long id) throws Exception;
 }

@@ -190,4 +190,22 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Thông tin chi tiết của objective theo id")
+    @GetMapping(path = "/detail/{id}")
+    public ResponseEntity<?> getDetailObjectiveById(
+            @ApiParam(value = "id cua Objective hien tai")
+            @PathVariable(value = "id") long id){
+        try {
+            return objectiveService.getDetailObjectiveById(id);
+        } catch (Exception e) {
+            logger.error("get detail objective failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }
