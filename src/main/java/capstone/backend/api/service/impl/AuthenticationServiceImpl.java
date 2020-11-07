@@ -7,6 +7,7 @@ import capstone.backend.api.entity.User;
 import capstone.backend.api.entity.security.TokenResponseInfo;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.AuthenticationService;
+import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +37,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
-    private final capstone.backend.api.utils.StringUtils stringUtils;
+    private final CommonUtils utils;
 
     @Override
     public ResponseEntity<?> authenticate(UserLoginDto userLoginDto) throws AuthenticationException {
@@ -94,7 +95,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
 
-        String verifyCode = stringUtils.generateRandomCode(commonProperties.getCodeSize());
+        String verifyCode = utils.generateRandomCode(commonProperties.getCodeSize());
 
         try {
             mailService.CreateMailVerifyCode(email, verifyCode);

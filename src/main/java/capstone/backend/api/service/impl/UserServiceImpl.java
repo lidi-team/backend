@@ -16,12 +16,9 @@ import capstone.backend.api.entity.User;
 import capstone.backend.api.repository.RoleRepository;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.UserService;
-import capstone.backend.api.utils.DateUtils;
-import capstone.backend.api.utils.RoleUtils;
-import capstone.backend.api.utils.StringUtils;
+import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -53,13 +50,9 @@ public class UserServiceImpl implements UserService {
 
     private final ExecuteServiceImpl executeService;
 
-    private final RoleUtils roleUtils;
+    private final CommonUtils utils;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final DateUtils dateUtils;
-
-    private final StringUtils stringUtils;
 
     private final MailServiceImpl mailService;
 
@@ -284,7 +277,7 @@ public class UserServiceImpl implements UserService {
 
         if (currentUser != null) {
             Department department = departmentService.getDepartmentById(userInfo.getDepartmentId());
-            Date date = dateUtils.stringToDate(userInfo.getDob(),"dd/MM/yyyy");
+            Date date = utils.stringToDate(userInfo.getDob(),"dd/MM/yyyy");
 
             currentUser.setFullName(userInfo.getFullName());
             currentUser.setEmail(userInfo.getEmail());
@@ -497,11 +490,11 @@ public class UserServiceImpl implements UserService {
                     );
                     continue;
                 }
-                String password = stringUtils.generateRandomCode(commonProperties.getCodeSize());
+                String password = utils.generateRandomCode(commonProperties.getCodeSize());
                 String passwordEncode = passwordEncoder.encode(password);
                 String dobStr = userRegister.getDob();
-                Date dob = dateUtils.stringToDate(dobStr, DateUtils.PATTERN_ddMMyyyy);
-                Set<Role> roles = roleUtils.getUserRoles(null);
+                Date dob = utils.stringToDate(dobStr, CommonUtils.PATTERN_ddMMyyyy);
+                Set<Role> roles = utils.getUserRoles(null);
                 String url = "";
                 User user = User.builder()
                         .email(userRegister.getEmail())
