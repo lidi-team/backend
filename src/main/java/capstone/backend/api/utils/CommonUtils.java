@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @AllArgsConstructor
@@ -70,5 +68,26 @@ public class CommonUtils {
                 100*(keyResult.getValueObtained()- keyResult.getFromValue())
                 /(keyResult.getToValue() - keyResult.getFromValue())
         );
+    }
+
+    public ArrayList<Long> stringToArray(String string) {
+        ArrayList<Long> longArray = new ArrayList<>();
+        if (string != null && !string.trim().isEmpty()) {
+            String[] array = string.split(",");
+            for (String item : array) {
+                if (!item.trim().isEmpty()) {
+                    longArray.add(Long.parseLong(item.trim()));
+                }
+            }
+        }
+        return longArray;
+    }
+
+    public String arrayToString(List<Long> longArray) {
+        StringBuilder string = new StringBuilder(",");
+        for (Long along : longArray) {
+            string.append(along).append(",");
+        }
+        return string.toString();
     }
 }

@@ -56,4 +56,10 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
 
     @Query(value = "select o from Objective o where o.id = :id and o.isDelete = false")
     Objective findByIdAndDelete(long id);
+
+    @Query(value = "select o from Objective o " +
+            "where o.parentId = :objectiveId " +
+            "and o.isDelete = false")
+    List<Objective> findAllByParentId(@Param(value = "objectiveId") long objectiveId);
+
 }
