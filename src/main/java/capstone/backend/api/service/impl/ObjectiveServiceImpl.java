@@ -8,6 +8,7 @@ import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.ObjectiveRepository;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.ObjectiveService;
+import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -37,6 +38,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private final JwtUtils jwtUtils;
 
     private final UserRepository userRepository;
+
+    private  final CommonUtils commonUtils;
 
     @Override
     public ResponseEntity<ApiResponse> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
@@ -591,7 +594,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .startValue(keyResult.getFromValue())
                 .targetedValue(keyResult.getToValue())
                 .valueObtained(keyResult.getValueObtained())
-                .progress(keyResult.getProgress())
+                .progress(commonUtils.calculateProgressKeyResult(keyResult))
                 .reference(keyResult.getReference())
                 .build();
     }
