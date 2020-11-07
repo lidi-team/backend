@@ -591,6 +591,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .startValue(keyResult.getFromValue())
                 .targetedValue(keyResult.getToValue())
                 .valueObtained(keyResult.getValueObtained())
+                .progress(keyResult.getProgress())
                 .reference(keyResult.getReference())
                 .build();
     }

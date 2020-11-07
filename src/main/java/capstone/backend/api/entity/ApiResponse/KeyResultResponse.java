@@ -17,6 +17,8 @@ public class KeyResultResponse {
 
     private double targetedValue;
 
+    private double progress;
+
     @NotNull
     private String content;
 
