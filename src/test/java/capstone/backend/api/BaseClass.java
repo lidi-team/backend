@@ -19,7 +19,7 @@ public class BaseClass {
 		RestUtils.setPort(8081);
 		RestUtils.setBasePath("api"); // Setup Base Path
 		RestUtils.setContentType(ContentType.JSON); // Setup Content Type
-		String requestBody = "{\"email\" : \"sontung199x@gmail.com\" , \"password\" : \"123456789\"} ";
+		String requestBody = "{\"email\" : \"namnhse05817@fpt.edu.vn\" , \"password\" : \"123456789\"} ";
 		
 		token = given().contentType(ContentType.JSON)
 		.body(requestBody).when().post("auth/signin/")
