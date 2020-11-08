@@ -19,6 +19,7 @@ public class ObjectiveProjectItem {
     private double weight;
     private double changing;
     private double progress;
+    private boolean delete;
     private List<KeyResultResponse> keyResults;
     private List<ObjectiveProjectItem> childObjectives;
 }

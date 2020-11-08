@@ -473,6 +473,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                         .weight(childObjective.getWeight())
                                         .progress(childObjective.getProgress())
                                         .changing(childObjective.getChanging())
+                                        .delete(true)
                                         .keyResults(childKeyResultResponses)
                                         .childObjectives(new ArrayList<>())
                                         .build()
@@ -489,6 +490,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                     .changing(objective.getChanging())
                                     .keyResults(keyResultResponses)
                                     .childObjectives(childItems)
+                                    .delete(childItems.size() == 0)
                                     .build()
                     );
 
