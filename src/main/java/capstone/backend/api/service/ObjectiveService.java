@@ -19,7 +19,7 @@ public interface ObjectiveService {
 
     ResponseEntity<?> getParentKeyResultTitleByObjectiveId(long id) throws Exception;
 
-    ResponseEntity<?> getListAlignByObjectiveId(long id) throws Exception;
+    ResponseEntity<?> getListAlignByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
 
     ResponseEntity<?> getKeyResultTitleByObjectiveId(long id) throws Exception;
 

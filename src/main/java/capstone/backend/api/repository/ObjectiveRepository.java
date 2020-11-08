@@ -62,4 +62,11 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
             "and o.isDelete = false")
     List<Objective> findAllByParentId(@Param(value = "objectiveId") long objectiveId);
 
+    @Query(value = "select o from Objective o " +
+            " join Execute e on o.execute.id = e.id" +
+            " where e.project.id = :projectId" +
+            " and o.cycle.id = :cycleId" +
+            " and o.isDelete = false")
+    List<Objective> findAllObjectiveByProjectIdAndCycleId(@Param(value = "projectId") long projectId,
+                                                        @Param(value = "cycleId") long cycleId);
 }

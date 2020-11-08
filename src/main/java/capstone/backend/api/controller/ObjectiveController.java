@@ -138,11 +138,15 @@ public class ObjectiveController {
         }
     }
 
-    @ApiOperation(value = "Danh sách objective có thể liên kết với objective hiện tại")
-    @GetMapping(path = "/align-objective/{id}")
-    public ResponseEntity<?> getListAlignByObjectiveId(@PathVariable(value = "id") long id) {
+    @ApiOperation(value = "Danh sách objective có thể liên kết theo project")
+    @GetMapping(path = "/align-objective")
+    public ResponseEntity<?> getListAlignByObjectiveId(
+            @ApiParam(value = "Id của project",required = true)
+            @RequestParam(value = "projectId") long projectId,
+            @ApiParam(value = "Id của project",required = true)
+            @RequestParam(value = "cycleId") long cycleId) {
         try {
-            return objectiveService.getListAlignByObjectiveId(id);
+            return objectiveService.getListAlignByProjectIdAndCycleId(projectId,cycleId);
         } catch (Exception e) {
             logger.error("get list align objectives failed");
             logger.error(e.getMessage());
