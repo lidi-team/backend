@@ -383,46 +383,17 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     }
 
     @Override
-    public ResponseEntity<?> getListAlignByObjectiveId(long id) throws Exception {
-        List<MetaDataResponse> responses = new ArrayList<>();
-        List<Objective> objectives;
+    public ResponseEntity<?> getListAlignByProjectIdAndCycleId(long projectId,long cycleId) throws Exception {
+        List<AlignObjectiveResponse> responses = new ArrayList<>();
 
-        if (id == 0) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_SUCCESS())
-                            .message(commonProperties.getMESSAGE_SUCCESS())
-                            .data(responses)
-                            .build()
-            );
-        }
-
-        Objective objective = objectiveRepository.findByIdAndDelete(id);
-        if (objective == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
-        }
-
-        Execute execute = objective.getExecute();
-        Project project = execute.getProject();
-        Cycle cycle = objective.getCycle();
-        int type = objective.getType();
-
-        if (type == 0) {
-            objectives = objectiveRepository.findAllByTypeAndCycleId(type, cycle.getId());
-        } else {
-            objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(project.getId(), cycle.getId(), type);
-        }
-
+        List<Objective> objectives = objectiveRepository.findAllObjectiveByProjectIdAndCycleId(projectId,cycleId);
         objectives.forEach(obj -> {
             responses.add(
-                    MetaDataResponse.builder()
+                    AlignObjectiveResponse.builder()
                             .id(obj.getId())
                             .name(obj.getName())
+                            .type(obj.getType())
+                            .user(obj.getExecute().getUser().getFullName())
                             .build()
             );
         });
