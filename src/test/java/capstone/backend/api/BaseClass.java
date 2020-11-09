@@ -9,6 +9,8 @@ import com.jayway.restassured.response.Header;
 import org.junit.Before;
 
 import static org.hamcrest.Matchers.*;
+
+	//File nay la file cau hinh ban dau. Ae co the sua email, password dang nhap tuy theo yeu cau API
 public class BaseClass {
 
     String token = "";

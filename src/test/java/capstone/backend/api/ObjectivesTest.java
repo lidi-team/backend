@@ -25,6 +25,8 @@ import java.util.*;
 @AutoConfigureMockMvc
 public class ObjectivesTest extends BaseClass {
 
+
+	//Test POST request: create new Objective
 	@Test
 	public void T00() {
 		try {
@@ -70,17 +72,14 @@ public class ObjectivesTest extends BaseClass {
 			Response response = given()
 			.contentType("application/json; charset=UTF-8")
 			.header(headers).body(request.toString()).when().post("objective/add");
-			System.out.println(response.statusCode());
-			System.out.println(response.asString());
-			System.out.println(response.getBody().asString());
-			System.out.println(response.statusLine());
-			int statusCode = response.getStatusCode();
 			Assert.assertEquals(statusCode, 200);
 		} catch (Exception e) {
 
 		}
 	}
 
+
+	//Test GET request: get keyresult by objectiveID
 	@Test
 	public void T01() {
 		Header headers = new Header("Authorization", "lidi " + token);
