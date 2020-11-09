@@ -1,0 +1,120 @@
+{
+  "id": "3eb8c3fb-085b-450d-8555-2071017706dc",
+  "version": "2.0",
+  "name": "okr",
+  "url": "http://localhost:8081/dang-nhap",
+  "tests": [{
+    "id": "f6435801-a0af-4251-af11-0701619e3a94",
+    "name": "test1",
+    "commands": [{
+      "id": "0bccffba-cdec-4a39-a402-5ee0932d039c",
+      "comment": "",
+      "command": "open",
+      "target": "http://localhost:8081/dang-nhap",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7b7bd8d9-daf3-4d39-a52c-72c932a6052b",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1294x741",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "52e7e418-19f3-4b29-a25f-5ea0d5f9553d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.login-form",
+      "targets": [
+        ["css=.login-form", "css:finder"],
+        ["xpath=//div[@id='__layout']/div/div[2]/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "89136811-0646-4133-bf30-15990f12afef",
+      "comment": "",
+      "command": "type",
+      "target": "name=email",
+      "targets": [
+        ["name=email", "name"],
+        ["css=.login-form__email > .el-input__inner", "css:finder"],
+        ["xpath=//input[@name='email']", "xpath:attributes"],
+        ["xpath=//div[@id='__layout']/div/div[2]/div[2]/div/form/div/div/div/input", "xpath:idRelative"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "namnhse05817@fpt.edu.vn"
+    }, {
+      "id": "fef65480-6cc7-45fc-b9bd-0879cdbd614d",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.el-button",
+      "targets": [
+        ["css=.el-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='__layout']/div/div[2]/div[2]/div/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Đăng nhập')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "45622a54-d78a-4afa-9a22-21f912da283d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.el-button",
+      "targets": [
+        ["css=.el-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='__layout']/div/div[2]/div[2]/div/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Đăng nhập')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "00d59547-f388-4569-9886-1b5402d4b16e",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.el-button",
+      "targets": [
+        ["css=.el-button", "css:finder"],
+        ["xpath=//button[@type='button']", "xpath:attributes"],
+        ["xpath=//div[@id='__layout']/div/div[2]/div[2]/div/form/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Đăng nhập')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "75de8306-8040-4b8b-a68b-e196cba495ec",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sidebar__link:nth-child(5) span",
+      "targets": [
+        ["css=.sidebar__link:nth-child(5) span", "css:finder"],
+        ["xpath=//div[@id='app']/div/div[2]/a[5]/div/span", "xpath:idRelative"],
+        ["xpath=//a[5]/div/span", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "0978fae8-9ca1-4b5f-93bb-a2603d72bf05",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.el-table__row:nth-child(10) > .el-table_1_column_1 > .cell",
+      "targets": [
+        ["css=.el-table__row:nth-child(10) > .el-table_1_column_1 > .cell", "css:finder"],
+        ["xpath=//div[@id='app']/div[2]/div/div/div/div[2]/div[3]/div/div/div[3]/table/tbody/tr[10]/td/div", "xpath:idRelative"],
+        ["xpath=//tr[10]/td/div", "xpath:position"]
+      ],
+      "value": "Mya Beach"
+    }]
+  }],
+  "suites": [{
+    "id": "e01312e4-b363-488b-96a5-20b07e8254fe",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["f6435801-a0af-4251-af11-0701619e3a94"]
+  }],
+  "urls": ["http://localhost:8081/dang-nhap"],
+  "plugins": []
+}
