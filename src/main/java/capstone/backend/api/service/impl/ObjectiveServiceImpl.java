@@ -594,6 +594,40 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getAlignObjectiveById(long id) throws Exception {
+        List<ObjectiveProjectItem> responses = new ArrayList<>();
+        Objective objective = objectiveRepository.findById(id).get();
+
+        List<Long> longs = commonUtils.stringToArray(objective.getAlignmentObjectives());
+        longs.forEach(item ->{
+            Objective align = objectiveRepository.findByIdAndDelete(item);
+            if(align != null){
+                List<KeyResultResponse> keyResultResponses = setListKeyResultResponse(align);
+                responses.add(
+                        ObjectiveProjectItem.builder()
+                                .id(align.getId())
+                                .title(align.getName())
+                                .type(align.getType())
+                                .weight(align.getWeight())
+                                .progress(align.getProgress())
+                                .changing(align.getChanging())
+                                .keyResults(keyResultResponses)
+                                .childObjectives(new ArrayList<>())
+                                .delete(false)
+                                .build()
+                );
+            }
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty();
     }
