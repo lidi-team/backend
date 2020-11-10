@@ -26,4 +26,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getAllObjectiveAndProjectOfUser(String token,long id) throws Exception;
 
     ResponseEntity<?> getDetailObjectiveById(long id) throws Exception;
+
+    ResponseEntity<?> getAlignObjectiveById(long id) throws Exception;
 }

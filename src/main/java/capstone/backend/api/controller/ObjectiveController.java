@@ -212,4 +212,22 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Thông tin chi tiết của objective align theo id")
+    @GetMapping(path = "/align-detail/{id}")
+    public ResponseEntity<?> getAlignObjectiveById(
+            @ApiParam(value = "id cua Objective hien tai")
+            @PathVariable(value = "id") long id){
+        try {
+            return objectiveService.getAlignObjectiveById(id);
+        } catch (Exception e) {
+            logger.error("get align objective failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }
