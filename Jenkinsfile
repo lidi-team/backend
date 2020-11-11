@@ -1,22 +1,21 @@
 pipeline {
     agent any
-     tools {
-        maven 'M3'
-    }
+    //  tools {
+    //     maven 'M3'
+    // }
     stages {
-        // stage('Pre') { 
-        //     steps {
-        //         sh 'docker container stop my-jenkins'
-        //         sh 'docker container prune --force my-jenkins'
-        //     }
-        // }
+        stage('Pre') { 
+            steps {
+                sh 'bash ./pre.sh'
+            }
+        }
 
         stage('Build') { 
             steps {
                 // sh 'export A=$(lsof -t -i:8082)'
-                sh 'mvn clean install' 
-                sh 'docker build -t myjenkins .'
-                sh 'docker container run -d -p 8082:8082 --name my-jenkins myjenkins'
+                sh 'mvn clean package' 
+                sh 'docker build -t backend .'
+                sh 'docker container run -d -p 8081:8080 --name my-backend backend'
             }
         }
         // stage('Deliver') { 
@@ -27,9 +26,16 @@ pipeline {
         //     }
         // }
     }
-    // post {
-    //     always {
-    //         cleanWs()
-    //     }
-    // }
+    post {
+        failure {
+        mail to: 'dinhlehoang35@gmail.com, hoangledinh65@gmail.com',
+             subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+             body: "Something is wrong with ${env.BUILD_URL}"
+    }
+        success {
+            mail to: 'dinhlehoang35@gmail.com, hoangledinh65@gmail.com',
+             subject: "Success notification from Jenkins!",
+             body: "Success!"
+        }
+    }
 }
