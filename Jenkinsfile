@@ -28,7 +28,9 @@ pipeline {
     }
     post {
         failure {
+
         mail to: 'dinhlehoang35@gmail.com, hoangledinh65@gmail.com',
+
              subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
              body: "Something is wrong with ${env.BUILD_URL}"
     }
@@ -36,6 +38,7 @@ pipeline {
             mail to: 'dinhlehoang35@gmail.com, hoangledinh65@gmail.com',
              subject: "Success notification from Jenkins!",
              body: "Success!"
+
         }
     }
 }

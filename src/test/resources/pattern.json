@@ -1,0 +1,136 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "JSON SCHEMA tests/test/teacherRegister API",
+    "default": {},
+    "examples": [
+        {
+            "email": "hoang5.com",
+            "password": "123445",
+            "dob": "22/11/1998",
+            "fullName": "Le Son Tung",
+            "phoneNumber": "0342529999",
+            "gender": 1,
+            "avatarUrl": null,
+            "roles": [
+                "ROLE_USER"
+            ]
+        }
+    ],
+    "required": [
+        "email",
+        "password",
+        "dob",
+        "fullName",
+        "phoneNumber",
+        "gender",
+        "avatarUrl",
+        "roles"
+    ],
+    "properties": {
+        "email": {
+            "$id": "#/properties/email",
+            "type": "string",
+            "title": "The email schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "hoang5.com"
+            ],
+            "maxLength": 3
+        },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "The password schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "123445"
+            ]
+        },
+        "dob": {
+            "$id": "#/properties/dob",
+            "type": "string",
+            "title": "The dob schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "22/11/1998"
+            ]
+        },
+        "fullName": {
+            "$id": "#/properties/fullName",
+            "type": "string",
+            "title": "The fullName schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Le Son Tung"
+            ]
+        },
+        "phoneNumber": {
+            "$id": "#/properties/phoneNumber",
+            "type": "string",
+            "title": "The phoneNumber schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "0342529999"
+            ],
+            "minLength": 3
+        },
+        "gender": {
+            "$id": "#/properties/gender",
+            "type": "integer",
+            "title": "The gender schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 5,
+            "examples": [
+                1
+            ],
+             "minimum": 0
+        },
+        "avatarUrl": {
+            "$id": "#/properties/avatarUrl",
+            "type": "null",
+            "title": "The avatarUrl schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": null,
+            "examples": [
+                null
+            ]
+        },
+        "roles": {
+            "$id": "#/properties/roles",
+            "type": "array",
+            "title": "The roles schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    "ROLE_USER"
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/roles/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/roles/items/anyOf/0",
+                        "type": "string",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": "",
+                        "examples": [
+                            "ROLE_USER"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": true
+}
