@@ -1,17 +1,17 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.CreateProjectDto;
+import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
+import capstone.backend.api.entity.ApiResponse.Project.ProjectDetailResponse;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectListResponse;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectPagingResponse;
-import capstone.backend.api.entity.Execute;
-import capstone.backend.api.entity.Project;
-import capstone.backend.api.entity.User;
-import capstone.backend.api.repository.ExecuteRepository;
-import capstone.backend.api.repository.ProjectRepository;
-import capstone.backend.api.repository.UserRepository;
+import capstone.backend.api.entity.ApiResponse.Project.StaffInformation;
+import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ProjectService;
+import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,10 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -39,8 +36,14 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ExecuteRepository executeRepository;
 
+    private final CommonUtils commonUtils;
+
+    private final RoleRepository roleRepository;
+
+    private final ProjectPositionRepository positionRepository;
+
     @Override
-    public ResponseEntity<ApiResponse> getAllProjects() throws Exception {
+    public ResponseEntity<?> getAllProjects() throws Exception {
         List<Project> projects = projectRepository.findAll();
         List<ProjectListResponse> projectListResponses = new ArrayList<>();
         projects.forEach(project -> {
@@ -63,7 +66,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getListMetaDataProject() throws Exception {
+    public ResponseEntity<?> getListMetaDataProject() throws Exception {
         ArrayList<Project> projects = (ArrayList<Project>) projectRepository.findAll();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
 
@@ -84,7 +87,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getAllAvailableProjectOfUser(String token, int type) throws Exception {
+    public ResponseEntity<?> getAllAvailableProjectOfUser(String token, int type) throws Exception {
         List<MetaDataResponse> responses = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
@@ -151,7 +154,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projects.getContent().forEach(project -> {
-            Execute execute = executeRepository.findByProjectIdAndIsPm(project.getId());
+            Execute execute = executeRepository.findPmByProjectId(project.getId());
             list.add(
                     ProjectPagingResponse.builder()
                             .id(project.getId())
@@ -175,6 +178,94 @@ public class ProjectServiceImpl implements ProjectService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(response).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getDetailProjectById(long id) throws Exception {
+        Project project = projectRepository.findById(id).get();
+
+        Execute pm = executeRepository.findPmByProjectId(id);
+        StaffInformation pmResponse = StaffInformation.builder()
+                .id(pm.getUser().getId())
+                .name(pm.getUser().getFullName())
+                .position(pm.getPosition().getName())
+                .department(pm.getUser().getDepartment().getName())
+                .build();
+        List<StaffInformation> staffResponse = new ArrayList<>();
+        List<Execute> staffs = executeRepository.findAllStaffByProjectId(id);
+        staffs.forEach(staff->{
+            staffResponse.add(
+                    StaffInformation.builder()
+                            .id(staff.getUser().getId())
+                            .name(staff.getUser().getFullName())
+                            .department(staff.getUser().getDepartment().getName())
+                            .position(staff.getPosition().getName())
+                            .build()
+            );
+        });
+
+        ProjectDetailResponse response = ProjectDetailResponse.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .description(project.getDescription())
+                .status(project.isClose()?"Closed":"Active")
+                .startDate(project.getFromDate())
+                .endDate(project.getEndDate())
+                .pm(pmResponse)
+                .staffs(staffResponse)
+                .build();
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception {
+        Role rolePm = roleRepository.findRoleByName("ROLE_PM").get();
+        ProjectPosition position = positionRepository.findById(1L).get();
+        Project parentProject = projectRepository.findById(projectDto.getParentProjectId()).orElse(null);
+
+        String fromDateStr = projectDto.getStartDate();
+        String endDateStr = projectDto.getEndDate();
+        Date fromDate = commonUtils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
+        Date endDate = commonUtils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
+
+        Project project = Project.builder()
+                .name(projectDto.getName())
+                .parent(parentProject)
+                .close(false)
+                .isDelete(false)
+                .fromDate(fromDate)
+                .endDate(endDate)
+                .description(projectDto.getDescription())
+                .build();
+        project = projectRepository.save(project);
+
+        User pm = userRepository.findById(projectDto.getPmId()).get();
+        pm.getRoles().add(rolePm);
+        pm = userRepository.save(pm);
+
+        Execute execute = Execute.builder()
+                .user(pm)
+                .project(project)
+                .fromDate(fromDate)
+                .endDate(endDate)
+                .isPm(true)
+                .isDelete(false)
+                .position(position)
+                .build();
+        executeRepository.save(execute);
+        
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .build()
         );
     }
 }

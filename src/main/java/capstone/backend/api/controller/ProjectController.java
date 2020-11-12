@@ -1,6 +1,7 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.CreateProjectDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import capstone.backend.api.service.impl.ProjectServiceImpl;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/project")
+@RequestMapping(value = "/api/projects")
 public class ProjectController {
 
     private final CommonProperties commonProperties;
@@ -60,7 +61,7 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "Tất cả project trong hệ thống")
-    @GetMapping(path = "/projects")
+    @GetMapping(path = "")
     public ResponseEntity<?> getAllProject(
             @ApiParam(value = "số thứ tự trang hiện tại")
             @RequestParam(value = "page") int page,
@@ -69,8 +70,7 @@ public class ProjectController {
             @ApiParam(value = "filter sort theo thứ tự gì")
             @RequestParam(value = "sortWith") String sortWith,
             @ApiParam(value = "status của project, null = total")
-            @RequestParam(value = "type") String type
-    ){
+            @RequestParam(value = "type") String type){
         try {
             return projectService.getAllProjectPaging(page,limit,sortWith,type);
         } catch (Exception e) {
@@ -84,5 +84,39 @@ public class ProjectController {
         }
     }
 
+    @ApiOperation(value = "lấy thông tin của project theo id")
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getProjectById(
+            @ApiParam(value = "Id của project")
+            @PathVariable(value = "id")long id){
+        try {
+            return projectService.getDetailProjectById(id);
+        } catch (Exception e) {
+            logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "lấy thông tin của project theo id")
+    @PostMapping(path = "/create")
+    public ResponseEntity<?> createProject(
+            @RequestBody() CreateProjectDto projectDto){
+        try {
+            return projectService.createProject(projectDto);
+        } catch (Exception e) {
+            logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 
 }
