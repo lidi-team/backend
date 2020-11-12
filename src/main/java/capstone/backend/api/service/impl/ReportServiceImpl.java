@@ -5,7 +5,7 @@ import capstone.backend.api.dto.CheckinDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.ProjectObjectiveResponse;
+import capstone.backend.api.entity.ApiResponse.Project.ProjectObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.ReportResponse;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.*;

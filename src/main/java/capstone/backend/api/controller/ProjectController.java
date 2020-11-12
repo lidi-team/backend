@@ -59,5 +59,30 @@ public class ProjectController {
         }
     }
 
+    @ApiOperation(value = "Tất cả project trong hệ thống")
+    @GetMapping(path = "/projects")
+    public ResponseEntity<?> getAllProject(
+            @ApiParam(value = "số thứ tự trang hiện tại")
+            @RequestParam(value = "page") int page,
+            @ApiParam(value = "tổng số item giới hạn trong trang")
+            @RequestParam(value = "limit") int limit,
+            @ApiParam(value = "filter sort theo thứ tự gì")
+            @RequestParam(value = "sortWith") String sortWith,
+            @ApiParam(value = "status của project, null = total")
+            @RequestParam(value = "type") String type
+    ){
+        try {
+            return projectService.getAllProjectPaging(page,limit,sortWith,type);
+        } catch (Exception e) {
+            logger.error("get list project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 
 }

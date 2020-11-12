@@ -90,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
+                            .message("Email này không tồn tại trong hệ thống!").build()
             );
         }
 
@@ -103,7 +103,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_TIME_OUT())
-                            .message("Cannot send mail!").build()
+                            .message("Không thể gửi mail!").build()
             );
         }
 

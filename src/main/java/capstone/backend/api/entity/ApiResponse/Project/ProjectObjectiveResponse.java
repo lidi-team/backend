@@ -1,4 +1,4 @@
-package capstone.backend.api.entity.ApiResponse;
+package capstone.backend.api.entity.ApiResponse.Project;
 
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
 import lombok.AllArgsConstructor;

@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface ProjectService {
-    ResponseEntity<ApiResponse> getAllProjects() throws Exception;
+    ResponseEntity<?> getAllProjects() throws Exception;
 
-    ResponseEntity<ApiResponse> getListMetaDataProject() throws Exception;
+    ResponseEntity<?> getListMetaDataProject() throws Exception;
 
-    ResponseEntity<ApiResponse> getAllAvailableProjectOfUser(String token,int type) throws Exception;
+    ResponseEntity<?> getAllAvailableProjectOfUser(String token,int type) throws Exception;
+
+    ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type) throws Exception;
+
 }
