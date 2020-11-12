@@ -18,6 +18,14 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     @Query(value =  "select e from Execute e " +
                     "join Project p on e.project.id = p.id " +
-                    "where e.user.id = :id and p.isClose = false and e.isDelete = false")
+                    "where e.user.id = :id and p.close = false and e.isDelete = false")
     List<Execute> findAllByUserIdAndOpenProject(@Param(value = "id") long id);
+
+    @Query(value =  "select e from Execute e " +
+            "join Project p on e.project.id = p.id " +
+            "where e.project.id = :id " +
+            "and p.close = false " +
+            "and e.isDelete = false " +
+            "and e.isPm = true")
+    Execute findByProjectIdAndIsPm(@Param(value = "id") long id);
 }

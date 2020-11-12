@@ -1,4 +1,4 @@
-package capstone.backend.api.entity.ApiResponse;
+package capstone.backend.api.entity.ApiResponse.Project;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProjectListResponse {
+public class ProjectPagingResponse {
     private long id;
     private String name;
-    private Date fromDate;
-    private Date toDate;
+    private Date startDate;
+    private Date endDate;
+    private String status;
+    private String description;
+    private String pm;
 }

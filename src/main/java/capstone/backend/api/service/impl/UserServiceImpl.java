@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -510,7 +511,20 @@ public class UserServiceImpl implements UserService {
                         .build();
                 users.add(user);
                 map.put(user, password);
-            } catch (Exception e) {
+            }
+            catch (ParseException ex){
+                fails.add(
+                        UserFailedItem.builder()
+                                .email(userRegister.getEmail())
+                                .departmentId(userRegister.getDepartmentId())
+                                .dob(userRegister.getDob())
+                                .fullName(userRegister.getFullName())
+                                .gender(userRegister.getGender())
+                                .reason("Định dạng ngày không hợp lệ!")
+                                .build()
+                );
+            }
+            catch (Exception e) {
                 fails.add(
                         UserFailedItem.builder()
                                 .email(userRegister.getEmail())

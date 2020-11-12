@@ -29,7 +29,7 @@ public class Project {
 
     @NonNull
     @Builder.Default
-    private boolean isClose = false;
+    private boolean close = false;
 
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
@@ -38,6 +38,8 @@ public class Project {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     @NonNull
     private Date endDate;
+
+    private String description;
 
     @OneToMany
     private Set<Project> childProject = new HashSet<>();
