@@ -235,32 +235,69 @@ public class ProjectServiceImpl implements ProjectService {
         Date fromDate = commonUtils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = commonUtils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
 
-        Project project = Project.builder()
-                .name(projectDto.getName())
-                .parent(parentProject)
-                .close(false)
-                .isDelete(false)
-                .fromDate(fromDate)
-                .endDate(endDate)
-                .description(projectDto.getDescription())
-                .build();
+        Project project;
+        if(projectDto.getId() == 0){
+            project = Project.builder()
+                    .name(projectDto.getName())
+                    .parent(parentProject)
+                    .close(projectDto.getStatus() == 0)
+                    .fromDate(fromDate)
+                    .endDate(endDate)
+                    .description(projectDto.getDescription())
+                    .build();
+        }else{
+            project = Project.builder()
+                    .id(projectDto.getId())
+                    .name(projectDto.getName())
+                    .parent(parentProject)
+                    .close(projectDto.getStatus() == 0)
+                    .fromDate(fromDate)
+                    .endDate(endDate)
+                    .description(projectDto.getDescription())
+                    .build();
+        }
         project = projectRepository.save(project);
 
         User pm = userRepository.findById(projectDto.getPmId()).get();
         pm.getRoles().add(rolePm);
         pm = userRepository.save(pm);
 
-        Execute execute = Execute.builder()
-                .user(pm)
-                .project(project)
-                .fromDate(fromDate)
-                .endDate(endDate)
-                .isPm(true)
-                .isDelete(false)
-                .position(position)
-                .build();
+        Execute execute = executeRepository.findPmByProjectId(project.getId());
+
+
+        if(execute != null ){
+            User oldUser = execute.getUser();
+            // check if pm of project is changed
+            if(oldUser.getId() != pm.getId()){
+                // check role PM of old pm -> decide to remove role pm or not
+                if(executeRepository.findOtherProjectUserIsPm(oldUser.getId(),project.getId()) == 0){
+                    oldUser.getRoles().remove(rolePm);
+                    userRepository.save(oldUser);
+                }
+            }
+            execute = Execute.builder()
+                    .id(execute.getId())
+                    .user(pm)
+                    .project(project)
+                    .fromDate(fromDate)
+                    .endDate(endDate)
+                    .isPm(true)
+                    .isDelete(false)
+                    .position(position)
+                    .build();
+        }else{
+            execute = Execute.builder()
+                    .user(pm)
+                    .project(project)
+                    .fromDate(fromDate)
+                    .endDate(endDate)
+                    .isPm(true)
+                    .isDelete(false)
+                    .position(position)
+                    .build();
+        }
         executeRepository.save(execute);
-        
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
