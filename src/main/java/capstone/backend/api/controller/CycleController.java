@@ -1,6 +1,7 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.CreateCycleDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.Cycle;
 import capstone.backend.api.service.impl.CycleServiceImpl;
@@ -22,9 +23,9 @@ import java.util.Date;
 @RequestMapping(value = "/api/cycle")
 @Api(value = "Chu kì")
 public class CycleController {
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
-    private CycleServiceImpl cycleService;
+    private final CycleServiceImpl cycleService;
     private static final Logger logger = LoggerFactory.getLogger(CycleController.class);
 
 
@@ -49,12 +50,11 @@ public class CycleController {
     @ApiOperation(value = "lấy tất cả cycle, có phân trang")
     @GetMapping(path = "/all")
     public ResponseEntity<?> viewListCycles(
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
-            @RequestHeader(value = "Authorization") String jwtToken) {
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 1", required = true) @RequestParam(name = "page") int page,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
+            @ApiParam(value = "Noi dung", required = true) @RequestParam(name = "text") String text) {
         try {
-            return cycleService.getAllCycles(page, size, sort, jwtToken);
+            return cycleService.getAllCycles(page, limit, text);
         } catch (Exception e) {
             logger.error("get list cycles failed");
             logger.error(e.getMessage());
@@ -69,11 +69,10 @@ public class CycleController {
     @ApiOperation(value = "tạo cycle mới")
     @PostMapping(path = "create")
     public ResponseEntity<?> createCycle(
-            @ApiParam(value = "", required = true) @Valid @RequestBody Cycle cycle,
-            @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Create cycle: " + cycle.getFromDate());
+            @ApiParam(value = "", required = true)
+            @Valid @RequestBody CreateCycleDto cycle) {
         try {
-            return cycleService.createCycle(cycle, jwtToken);
+            return cycleService.createCycle(cycle);
         } catch (Exception e) {
             logger.error("Create cycle failed!");
             logger.error(e.getMessage());
@@ -86,13 +85,13 @@ public class CycleController {
     }
 
     @ApiOperation(value = "cập nhật thông tin cycle")
-    @PutMapping(path = "update")
+    @PutMapping(path = "update/{id}")
     public ResponseEntity<?> updateCycle(
-            @ApiParam(required = true) @Valid @RequestBody Cycle cycle,
-            @RequestHeader(value = "Authorization") String jwtToken) {
+            @ApiParam(required = true) @PathVariable(value = "id") long id,
+            @ApiParam(required = true) @Valid @RequestBody CreateCycleDto cycle) {
         logger.info("Update cycle: " + cycle.getName());
         try {
-            return cycleService.updateCycle(cycle, jwtToken);
+            return cycleService.updateCycle(id,cycle);
         } catch (Exception e) {
             logger.error("Update cycle failed!");
             return ResponseEntity.badRequest().body(
@@ -121,18 +120,11 @@ public class CycleController {
         }
     }
 
-    @ApiOperation(value = "tìm kiếm cycle, có sắp xếp")
-    @GetMapping(path = "search")
-    public ResponseEntity<?> searchByDate(
-            @ApiParam(value = "", required = true) @RequestParam(name = "date") String date,
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
-            @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Search cycle: " + date);
+    @ApiOperation(value = "tìm kiếm cycle theo id")
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> findById(@PathVariable(value = "id")long id) {
         try {
-            Date dateSreach = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-            return cycleService.searchCycle(dateSreach, page, size, sort, jwtToken);
+            return cycleService.findById(id);
         } catch (Exception e) {
             logger.error("Search cycle failed!");
             return ResponseEntity.badRequest().body(

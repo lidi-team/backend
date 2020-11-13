@@ -14,4 +14,6 @@ public interface CycleRepository extends JpaRepository<Cycle, Long> {
     Page<Cycle> findAllByFromDateLessThanEqualAndEndDateGreaterThanEqual(Date fromeDate, Date endDate, Pageable pageable);
 
     Cycle findFirstByFromDateBeforeAndEndDateAfter(@NonNull Date fromDate, @NonNull Date endDate);
+
+    Page<Cycle> findAllByNameContains(String text, Pageable pageable);
 }
