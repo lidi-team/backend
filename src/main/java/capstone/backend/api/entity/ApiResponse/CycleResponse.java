@@ -17,8 +17,6 @@ public class CycleResponse {
 
     private String name;
 
-    private String description;
-
     private Date startDate;
 
     private Date endDate;

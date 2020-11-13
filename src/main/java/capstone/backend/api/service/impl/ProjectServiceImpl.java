@@ -146,11 +146,11 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
-            projects = projectRepository.findAll(PageRequest.of(page,limit, Sort.by(sortWith)));
+            projects = projectRepository.findAll(PageRequest.of(page-1,limit, Sort.by(sortWith)));
         }else{
             projects = projectRepository.findAllByClose(
                     !type.equalsIgnoreCase("active"),
-                    PageRequest.of(page,limit, Sort.by(sortWith)));
+                    PageRequest.of(page-1,limit, Sort.by(sortWith)));
         }
 
         projects.getContent().forEach(project -> {
@@ -168,10 +168,7 @@ public class ProjectServiceImpl implements ProjectService {
             );
         });
         response.put("data", list);
-        Map<String, Integer> meta = new HashMap<>();
-        meta.put("totalItems", (int) projects.getTotalElements());
-        meta.put("totalPages", projects.getTotalPages());
-        response.put("meta", meta);
+        response.put("meta", commonUtils.paging(projects,page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

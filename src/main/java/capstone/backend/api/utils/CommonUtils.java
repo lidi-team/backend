@@ -6,6 +6,7 @@ import capstone.backend.api.repository.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
@@ -89,5 +90,15 @@ public class CommonUtils {
             string.append(along).append(",");
         }
         return string.toString();
+    }
+
+    public Map<String,Integer> paging(Page<?> page,int currentPage){
+
+        Map<String,Integer> meta = new HashMap<>();
+        meta.put("totalItems", (int) page.getTotalElements());
+        meta.put("totalPages",page.getTotalPages());
+        meta.put("currentPage",currentPage);
+
+        return meta;
     }
 }
