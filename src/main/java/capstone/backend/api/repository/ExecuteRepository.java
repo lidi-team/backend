@@ -16,12 +16,14 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     Optional<Execute> findByUserIdAndProjectId(long userId, long projectId);
 
-    @Query(value =  "select e from Execute e " +
-                    "join Project p on e.project.id = p.id " +
-                    "where e.user.id = :id and p.close = false and e.isDelete = false")
+    @Query(value = "select e from Execute e " +
+            "join Project p on e.project.id = p.id " +
+            "where e.user.id = :id " +
+            "and p.close = false " +
+            "and e.isDelete = false")
     List<Execute> findAllByUserIdAndOpenProject(@Param(value = "id") long id);
 
-    @Query(value =  "select e from Execute e " +
+    @Query(value = "select e from Execute e " +
             "join Project p on e.project.id = p.id " +
             "where e.project.id = :id " +
             "and p.close = false " +
@@ -30,11 +32,18 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     Execute findPmByProjectId(@Param(value = "id") long id);
 
 
-    @Query(value =  "select e from Execute e " +
+    @Query(value = "select e from Execute e " +
             "join Project p on e.project.id = p.id " +
             "where e.project.id = :id " +
             "and p.close = false " +
             "and e.isDelete = false " +
             "and e.isPm = false")
     List<Execute> findAllStaffByProjectId(@Param(value = "id") long id);
+
+    @Query(value = "select count(e.id) as num from executes e\n" +
+            "join projects p on e.project_id = p.id\n" +
+            "where p.id <> :projectId and e.user_id = :userId\n" +
+            "and p.close = false and e.is_delete = false\n" +
+            "and e.is_pm = true",nativeQuery = true)
+    int findOtherProjectUserIsPm(@Param(value = "userId") long userId,@Param(value = "projectId")long projectId);
 }
