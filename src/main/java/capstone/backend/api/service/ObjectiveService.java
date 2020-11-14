@@ -28,4 +28,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getDetailObjectiveById(long id) throws Exception;
 
     ResponseEntity<?> getAlignObjectiveById(long id) throws Exception;
+
+    ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
 }
