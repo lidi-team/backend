@@ -633,15 +633,30 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId, long cycleId) throws Exception {
         List<MetaDataResponse> responses = new ArrayList<>();
 
-        List<Objective> objectives = objectiveRepository.findAllProjectObjective(projectId,cycleId);
-        objectives.forEach(obj -> {
-            responses.add(
-                    MetaDataResponse.builder()
-                            .id(obj.getId())
-                            .name(obj.getName())
-                            .build()
-            );
-        });
+        if(projectId == 0){
+            List<Objective> objectives = objectiveRepository.findCompanyObjective(cycleId);
+            objectives.forEach(obj -> {
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(obj.getId())
+                                .name(obj.getName())
+                                .build()
+                );
+            });
+        }else{
+
+            List<Objective> objectives = objectiveRepository.findAllProjectObjective(projectId,cycleId);
+            objectives.forEach(obj -> {
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(obj.getId())
+                                .name(obj.getName())
+                                .build()
+                );
+            });
+        }
+
+
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
