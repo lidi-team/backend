@@ -18,6 +18,8 @@ public class Department {
     @NonNull
     private String name;
 
+    private String description = "";
+
     @Builder.Default
     private boolean isDelete = false;
 }

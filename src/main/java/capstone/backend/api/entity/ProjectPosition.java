@@ -19,6 +19,8 @@ public class ProjectPosition {
     @NonNull
     private String name;
 
+    private String description = "";
+
     @Builder.Default
     private boolean isDelete = false;
 }

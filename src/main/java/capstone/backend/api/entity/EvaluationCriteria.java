@@ -23,4 +23,7 @@ public class EvaluationCriteria {
     private String type;
 
     private int numberOfStar;
+
+    @Builder.Default
+    private boolean isDelete = false;
 }
