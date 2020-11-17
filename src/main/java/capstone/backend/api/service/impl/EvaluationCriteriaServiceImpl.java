@@ -59,6 +59,10 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
             limit = 10;
         }
 
+        if (sort == null) {
+            sort = "id";
+        }
+
         Page<EvaluationCriteria> evaluationCriterias = evaluationRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by(sort)));
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
