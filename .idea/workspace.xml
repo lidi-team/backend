@@ -39,26 +39,19 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="User API">
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/DepartmentController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/EvaluationCriteriaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/PositionsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/DepartmentDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/EvaluationCriteriaDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/ProjectPositionDto.java" afterDir="false" />
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="Department + Position + EvaluationCriteria">
+      <change afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/dto/MeasureDto.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/Department.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/Department.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/EvaluationCriteria.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/EvaluationCriteria.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/ProjectPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/entity/ProjectPosition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/EvaluationCriteriaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/EvaluationCriteriaRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/ProjectPositionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/ProjectPositionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/DepartmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/DepartmentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/EvaluationCriteriaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/EvaluationCriteriaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/ProjectPositionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/ProjectPositionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/DepartmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/DepartmentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/EvaluationCriteriaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/EvaluationCriteriaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/MeasureController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/MeasureController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/ProjectPositionsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/controller/ProjectPositionsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/UnitOfKeyResultRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/UnitOfKeyResultRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UnitOfKeyResultService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/UnitOfKeyResultService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/EvaluationCriteriaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/EvaluationCriteriaServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/ProjectPositionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/ProjectPositionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UnitOfKeyResultServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/UnitOfKeyResultServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +115,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -244,7 +237,9 @@
       <workItem from="1605240219011" duration="12000" />
       <workItem from="1605407113208" duration="690000" />
       <workItem from="1605428309883" duration="6039000" />
-      <workItem from="1605451703553" duration="8970000" />
+      <workItem from="1605451703553" duration="9351000" />
+      <workItem from="1605514845655" duration="361000" />
+      <workItem from="1605593004288" duration="6368000" />
     </task>
     <task id="LOCAL-00001" summary="User API">
       <created>1603196899661</created>
@@ -253,7 +248,14 @@
       <option name="project" value="LOCAL" />
       <updated>1603196899661</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Department + Position + EvaluationCriteria">
+      <created>1605462953920</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1605462953920</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -274,7 +276,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="APIs Document" />
     <MESSAGE value="User API" />
-    <option name="LAST_COMMIT_MESSAGE" value="User API" />
+    <MESSAGE value="Department + Position + EvaluationCriteria" />
+    <option name="LAST_COMMIT_MESSAGE" value="Department + Position + EvaluationCriteria" />
   </component>
   <component name="WindowStateProjectService">
     <state x="560" y="275" key="#Intentions" timestamp="1605460059050">
@@ -294,13 +297,13 @@
     </state>
     <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1602994885599" />
     <state x="953" y="261" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1603436733824" />
-    <state x="686" y="143" key="#com.intellij.ide.util.MemberChooser" timestamp="1605462151302">
+    <state x="686" y="143" key="#com.intellij.ide.util.MemberChooser" timestamp="1605599360595">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state x="686" y="104" key="#com.intellij.ide.util.MemberChooser/-1366.0.1366.728/0.0.1920.1040@0.0.1920.1040" timestamp="1599667364838" />
     <state x="488" y="73" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1599578235151" />
     <state x="686" y="141" key="#com.intellij.ide.util.MemberChooser/0.23.1920.1177@0.23.1920.1177" timestamp="1603465027066" />
-    <state x="686" y="143" key="#com.intellij.ide.util.MemberChooser/0.25.1920.1175@0.25.1920.1175" timestamp="1605462151302" />
+    <state x="686" y="143" key="#com.intellij.ide.util.MemberChooser/0.25.1920.1175@0.25.1920.1175" timestamp="1605599360595" />
     <state x="583" y="445" key="#com.intellij.refactoring.move.MoveHandler.SelectRefactoringDialog" timestamp="1599663605605">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -326,30 +329,30 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1599115724200" />
-    <state width="1878" height="269" key="GridCell.Tab.0.bottom" timestamp="1605462349957">
+    <state width="1878" height="269" key="GridCell.Tab.0.bottom" timestamp="1605601383330">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
     <state width="1878" height="271" key="GridCell.Tab.0.bottom/0.23.1920.1177@0.23.1920.1177" timestamp="1605106698472" />
-    <state width="1878" height="269" key="GridCell.Tab.0.bottom/0.25.1920.1175@0.25.1920.1175" timestamp="1605462349957" />
-    <state width="1878" height="269" key="GridCell.Tab.0.center" timestamp="1605462349956">
+    <state width="1878" height="269" key="GridCell.Tab.0.bottom/0.25.1920.1175@0.25.1920.1175" timestamp="1605601383330" />
+    <state width="1878" height="269" key="GridCell.Tab.0.center" timestamp="1605601383329">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
     <state width="1878" height="271" key="GridCell.Tab.0.center/0.23.1920.1177@0.23.1920.1177" timestamp="1605106698471" />
-    <state width="1878" height="269" key="GridCell.Tab.0.center/0.25.1920.1175@0.25.1920.1175" timestamp="1605462349956" />
-    <state width="1878" height="269" key="GridCell.Tab.0.left" timestamp="1605462349956">
+    <state width="1878" height="269" key="GridCell.Tab.0.center/0.25.1920.1175@0.25.1920.1175" timestamp="1605601383329" />
+    <state width="1878" height="269" key="GridCell.Tab.0.left" timestamp="1605601383329">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1600062721064" />
     <state width="1878" height="271" key="GridCell.Tab.0.left/0.23.1920.1177@0.23.1920.1177" timestamp="1605106698463" />
-    <state width="1878" height="269" key="GridCell.Tab.0.left/0.25.1920.1175@0.25.1920.1175" timestamp="1605462349956" />
-    <state width="1878" height="269" key="GridCell.Tab.0.right" timestamp="1605462349956">
+    <state width="1878" height="269" key="GridCell.Tab.0.left/0.25.1920.1175@0.25.1920.1175" timestamp="1605601383329" />
+    <state width="1878" height="269" key="GridCell.Tab.0.right" timestamp="1605601383330">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state width="1323" height="159" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1600062721065" />
     <state width="1878" height="271" key="GridCell.Tab.0.right/0.23.1920.1177@0.23.1920.1177" timestamp="1605106698472" />
-    <state width="1878" height="269" key="GridCell.Tab.0.right/0.25.1920.1175@0.25.1920.1175" timestamp="1605462349956" />
+    <state width="1878" height="269" key="GridCell.Tab.0.right/0.25.1920.1175@0.25.1920.1175" timestamp="1605601383330" />
     <state width="994" height="159" key="GridCell.Tab.1.bottom" timestamp="1600068827347">
       <screen x="1366" y="0" width="1920" height="1040" />
     </state>
@@ -394,15 +397,17 @@
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state x="192" y="130" key="MergeDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1605106681805" />
-    <state x="281" y="23" key="SettingsEditor" timestamp="1603268424015">
-      <screen x="0" y="23" width="1920" height="1177" />
+    <state x="281" y="25" key="SettingsEditor" timestamp="1605596209973">
+      <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state x="200" y="0" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1599885956073" />
     <state x="281" y="23" key="SettingsEditor/0.23.1920.1177@0.23.1920.1177" timestamp="1603268424015" />
-    <state x="560" y="347" key="Vcs.Push.Dialog.v2" timestamp="1603196912633">
-      <screen x="0" y="23" width="1920" height="1177" />
+    <state x="281" y="25" key="SettingsEditor/0.25.1920.1175@0.25.1920.1175" timestamp="1605596209973" />
+    <state x="560" y="348" key="Vcs.Push.Dialog.v2" timestamp="1605462955931">
+      <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state x="560" y="347" key="Vcs.Push.Dialog.v2/0.23.1920.1177@0.23.1920.1177" timestamp="1603196912633" />
+    <state x="560" y="348" key="Vcs.Push.Dialog.v2/0.25.1920.1175@0.25.1920.1175" timestamp="1605462955931" />
     <state x="92" y="92" width="1182" height="544" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1598515779060">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -420,11 +425,11 @@
       <screen x="0" y="23" width="1920" height="1177" />
     </state>
     <state width="600" height="440" key="javadoc.popup/0.23.1920.1177@0.23.1920.1177" timestamp="1603439658743" />
-    <state x="744" y="385" key="refactoring.ChangeSignatureDialog" timestamp="1605455118506">
+    <state x="744" y="385" key="refactoring.ChangeSignatureDialog" timestamp="1605595672161">
       <screen x="0" y="25" width="1920" height="1175" />
     </state>
     <state x="744" y="384" key="refactoring.ChangeSignatureDialog/0.23.1920.1177@0.23.1920.1177" timestamp="1603466868332" />
-    <state x="744" y="385" key="refactoring.ChangeSignatureDialog/0.25.1920.1175@0.25.1920.1175" timestamp="1605455118506" />
+    <state x="744" y="385" key="refactoring.ChangeSignatureDialog/0.25.1920.1175@0.25.1920.1175" timestamp="1605595672161" />
     <state x="339" y="162" key="run.anything.popup" timestamp="1599884553235">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

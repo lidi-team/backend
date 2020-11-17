@@ -33,7 +33,7 @@ public class ProjectPositionsController {
     public ResponseEntity<?> viewListPosition(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "page") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int size,
-            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = false) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = false) @RequestParam(name = "sortWith", required = false) String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         try {
             return projectPositionService.getAllPosition(page, size, sort, jwtToken);

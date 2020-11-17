@@ -1,8 +1,10 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.MeasureDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.UnitOfKeyResult;
+import capstone.backend.api.service.UnitOfKeyResultService;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
 import capstone.backend.api.service.impl.UnitOfKeyResultServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -17,21 +19,21 @@ import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping(value = "/api/measure")
+@RequestMapping(value = "/api/measures")
 public class MeasureController {
     private CommonProperties commonProperties;
     private static final Logger logger = LoggerFactory.getLogger(MeasureController.class);
-    private UnitOfKeyResultServiceImpl unitOfKeyResultService;
+    private UnitOfKeyResultService unitOfKeyResultService;
 
     @ApiOperation(value = "lấy toàn bộ measure, có phân trang")
-    @GetMapping(path = "/all")
+    @GetMapping()
     public ResponseEntity<?> viewListCycles(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = false) @RequestParam(name = "sortWith", required = false) String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         try {
-            return unitOfKeyResultService.getAllMeasure(page, size, sort, jwtToken);
+            return unitOfKeyResultService.getAllMeasure(page, limit, sort, jwtToken);
         } catch (Exception e) {
             logger.error("get list measure failed");
             logger.error(e.getMessage());
@@ -44,11 +46,12 @@ public class MeasureController {
     }
 
     @ApiOperation(value = "tạo measure")
-    @PostMapping(path = "create")
+    @PostMapping()
     public ResponseEntity<?> createMeasure(
-            @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
+            @ApiParam(value = "", required = true)
+            @Valid @RequestBody MeasureDto unit,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Create measure: " + unit.getName());
+        logger.info("Create measure: " + unit.getType());
         try {
             return unitOfKeyResultService.createMeasure(unit, jwtToken);
         } catch (Exception e) {
@@ -62,14 +65,34 @@ public class MeasureController {
         }
     }
 
-    @ApiOperation(value = "chập nhật measure theo id")
-    @PutMapping(path = "update")
-    public ResponseEntity<?> updateMeasure(
-            @ApiParam(value = "", required = true) @Valid @RequestBody UnitOfKeyResult unit,
+    @ApiOperation(value = "lấy thông tin measure theo id")
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getDepartment(
+            @ApiParam(required = true)
+            @PathVariable(value = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
-        logger.info("Update measure: " + unit.getName());
         try {
-            return unitOfKeyResultService.updateMeasure(unit, jwtToken);
+            return unitOfKeyResultService.getMeasureById(id, jwtToken);
+        } catch (Exception e) {
+            logger.error("get measure failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "cập nhật measure theo id")
+    @PutMapping(path= "/{id}")
+    public ResponseEntity<?> updateMeasure(
+            @ApiParam(required = true) @PathVariable(value = "id") long id,
+            @ApiParam(value = "", required = true) @Valid @RequestBody MeasureDto unit,
+            @RequestHeader(value = "Authorization") String jwtToken) {
+        logger.info("Update measure: " + unit.getType());
+        try {
+            return unitOfKeyResultService.updateMeasure(id, unit, jwtToken);
         } catch (Exception e) {
             logger.error("Update cycle failed!");
             return ResponseEntity.badRequest().body(
@@ -81,9 +104,9 @@ public class MeasureController {
     }
 
     @ApiOperation(value = "xoá measure theo id")
-    @DeleteMapping(path = "delete")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteMeasure(
-            @ApiParam(value = "", required = true) @RequestParam(name = "id") long id,
+            @ApiParam(required = true) @PathVariable(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Delete measure: " + id);
         try {
@@ -103,12 +126,12 @@ public class MeasureController {
     public ResponseEntity<?> searchByName(
             @ApiParam(value = "", required = true) @RequestParam(name = "name") String name,
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
-            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "size") int size,
-            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = true) @RequestParam(name = "sortWith") String sort,
+            @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
+            @ApiParam(value = "Kết quả trả về sắp xếp theo", required = false) @RequestParam(name = "sortWith", required = false) String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Search measure: " + name);
         try {
-            return unitOfKeyResultService.searchMeasure(name, page, size, sort, jwtToken);
+            return unitOfKeyResultService.searchMeasure(name, page, limit, sort, jwtToken);
         } catch (Exception e) {
             logger.error("Search measure failed!");
             return ResponseEntity.badRequest().body(
