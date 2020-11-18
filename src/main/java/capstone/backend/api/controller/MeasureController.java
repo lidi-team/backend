@@ -28,7 +28,7 @@ public class MeasureController {
     @ApiOperation(value = "lấy toàn bộ measure, có phân trang")
     @GetMapping()
     public ResponseEntity<?> viewListCycles(
-            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "paging") int page,
+            @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 0", required = true) @RequestParam(name = "page") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
             @ApiParam(value = "Kết quả trả về sắp xếp theo", required = false) @RequestParam(name = "sortWith", required = false) String sort,
             @RequestHeader(value = "Authorization") String jwtToken) {

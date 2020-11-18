@@ -47,7 +47,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
             sort = "id";
         }
 
-        Page<UnitOfKeyResult> measureList = unitRepository.findByIsDeleteFalse(PageRequest.of(page, size-1, Sort.by(sort).ascending()));
+        Page<UnitOfKeyResult> measureList = unitRepository.findByIsDeleteFalse(PageRequest.of(page-1, size, Sort.by(sort).ascending()));
 
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
