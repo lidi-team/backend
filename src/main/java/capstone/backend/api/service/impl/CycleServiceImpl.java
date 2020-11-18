@@ -92,9 +92,9 @@ public class CycleServiceImpl implements CycleService {
             size = 10;
         }
         if(text == null || text.isEmpty()){
-            cycles = cycleRepository.findAll(PageRequest.of(page-1, size));
+            cycles = cycleRepository.findByIsDeleteFalse(PageRequest.of(page-1, size));
         }else {
-            cycles = cycleRepository.findAllByNameContains(text,PageRequest.of(page-1, size));
+            cycles = cycleRepository.findAllByNameContainsAndIsDeleteFalse(text,PageRequest.of(page-1, size));
         }
 
         List<Cycle> list = cycles.getContent();
@@ -197,7 +197,7 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ResponseEntity<?> findById(long id) throws Exception {
-        Cycle cycle = cycleRepository.findById(id).get();
+        Cycle cycle = cycleRepository.findByIdAndIsDeleteFalse(id);
 
         CycleResponse response = CycleResponse.builder()
                 .id(cycle.getId())

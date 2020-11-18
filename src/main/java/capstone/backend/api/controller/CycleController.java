@@ -48,11 +48,11 @@ public class CycleController {
     }
 
     @ApiOperation(value = "lấy tất cả cycle, có phân trang")
-    @GetMapping(path = "/all")
+    @GetMapping()
     public ResponseEntity<?> viewListCycles(
             @ApiParam(value = "Số trang cần truy vấn, trang đầu tiên là 1", required = true) @RequestParam(name = "page") int page,
             @ApiParam(value = "Số lượng kết quả trên mỗi trang, số nguyên", required = true) @RequestParam(name = "limit") int limit,
-            @ApiParam(value = "Noi dung", required = true) @RequestParam(name = "text") String text) {
+            @ApiParam(value = "Noi dung", required = false) @RequestParam(name = "text", required = false) String text) {
         try {
             return cycleService.getAllCycles(page, limit, text);
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class CycleController {
     }
 
     @ApiOperation(value = "tạo cycle mới")
-    @PostMapping(path = "create")
+    @PostMapping()
     public ResponseEntity<?> createCycle(
             @ApiParam(value = "", required = true)
             @Valid @RequestBody CreateCycleDto cycle) {
@@ -85,7 +85,7 @@ public class CycleController {
     }
 
     @ApiOperation(value = "cập nhật thông tin cycle")
-    @PutMapping(path = "update/{id}")
+    @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateCycle(
             @ApiParam(required = true) @PathVariable(value = "id") long id,
             @ApiParam(required = true) @Valid @RequestBody CreateCycleDto cycle) {
@@ -103,7 +103,7 @@ public class CycleController {
     }
 
     @ApiOperation(value = "xoá một cycle theo id")
-    @DeleteMapping(path = "delete")
+    @DeleteMapping()
     public ResponseEntity<?> deleteCycle(
             @ApiParam(required = true) @RequestParam(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
