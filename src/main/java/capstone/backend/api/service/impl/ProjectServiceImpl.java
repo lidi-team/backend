@@ -144,6 +144,9 @@ public class ProjectServiceImpl implements ProjectService {
         if (limit == 0){
             limit = 10;
         }
+        if(sortWith.equalsIgnoreCase("status")){
+            sortWith = "isDelete";
+        }
 
         if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
             projects = projectRepository.findAll(PageRequest.of(page-1,limit, Sort.by(sortWith)));
