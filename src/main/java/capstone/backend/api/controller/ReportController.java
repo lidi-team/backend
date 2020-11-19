@@ -57,15 +57,46 @@ public class ReportController {
     }
 
     @ApiOperation(value = "Danh sách objective của user theo chu kì")
-    @GetMapping(path = "/list-objective")
+    @GetMapping(path = "")
     public ResponseEntity<?> getListObjectiveByCycleId(@RequestHeader(name = "Authorization") String token,
                                                        @ApiParam(value = "id của chu kì hiện tại")
-                                                       @RequestParam(name = "cycleId") long id,
-                                                       @ApiParam(value = "phân loại request. type = 1 là list objective project," +
-                                                               " type = 2 là list objective cá nhân")
-                                                       @RequestParam(name = "type") int type) {
+                                                       @RequestParam(name = "cycleId") long id) {
         try {
-            return reportService.getListObjectiveByCycleId(token, id, type);
+            return reportService.getListObjectiveByCycleId(token, id);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "Danh sách checkin history của user objective")
+    @GetMapping(path = "checkin/history/{id}")
+    public ResponseEntity<?> getListCheckinHistory(@ApiParam(value = "id của objective hiện tại")
+                                                       @PathVariable(name = "id") long id) {
+        try {
+            return reportService.getCheckinHistoryByObjectiveId(id);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "Danh sách checkin history của user objective")
+    @GetMapping(path = "checkin/objective/{id}")
+    public ResponseEntity<?> getCheckinDetailByObjectiveId(@ApiParam(value = "id của objective hiện tại")
+                                                   @PathVariable(name = "id") long id) {
+        try {
+            return null;
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());

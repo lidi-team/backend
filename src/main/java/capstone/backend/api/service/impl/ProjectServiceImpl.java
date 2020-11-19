@@ -299,6 +299,7 @@ public class ProjectServiceImpl implements ProjectService {
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(project.getId())
                         .build()
         );
     }

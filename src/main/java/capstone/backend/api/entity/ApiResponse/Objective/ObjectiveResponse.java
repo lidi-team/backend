@@ -1,6 +1,6 @@
 package capstone.backend.api.entity.ApiResponse.Objective;
 
-import capstone.backend.api.entity.ApiResponse.KeyResultResponse;
+import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

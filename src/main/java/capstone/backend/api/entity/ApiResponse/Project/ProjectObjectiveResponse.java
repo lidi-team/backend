@@ -1,5 +1,6 @@
 package capstone.backend.api.entity.ApiResponse.Project;
 
+import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveCheckin;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,6 @@ import java.util.List;
 public class ProjectObjectiveResponse {
     private long id;
     private String name;
-    private String position;
-    private List<ObjectiveResponse> objectives;
+    private List<ObjectiveCheckin> objectives;
 }
 
