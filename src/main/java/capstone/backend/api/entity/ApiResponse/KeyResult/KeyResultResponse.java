@@ -1,4 +1,4 @@
-package capstone.backend.api.entity.ApiResponse;
+package capstone.backend.api.entity.ApiResponse.KeyResult;
 
 import lombok.*;
 

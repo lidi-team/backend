@@ -12,15 +12,12 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ObjectiveProjectItem {
+public class ObjectiveCheckin {
     private long id;
-    private String title;
-    private int type;
-    private double weight;
-    private double changing;
     private double progress;
-    private boolean delete;
-    private List<ObjectiveProjectItem> alignObjectives;
+    private String title;
+    private double change;
+    private String status;
+    private long checkinId;
     private List<KeyResultResponse> keyResults;
-    private List<ObjectiveProjectItem> childObjectives;
 }

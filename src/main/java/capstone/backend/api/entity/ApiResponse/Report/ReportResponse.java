@@ -1,5 +1,6 @@
-package capstone.backend.api.entity.ApiResponse;
+package capstone.backend.api.entity.ApiResponse.Report;
 
+import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,9 @@ import java.util.Date;
 public class ReportResponse {
     private long id;
     private String title;
-    private Date checkinDate;
+    private Date checkinAt;
     private Date nextCheckinDate;
     private String status;
+    private long teamLeaderId;
+    private MetaDataResponse objective;
 }
