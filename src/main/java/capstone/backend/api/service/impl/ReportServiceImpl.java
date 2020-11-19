@@ -54,15 +54,13 @@ public class ReportServiceImpl implements ReportService {
         List<ReportResponse> responses = new ArrayList<>();
         List<Report> reports = reportRepository.findAllByObjectiveId(id);
 
-        Objective objective = objectiveRepository.findByIdAndDelete(id);
-
         reports.forEach(report -> {
             responses.add(
                     ReportResponse.builder()
                             .id(report.getId())
                             .checkinAt(report.getCheckinDate())
                             .nextCheckinDate(report.getNextCheckinDate())
-                            .status(setStatusForObjective(objective,report))
+                            .status(report.getStatus())
                             .teamLeaderId(report.getAuthorizedUser().getId())
                             .objective(
                                     MetaDataResponse.builder()
