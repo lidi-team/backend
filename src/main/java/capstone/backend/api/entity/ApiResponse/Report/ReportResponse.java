@@ -14,7 +14,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class ReportResponse {
     private long id;
-    private String title;
     private Date checkinAt;
     private Date nextCheckinDate;
     private String status;

@@ -75,7 +75,7 @@ public class ReportController {
     }
 
     @ApiOperation(value = "Danh sách checkin history của user objective")
-    @GetMapping(path = "checkin/history/{id}")
+    @GetMapping(path = "/history/{id}")
     public ResponseEntity<?> getListCheckinHistory(@ApiParam(value = "id của objective hiện tại")
                                                        @PathVariable(name = "id") long id) {
         try {
