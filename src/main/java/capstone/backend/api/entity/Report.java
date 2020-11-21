@@ -35,9 +35,11 @@ public class Report {
     @JoinColumn(name = "objectiveId")
     private Objective objective;
 
-    // "DRAFT","SUBMITTED","REJECTED","APPROVED"
+    // "Draft","Pending","Reviewed"
     @NonNull
     private String status;
+
+    private double progress;
 
     private boolean isLeaderFeedback;
 
