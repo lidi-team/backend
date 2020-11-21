@@ -47,6 +47,8 @@ public class ReportServiceImpl implements ReportService {
 
     private final ObjectiveServiceImpl objectiveService;
 
+    private final CycleRepository cycleRepository;
+
     private final JwtUtils jwtUtils;
 
     @Override
@@ -103,6 +105,16 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId) throws Exception {
         List<ProjectObjectiveResponse> responses = new ArrayList<>();
+
+        Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
+        if(cycle == null)
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                            .build()
+            );
+
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();

@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    Page<Project> findAll(Pageable pageable);
+    Page<Project> findAllByNameContains(String text,Pageable pageable);
 
-    Page<Project> findAllByClose(boolean active, Pageable pageable);
+    Page<Project> findAllByCloseAndNameContains(boolean active,String text, Pageable pageable);
 }

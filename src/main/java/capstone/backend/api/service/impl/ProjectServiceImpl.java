@@ -137,7 +137,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type) throws Exception {
+    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text) throws Exception {
         Page<Project> projects;
         List<ProjectPagingResponse> list = new ArrayList<>();
         Map<String, Object> response = new HashMap<>();
@@ -145,14 +145,17 @@ public class ProjectServiceImpl implements ProjectService {
             limit = 10;
         }
         if(sortWith.equalsIgnoreCase("status")){
-            sortWith = "isDelete";
+            sortWith = "close";
+        }
+        if(text == null){
+            text = "";
         }
 
         if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
-            projects = projectRepository.findAll(PageRequest.of(page-1,limit, Sort.by(sortWith)));
+            projects = projectRepository.findAllByNameContains(text,PageRequest.of(page-1,limit, Sort.by(sortWith)));
         }else{
-            projects = projectRepository.findAllByClose(
-                    !type.equalsIgnoreCase("active"),
+            projects = projectRepository.findAllByCloseAndNameContains(
+                    !type.equalsIgnoreCase("active"),text,
                     PageRequest.of(page-1,limit, Sort.by(sortWith)));
         }
 
