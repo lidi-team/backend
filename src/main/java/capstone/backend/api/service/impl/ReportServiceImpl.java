@@ -159,7 +159,7 @@ public class ReportServiceImpl implements ReportService {
             );
         });
 
-        List<Chart> chart = setListChartByObjectiveId(id);
+        Chart chart = setListChartByObjectiveId(id);
 
         Report report = reportRepository.findFirstByObjectiveIdOrderByIdDesc(objective.getId());
         if(report != null){
@@ -235,18 +235,17 @@ public class ReportServiceImpl implements ReportService {
         return report.getStatus();
     }
 
-    private List<Chart> setListChartByObjectiveId(long objectiveId){
-        List<Chart> chart = new ArrayList<>();
+    private Chart setListChartByObjectiveId(long objectiveId){
+        Chart chart = new Chart();
+        List<Double> progress = new ArrayList<>();
+        List<Date> checkinAt = new ArrayList<>();
         List<Report> reports = reportRepository.findAllByObjectiveId(objectiveId);
         reports.forEach(report -> {
-            chart.add(
-                    Chart.builder()
-                            .checkinAt(report.getCheckinDate())
-                            .progress(report.getProgress())
-                            .build()
-            );
+            progress.add(report.getProgress());
+            checkinAt.add(report.getCheckinDate());
         });
-
+        chart.setProgress(progress);
+        chart.setCheckinAt(checkinAt);
         return chart;
     }
 

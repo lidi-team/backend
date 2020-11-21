@@ -6,12 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Chart {
-    private double progress;
-    private Date checkinAt;
+    private List<Double> progress;
+    private List<Date> checkinAt;
 }
