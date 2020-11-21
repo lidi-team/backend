@@ -70,9 +70,11 @@ public class ProjectController {
             @ApiParam(value = "filter sort theo thứ tự gì")
             @RequestParam(value = "sortWith") String sortWith,
             @ApiParam(value = "status của project, null = total")
-            @RequestParam(value = "type") String type){
+            @RequestParam(value = "type") String type,
+            @ApiParam(value = "name của project")
+            @RequestParam(value = "text") String text){
         try {
-            return projectService.getAllProjectPaging(page,limit,sortWith,type);
+            return projectService.getAllProjectPaging(page,limit,sortWith,type,text);
         } catch (Exception e) {
             logger.error("get list project failed");
             logger.error(e.getMessage());

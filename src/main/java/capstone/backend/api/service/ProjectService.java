@@ -12,7 +12,7 @@ public interface ProjectService {
 
     ResponseEntity<?> getAllAvailableProjectOfUser(String token, int type) throws Exception;
 
-    ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type) throws Exception;
+    ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text) throws Exception;
 
     ResponseEntity<?> getDetailProjectById(long id) throws Exception;
 
