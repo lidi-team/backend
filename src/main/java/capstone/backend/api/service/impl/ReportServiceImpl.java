@@ -51,6 +51,8 @@ public class ReportServiceImpl implements ReportService {
 
     private final JwtUtils jwtUtils;
 
+    private final ProjectRepository projectRepository;
+
     @Override
     public ResponseEntity<?> getCheckinHistoryByObjectiveId(long id) {
         List<ReportResponse> responses = new ArrayList<>();
@@ -107,7 +109,7 @@ public class ReportServiceImpl implements ReportService {
         List<ProjectObjectiveResponse> responses = new ArrayList<>();
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
-        if(cycle == null)
+        if (cycle == null)
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
@@ -140,40 +142,76 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ResponseEntity<?> getCheckinDetailByObjectiveId(long id) {
-        Map<String,Object> response = new HashMap<>();
-        List<KeyResultCheckin> keyResultCheckins = new ArrayList<>();
-        Map<String,Object> checkin = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> checkin = new HashMap<>();
         List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail> details = new ArrayList<>();
 
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
-        List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(id);
-        keyResults.forEach(keyResult -> {
-            keyResultCheckins.add(
-                    KeyResultCheckin.builder()
-                            .id(keyResult.getId())
-                            .content(keyResult.getContent())
-                            .targetedValue(keyResult.getToValue())
-                            .valueObtained(keyResult.getValueObtained())
-                            .build()
-            );
-        });
+        List<KeyResultCheckin> keyResultCheckins = setListKeyResultCheckin(id);
 
         Chart chart = setListChartByObjectiveId(id);
 
         Report report = reportRepository.findFirstByObjectiveIdOrderByIdDesc(objective.getId());
-        if(report != null){
-            checkin = setCheckinListByObjectiveId(objective,report);
-            details = setListDetailByReportId(report.getId(),keyResultCheckins);
+        if (report != null) {
+            checkin = setCheckinListByObjectiveId(objective, report);
+            details = setListDetailByReportId(report.getId(), keyResultCheckins);
         }
 
-        response.put("id",objective.getId());
-        response.put("title",objective.getName());
-        response.put("progress",objective.getProgress());
-        response.put("keyResults",keyResultCheckins);
-        response.put("chart",chart);
-        response.put("checkin",checkin);
-        response.put("checkinDetail",details);
+        response.put("id", objective.getId());
+        response.put("title", objective.getName());
+        response.put("progress", objective.getProgress());
+        response.put("progressSuggest", setProgressSuggest(objective));
+        response.put("keyResults", keyResultCheckins);
+        response.put("chart", chart);
+        response.put("checkin", checkin);
+        response.put("checkinDetail", details);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getDetailCheckinByCheckinId(long id) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+        Report report = reportRepository.findById(id).orElse(null);
+        if (report == null)
+            return ResponseEntity.status(401).body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+
+        Objective objective = report.getObjective();
+        Map<String, Object> objectiveMap = new HashMap<>();
+        objectiveMap.put("id", objective.getId());
+        objectiveMap.put("progress", objective.getProgress());
+        objectiveMap.put("title", objective.getName());
+        objectiveMap.put("userId", objective.getExecute().getUser().getId());
+
+        List<KeyResultCheckin> keyResultCheckins = setListKeyResultCheckin(objective.getId());
+
+        List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail>
+                reportDetails = setListDetailByReportId(id, keyResultCheckins);
+
+        Chart chart = setListChartByObjectiveId(objective.getId());
+
+        response.put("id", report.getId());
+        response.put("progress", report.getProgress());
+        response.put("progressSuggest", setProgressSuggest(objective));
+        response.put("checkinAt", report.getCheckinDate());
+        response.put("nextCheckinDate", report.getNextCheckinDate());
+        response.put("status", report.getStatus());
+        response.put("teamLeaderId", report.getAuthorizedUser().getId());
+        response.put("objective", objectiveMap);
+        response.put("checkinDetails", reportDetails);
+        response.put("chart", chart);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -196,7 +234,7 @@ public class ReportServiceImpl implements ReportService {
             });
 
             Report report = reportRepository.findFirstByObjectiveIdOrderByIdDesc(objective.getId());
-            String status = setStatusForObjective(objective,report);
+            String status = setStatusForObjective(objective, report);
 
             ObjectiveCheckin objectiveResponse = ObjectiveCheckin.builder()
                     .id(objective.getId())
@@ -219,23 +257,23 @@ public class ReportServiceImpl implements ReportService {
         );
     }
 
-    private String setStatusForObjective(Objective objective, Report report){
-        if(objective.getStatus().equalsIgnoreCase("completed")){
+    private String setStatusForObjective(Objective objective, Report report) {
+        if (objective.getStatus().equalsIgnoreCase("completed")) {
             return "Completed";
         }
 
-        if(report == null){
+        if (report == null) {
             return "Reviewed";
         }
 
-        if(report.getNextCheckinDate().before(new Date()) && report.getStatus().equalsIgnoreCase("draft")){
+        if (report.getNextCheckinDate().before(new Date()) && report.getStatus().equalsIgnoreCase("draft")) {
             return "Overdue";
         }
 
         return report.getStatus();
     }
 
-    private Chart setListChartByObjectiveId(long objectiveId){
+    private Chart setListChartByObjectiveId(long objectiveId) {
         Chart chart = new Chart();
         List<Double> progress = new ArrayList<>();
         List<Date> checkinAt = new ArrayList<>();
@@ -249,22 +287,22 @@ public class ReportServiceImpl implements ReportService {
         return chart;
     }
 
-    private Map<String,Object> setCheckinListByObjectiveId(Objective objective, Report report){
-        Map<String,Object> checkin = new HashMap<>();
-        checkin.put("id",report.getId());
-        checkin.put("checkinAt",report.getCheckinDate());
+    private Map<String, Object> setCheckinListByObjectiveId(Objective objective, Report report) {
+        Map<String, Object> checkin = new HashMap<>();
+        checkin.put("id", report.getId());
+        checkin.put("checkinAt", report.getCheckinDate());
         checkin.put("nextCheckinDate", report.getNextCheckinDate());
-        checkin.put("status",setStatusForObjective(objective,report));
+        checkin.put("status", setStatusForObjective(objective, report));
 
         return checkin;
     }
 
     private List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail> setListDetailByReportId(long reportId,
-            List<KeyResultCheckin> keyResultCheckins){
+                                                                                                      List<KeyResultCheckin> keyResultCheckins) {
         List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail> details = new ArrayList<>();
         List<ReportDetail> reportDetails = detailRepository.findAllByReportId(reportId);
         reportDetails.forEach(reportDetail -> {
-            KeyResultCheckin keyResult =  keyResultCheckins.stream().filter(
+            KeyResultCheckin keyResult = keyResultCheckins.stream().filter(
                     item -> item.getId() == reportDetail.getKeyResult().getId())
                     .collect(Collectors.toList()).get(0);
             details.add(
@@ -281,4 +319,66 @@ public class ReportServiceImpl implements ReportService {
         });
         return details;
     }
+
+    private List<KeyResultCheckin> setListKeyResultCheckin(long objectiveId) {
+        List<KeyResultCheckin> keyResultCheckins = new ArrayList<>();
+        List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objectiveId);
+        keyResults.forEach(keyResult -> {
+            keyResultCheckins.add(
+                    KeyResultCheckin.builder()
+                            .id(keyResult.getId())
+                            .content(keyResult.getContent())
+                            .targetedValue(keyResult.getToValue())
+                            .valueObtained(keyResult.getValueObtained())
+                            .build()
+            );
+        });
+
+        return keyResultCheckins;
+    }
+
+    private double setProgressSuggest(Objective objective) {
+        double progress;
+        double weight = 0;
+        double totalProgress = 0;
+
+        if (objective.getType() == 2) {
+            List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
+            weight = keyResults.size() == 0 ? 1 : keyResults.size();
+            totalProgress = keyResults.stream().mapToDouble(KeyResult::calculateProgress).sum();
+
+        } else{
+            List<Project> projects = new ArrayList<>();
+            if (objective.getType() == 1) {
+                List<Objective> objectives =
+                        objectiveRepository.findAllByParentIdAndType(objective.getId(), commonProperties.getOBJ_PERSONAL());
+                //calculate by personal objective of project
+                weight = objectives.stream().mapToDouble(Objective::getWeight).sum();
+                totalProgress = objectives.stream().mapToDouble(Objective::calculateProgress).sum();
+
+                //get list children projects of current project
+                long currentProjectId = objective.getExecute().getProject().getId();
+                 projects = projectRepository.findAllByParentId(currentProjectId);
+
+            } else{
+                //get list projects in this cycle
+                projects = projectRepository.findAllByFromDateAndEndDate(objective.getCycle().getFromDate());
+
+            }
+
+            for (Project project : projects) {
+                List<Objective> objectives = objectiveRepository.findAllByProjectIdAndCycleIdAndType(
+                        project.getId(), objective.getCycle().getId(),
+                        commonProperties.getOBJ_PROJECT());
+
+                weight += objectives.stream().mapToDouble(Objective::getWeight).sum()*project.getWeight();
+                totalProgress += objectives.stream().mapToDouble(Objective::calculateProgress).sum()*project.getWeight();
+            }
+        }
+        weight = weight == 0 ? 1 : weight;
+        progress = totalProgress/weight;
+
+        return progress;
+    }
+
 }

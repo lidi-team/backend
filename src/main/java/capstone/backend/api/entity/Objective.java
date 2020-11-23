@@ -57,4 +57,8 @@ public class Objective {
 
     @Builder.Default
     private boolean isDelete = false;
+
+    public double calculateProgress(){
+        return this.weight * this.progress;
+    }
 }

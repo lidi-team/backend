@@ -20,4 +20,5 @@ public class CreateProjectDto {
     private String endDate;
     private String description;
     private int status;
+    private int weight;
 }

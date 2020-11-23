@@ -19,4 +19,5 @@ public class ProjectPagingResponse {
     private String status;
     private String description;
     private String pm;
+    private int weight;
 }

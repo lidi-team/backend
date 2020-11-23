@@ -41,6 +41,8 @@ public class Project {
 
     private String description;
 
+    private int weight;
+
     @OneToMany
     private Set<Project> childProject = new HashSet<>();
 
