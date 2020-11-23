@@ -59,4 +59,8 @@ public class KeyResult {
     @Builder.Default
     private boolean isDelete = false;
 
+    public double calculateProgress(){
+        return Math.abs(100*(this.getValueObtained() - this.getFromValue())/(this.getToValue() - this.getFromValue()));
+    }
+
 }

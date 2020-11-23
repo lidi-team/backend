@@ -108,4 +108,21 @@ public class ReportController {
         }
     }
 
+    @ApiOperation(value = "Danh sách checkin history của user objective")
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<?> getCheckinDetailByCheckinId(@ApiParam(value = "id của checkin hiện tại")
+                                                           @PathVariable(name = "id") long id) {
+        try {
+            return reportService.getDetailCheckinByCheckinId(id);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

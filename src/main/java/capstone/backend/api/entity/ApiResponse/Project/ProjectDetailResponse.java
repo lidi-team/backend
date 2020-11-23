@@ -20,5 +20,6 @@ public class ProjectDetailResponse {
     private String status;
     private String description;
     private StaffInformation pm;
+    private int weight;
     private List<StaffInformation> staffs;
 }

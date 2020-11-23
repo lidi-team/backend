@@ -47,6 +47,13 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
                                                         @Param(value = "userId") long userId,
                                                         @Param(value = "type") int type);
 
+    @Query(value = "select o from Objective o " +
+            "where o.parentId = :objectiveId " +
+            "and o.type = :type " +
+            "and o.isDelete = false ")
+    List<Objective> findAllByParentIdAndType(@Param(value = "objectiveId") long objectiveId,
+                                             @Param(value = "type") int type);
+
     @Modifying
     @Transactional
     @Query("update Objective o set o.isDelete = true where o.id = :id")

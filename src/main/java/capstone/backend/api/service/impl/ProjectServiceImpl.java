@@ -170,6 +170,7 @@ public class ProjectServiceImpl implements ProjectService {
                             .description(project.getDescription())
                             .status(project.isClose()?"Closed":"Active")
                             .pm(execute.getUser().getFullName())
+                            .weight(project.getWeight())
                             .build()
             );
         });
@@ -216,6 +217,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .startDate(project.getFromDate())
                 .endDate(project.getEndDate())
                 .pm(pmResponse)
+                .weight(project.getWeight())
                 .staffs(staffResponse)
                 .build();
 
@@ -247,6 +249,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .description(projectDto.getDescription())
+                    .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
         }else{
             project = Project.builder()
@@ -257,6 +260,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .description(projectDto.getDescription())
+                    .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
         }
         project = projectRepository.save(project);
