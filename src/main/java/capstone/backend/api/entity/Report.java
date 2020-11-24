@@ -41,9 +41,11 @@ public class Report {
 
     private double progress;
 
-    private boolean isLeaderFeedback;
+    @Builder.Default
+    private boolean isLeaderFeedback = false;
 
-    private boolean isStaffFeedback;
+    @Builder.Default
+    private boolean isStaffFeedback = false;
 
     @Builder.Default
     private boolean isDelete = false;

@@ -51,9 +51,6 @@ public class KeyResult {
     private String reference;
 
     @NumberFormat(pattern = "#.##")
-    private double weight;
-
-    @NumberFormat(pattern = "#.##")
     private double progress;
 
     @Builder.Default

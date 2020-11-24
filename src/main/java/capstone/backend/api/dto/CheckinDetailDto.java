@@ -15,7 +15,7 @@ public class CheckinDetailDto {
     private double valueObtained;
     private double confidentLevel;
     private String progress;
-    private String problem;
-    private String plan;
+    private String problems;
+    private String plans;
     private long keyResultId;
 }

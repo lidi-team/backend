@@ -22,35 +22,34 @@ public class ReportDetailServiceImpl implements ReportDetailService {
     KeyResultRepository keyResultRepository;
 
     @Override
-    public void addReportDetails(List<CheckinDetailDto> list, Report report) throws Exception {
+    public void addReportDetails(List<CheckinDetailDto> list, Report report, List<KeyResult> keyResults) throws Exception {
         List<ReportDetail> details = new ArrayList<>();
-        List<KeyResult> keyResults = new ArrayList<>();
 
         list.forEach(item -> {
-            KeyResult keyResult = keyResultRepository.findById(item.getKeyResultId()).orElse(null);
+            KeyResult keyResult = keyResults.stream()
+                    .filter(keyResult1 -> keyResult1.getId() == item.getKeyResultId()).findFirst().orElse(null);
+
             details.add(
                     ReportDetail.builder()
                             .id(item.getId())
                             .confidentLevel(item.getConfidentLevel())
                             .progress(item.getProgress())
-                            .plans(item.getPlan())
-                            .problems(item.getProblem())
+                            .plans(item.getPlans())
+                            .problems(item.getProblems())
                             .targetValue(item.getTargetValue())
                             .valueObtained(item.getValueObtained())
                             .report(report)
                             .keyResult(keyResult)
                             .build()
             );
-            if (keyResult != null) {
-                keyResult.setValueObtained(item.getValueObtained());
-                keyResult.setProgress(Math.abs((item.getValueObtained() - keyResult.getFromValue())
-                        / (keyResult.getToValue() - keyResult.getFromValue())));
 
+            if (keyResult != null && report.getStatus().equalsIgnoreCase("Reviewed")) {
+                keyResult.setValueObtained(item.getValueObtained());
+                keyResult.setProgress(keyResult.calculateProgress() * item.getConfidentLevel());
                 keyResults.add(keyResult);
+                keyResultRepository.saveAll(keyResults);
             }
         });
-
         detailRepository.saveAll(details);
-        keyResultRepository.saveAll(keyResults);
     }
 }

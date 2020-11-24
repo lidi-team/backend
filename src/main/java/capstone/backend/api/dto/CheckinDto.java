@@ -15,7 +15,8 @@ import java.util.List;
 public class CheckinDto {
     private long id;
     private long objectiveId;
-    private Date nextCheckinDate;
+    private String nextCheckinDate;
     private String status;
+    private double progress;
     private List<CheckinDetailDto> checkinDetails;
 }
