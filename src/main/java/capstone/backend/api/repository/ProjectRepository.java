@@ -24,4 +24,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query(value = "select p from Project p " +
             "where p.fromDate <= :date and p.endDate > :date ")
     List<Project> findAllByFromDateAndEndDate(Date date);
+
 }

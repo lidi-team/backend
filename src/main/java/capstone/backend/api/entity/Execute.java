@@ -23,6 +23,10 @@ public class Execute {
     @JoinColumn(name = "userId")
     private User user;
 
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "reviewerId")
+    private User reviewer;
 
     @ManyToOne
     @JoinColumn(name = "projectId")

@@ -17,4 +17,6 @@ public interface ReportService {
 
     ResponseEntity<?> getDetailCheckinByCheckinId(long id) throws Exception;
 
+    ResponseEntity<?> getListRequestCheckin(String token,int page,int limit,long cycleId) throws Exception;
+
 }

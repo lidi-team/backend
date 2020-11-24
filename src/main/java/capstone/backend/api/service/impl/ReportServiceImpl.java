@@ -9,14 +9,19 @@ import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveCheckin;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Report.Chart;
+import capstone.backend.api.entity.ApiResponse.Report.ObjectiveCheckinRequest;
 import capstone.backend.api.entity.ApiResponse.Report.ReportResponse;
+import capstone.backend.api.entity.ApiResponse.Report.UserRequestCheckin;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ReportService;
+import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +58,8 @@ public class ReportServiceImpl implements ReportService {
 
     private final ProjectRepository projectRepository;
 
+    private final CommonUtils commonUtils;
+
     @Override
     public ResponseEntity<?> getCheckinHistoryByObjectiveId(long id) {
         List<ReportResponse> responses = new ArrayList<>();
@@ -88,20 +95,46 @@ public class ReportServiceImpl implements ReportService {
     public ResponseEntity<?> addCheckin(CheckinDto checkinDto) throws Exception {
 
         Objective objective = objectiveRepository.findByIdAndDelete(checkinDto.getObjectiveId());
+        List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
 
-        Report report = Report.builder()
-                .id(checkinDto.getId())
-                .checkinDate(new Date())
-                .nextCheckinDate(checkinDto.getNextCheckinDate())
-                .objective(objective)
-                .status(checkinDto.getStatus())
-                .build();
+        User authorizedUser = objective.getExecute().getUser();
+
+        Report report;
+        if(checkinDto.getId() != 0){
+            report = reportRepository.findById(checkinDto.getId()).get();
+            report.setNextCheckinDate(commonUtils.stringToDate(checkinDto.getNextCheckinDate(), CommonUtils.PATTERN_ddMMyyyy));
+            report.setAuthorizedUser(authorizedUser);
+            report.setObjective(objective);
+            report.setProgress(checkinDto.getProgress());
+            report.setStatus(checkinDto.getStatus());
+        }else{
+            report = Report.builder()
+                    .id(checkinDto.getId())
+                    .checkinDate(new Date())
+                    .nextCheckinDate(commonUtils.stringToDate(checkinDto.getNextCheckinDate(), CommonUtils.PATTERN_ddMMyyyy))
+                    .objective(objective)
+                    .progress(checkinDto.getProgress())
+                    .authorizedUser(authorizedUser)
+                    .status(checkinDto.getStatus())
+                    .build();
+        }
+
+        if(checkinDto.getStatus().equalsIgnoreCase("Reviewed")){
+            double oldProgress = objective.getProgress();
+            objective.setProgress(checkinDto.getProgress());
+            objective.setChanging(objective.getProgress() - oldProgress);
+            objectiveRepository.save(objective);
+        }
 
         report = reportRepository.save(report);
+        reportDetailService.addReportDetails(checkinDto.getCheckinDetails(), report, keyResults);
 
-        reportDetailService.addReportDetails(checkinDto.getCheckinDetails(), report);
-
-        return null;
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .build()
+        );
     }
 
     @Override
@@ -212,6 +245,63 @@ public class ReportServiceImpl implements ReportService {
         response.put("objective", objectiveMap);
         response.put("checkinDetails", reportDetails);
         response.put("chart", chart);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListRequestCheckin(String token, int page, int limit, long cycleId) throws Exception {
+        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> items = new ArrayList<>();
+
+        if (limit == 0) {
+            limit = 10;
+        }
+        if (page == 0) {
+            page = 1;
+        }
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        Page<Report> reports = reportRepository.findByReviewerAndStatusAndCycle(
+                user.getId(), "Pending", cycleId,
+                PageRequest.of(page - 1, limit));
+        for (Report report : reports) {
+
+            ObjectiveCheckinRequest objective =
+                    ObjectiveCheckinRequest.builder()
+                            .id(report.getObjective().getId())
+                            .title(report.getObjective().getName())
+                            .user(
+                                    UserRequestCheckin.builder()
+                                            .id(report.getObjective().getExecute().getUser().getId())
+                                            .fullName(report.getObjective().getExecute().getUser().getFullName())
+                                            .build())
+                            .build();
+
+            MetaDataResponse project =
+                    MetaDataResponse.builder()
+                            .id(report.getObjective().getExecute().getProject().getId())
+                            .name(report.getObjective().getExecute().getProject().getName())
+                            .build();
+
+            Map<String, Object> checkin = new HashMap<>();
+            checkin.put("id", report.getId());
+            checkin.put("createdAt", report.getCheckinDate());
+            checkin.put("objective", objective);
+            checkin.put("project",project);
+
+            items.add(checkin);
+        }
+        response.put("items",items);
+        response.put("meta",commonUtils.paging(reports,page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -347,7 +437,7 @@ public class ReportServiceImpl implements ReportService {
             weight = keyResults.size() == 0 ? 1 : keyResults.size();
             totalProgress = keyResults.stream().mapToDouble(KeyResult::calculateProgress).sum();
 
-        } else{
+        } else {
             List<Project> projects = new ArrayList<>();
             if (objective.getType() == 1) {
                 List<Objective> objectives =
@@ -358,9 +448,9 @@ public class ReportServiceImpl implements ReportService {
 
                 //get list children projects of current project
                 long currentProjectId = objective.getExecute().getProject().getId();
-                 projects = projectRepository.findAllByParentId(currentProjectId);
+                projects = projectRepository.findAllByParentId(currentProjectId);
 
-            } else{
+            } else {
                 //get list projects in this cycle
                 projects = projectRepository.findAllByFromDateAndEndDate(objective.getCycle().getFromDate());
 
@@ -371,12 +461,12 @@ public class ReportServiceImpl implements ReportService {
                         project.getId(), objective.getCycle().getId(),
                         commonProperties.getOBJ_PROJECT());
 
-                weight += objectives.stream().mapToDouble(Objective::getWeight).sum()*project.getWeight();
-                totalProgress += objectives.stream().mapToDouble(Objective::calculateProgress).sum()*project.getWeight();
+                weight += objectives.stream().mapToDouble(Objective::getWeight).sum() * project.getWeight();
+                totalProgress += objectives.stream().mapToDouble(Objective::calculateProgress).sum() * project.getWeight();
             }
         }
         weight = weight == 0 ? 1 : weight;
-        progress = totalProgress/weight;
+        progress = totalProgress / weight;
 
         return progress;
     }
