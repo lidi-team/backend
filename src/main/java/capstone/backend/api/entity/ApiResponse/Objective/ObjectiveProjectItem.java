@@ -20,6 +20,7 @@ public class ObjectiveProjectItem {
     private double changing;
     private double progress;
     private boolean delete;
+    private long parentId;
     private List<ObjectiveProjectItem> alignObjectives;
     private List<KeyResultResponse> keyResults;
     private List<ObjectiveProjectItem> childObjectives;
