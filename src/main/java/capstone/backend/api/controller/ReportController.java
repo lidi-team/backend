@@ -60,9 +60,11 @@ public class ReportController {
     @GetMapping(path = "")
     public ResponseEntity<?> getListObjectiveByCycleId(@RequestHeader(name = "Authorization") String token,
                                                        @ApiParam(value = "id của chu kì hiện tại")
-                                                       @RequestParam(name = "cycleId") long id) {
+                                                       @RequestParam(name = "cycleId") long cycleId,
+                                                       @ApiParam(value = "id của project hiện tại")
+                                                       @RequestParam(name = "projectId") long projectId) {
         try {
-            return reportService.getListObjectiveByCycleId(token, id);
+            return reportService.getListObjectiveByCycleId(token, cycleId,projectId);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());

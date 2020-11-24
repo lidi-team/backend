@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -19,5 +20,5 @@ public class ObjectiveCheckin {
     private double change;
     private String status;
     private long checkinId;
-    private List<KeyResultResponse> keyResults;
+    private List<Map<String,Object>> keyResults;
 }

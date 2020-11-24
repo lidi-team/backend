@@ -44,9 +44,9 @@ public class ReportDetailServiceImpl implements ReportDetailService {
             );
 
             if (keyResult != null && report.getStatus().equalsIgnoreCase("Reviewed")) {
-                keyResult.setValueObtained(item.getValueObtained());
-                keyResult.setProgress(keyResult.calculateProgress() * item.getConfidentLevel());
-                keyResults.add(keyResult);
+                int index = keyResults.indexOf(keyResult);
+                keyResults.get(index).setValueObtained(item.getValueObtained());
+                keyResults.get(index).setProgress(keyResult.calculateProgress() * item.getConfidentLevel());
                 keyResultRepository.saveAll(keyResults);
             }
         });
