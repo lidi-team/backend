@@ -6,7 +6,8 @@ import org.springframework.format.annotation.NumberFormat;
 import javax.persistence.*;
 
 @Entity
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

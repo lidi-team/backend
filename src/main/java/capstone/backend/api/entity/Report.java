@@ -7,7 +7,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,7 +28,6 @@ public class Report {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date nextCheckinDate;
 
-    @NonNull
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date checkinDate;
 

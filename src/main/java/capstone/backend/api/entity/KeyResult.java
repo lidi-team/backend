@@ -8,7 +8,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data
+@Setter
+@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

@@ -4,7 +4,6 @@ import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.CheckinDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultCheckin;
-import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveCheckin;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectObjectiveResponse;
@@ -94,22 +93,21 @@ public class ReportServiceImpl implements ReportService {
 
         Objective objective = objectiveRepository.findByIdAndDelete(checkinDto.getObjectiveId());
         List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
-        Map<Long,Double> valueOlds = saveOldValueKeyResult(keyResults);
+        Map<Long, Double> valueOlds = saveOldValueKeyResult(keyResults);
 
         User authorizedUser = objective.getExecute().getUser();
 
         Report report;
-        if(checkinDto.getId() != 0){
+        if (checkinDto.getId() != 0) {
             report = reportRepository.findById(checkinDto.getId()).get();
             report.setNextCheckinDate(commonUtils.stringToDate(checkinDto.getNextCheckinDate(), CommonUtils.PATTERN_ddMMyyyy));
             report.setAuthorizedUser(authorizedUser);
             report.setObjective(objective);
             report.setProgress(checkinDto.getProgress());
             report.setStatus(checkinDto.getStatus());
-        }else{
+        } else {
             report = Report.builder()
                     .id(checkinDto.getId())
-                    .checkinDate(new Date())
                     .nextCheckinDate(commonUtils.stringToDate(checkinDto.getNextCheckinDate(), CommonUtils.PATTERN_ddMMyyyy))
                     .objective(objective)
                     .progress(checkinDto.getProgress())
@@ -118,20 +116,27 @@ public class ReportServiceImpl implements ReportService {
                     .build();
         }
 
+        if (checkinDto.getStatus().equalsIgnoreCase("Pending")) {
+            report.setCheckinDate(new Date());
+        }
+
         report = reportRepository.save(report);
         reportDetailService.addReportDetails(checkinDto.getCheckinDetails(), report, keyResults);
 
-        if(checkinDto.getStatus().equalsIgnoreCase("Reviewed")){
+        if (checkinDto.getStatus().equalsIgnoreCase("Reviewed")) {
             double oldProgress = objective.getProgress();
             objective.setProgress(checkinDto.getProgress());
             objective.setChanging(objective.getProgress() - oldProgress);
-            Objective obj = objectiveRepository.save(objective);
+            objectiveRepository.updateChangingAndProgressObjective(objective.getChanging(),
+                    objective.getProgress(), objective.getId());
 
-            Map<Long,Double> changing = setListChangingKeyResult(valueOlds,keyResults);
+            Map<Long, Double> changing = setListChangingKeyResult(valueOlds, keyResults);
             //update progress of upper objectives and key results;
-            new Thread(()->{
-                calculateProgressAllObjective(obj,changing);
-            }).start();
+            Thread t = new Thread(() -> {
+                calculateProgressAllObjective(objective, changing);
+            });
+            t.setDaemon(true);
+            t.start();
 
         }
 
@@ -144,7 +149,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId,long projectId) throws Exception {
+    public ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId, long projectId) throws Exception {
         List<ProjectObjectiveResponse> responses = new ArrayList<>();
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
@@ -160,10 +165,10 @@ public class ReportServiceImpl implements ReportService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
         List<Execute> executes;
-        if(projectId == 0){
+        if (projectId == 0) {
             executes = executeRepository.findAllByUserIdAndOpenProject(user.getId());
         } else {
-            executes = executeRepository.findAllByUserIdAndProjectId(user.getId(),projectId);
+            executes = executeRepository.findAllByUserIdAndProjectId(user.getId(), projectId);
         }
 
 
@@ -307,12 +312,12 @@ public class ReportServiceImpl implements ReportService {
             checkin.put("id", report.getId());
             checkin.put("createdAt", report.getCheckinDate());
             checkin.put("objective", objective);
-            checkin.put("project",project);
+            checkin.put("project", project);
 
             items.add(checkin);
         }
-        response.put("items",items);
-        response.put("meta",commonUtils.paging(reports,page));
+        response.put("items", items);
+        response.put("meta", commonUtils.paging(reports, page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -326,19 +331,19 @@ public class ReportServiceImpl implements ReportService {
     private void setProjectResponse(List<ProjectObjectiveResponse> responses, Execute execute,
                                     List<ObjectiveCheckin> objectivesResponse, List<Objective> objectives) {
         objectives.forEach(objective -> {
-            List<Map<String,Object>> keyResultResponses = new ArrayList<>();
+            List<Map<String, Object>> keyResultResponses = new ArrayList<>();
             List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
 
             keyResults.forEach(keyResult -> {
-                Map<String,Object> keyResultResponse = new HashMap<>();
-                keyResultResponse.put("id",keyResult.getId());
-                keyResultResponse.put("startValue",keyResult.getFromValue());
-                keyResultResponse.put("valueObtained",keyResult.getValueObtained());
-                keyResultResponse.put("targetedValue",keyResult.getToValue());
-                keyResultResponse.put("progress",keyResult.getProgress());
-                keyResultResponse.put("content",keyResult.getContent());
-                keyResultResponse.put("measureUnit",keyResult.getUnitOfKeyResult().getName());
-                keyResultResponse.put("reference",keyResult.getReference());
+                Map<String, Object> keyResultResponse = new HashMap<>();
+                keyResultResponse.put("id", keyResult.getId());
+                keyResultResponse.put("startValue", keyResult.getFromValue());
+                keyResultResponse.put("valueObtained", keyResult.getValueObtained());
+                keyResultResponse.put("targetedValue", keyResult.getToValue());
+                keyResultResponse.put("progress", keyResult.getProgress());
+                keyResultResponse.put("content", keyResult.getContent());
+                keyResultResponse.put("measureUnit", keyResult.getUnitOfKeyResult().getName());
+                keyResultResponse.put("reference", keyResult.getReference());
 
                 keyResultResponses.add(keyResultResponse);
             });
@@ -491,50 +496,56 @@ public class ReportServiceImpl implements ReportService {
         return progress;
     }
 
-    private void calculateProgressAllObjective(Objective objective,Map<Long,Double> keyResultChanging){
-
+    private void calculateProgressAllObjective(Objective objective, Map<Long, Double> keyResultChanging) {
         Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
-        parentObjective.setChanging(objective.getChanging() * calculatePercentObjective(objective,parentObjective));
-        parentObjective.setProgress(parentObjective.getProgress() + parentObjective.getChanging());
-        parentObjective = objectiveRepository.save(parentObjective);
+
+        double change = objective.getChanging() * calculatePercentObjective(objective, parentObjective);
+        double progress = parentObjective.getProgress() + change;
+
+        parentObjective.setChanging(change);
+        parentObjective.setProgress(progress);
+        objectiveRepository.updateChangingAndProgressObjective(change, progress, parentObjective.getId());
 
         List<KeyResult> parentKeyResults = keyResultRepository.findAllByObjectiveId(parentObjective.getId());
-        Map<Long,Double> oldParentValue = saveOldValueKeyResult(parentKeyResults);
+        Map<Long, Double> oldParentValue = saveOldValueKeyResult(parentKeyResults);
 
         for (KeyResult parentKeyResult : parentKeyResults) {
-            if(keyResultChanging.containsKey(parentKeyResult.getId())){
-                double changing = keyResultChanging.get(parentKeyResult.getId());
-                parentKeyResult.setProgress(parentKeyResult.getProgress() + changing * parentKeyResult.getProgress());
+            if (keyResultChanging.containsKey(parentKeyResult.getId())) {
+                double changeKey = keyResultChanging.get(parentKeyResult.getId());
+                double progressKey = parentKeyResult.getProgress() + changeKey * parentKeyResult.getProgress();
+                double valueObtain = calculateValueObtainKeyResult(parentKeyResult);
+                parentKeyResult.setProgress(progressKey);
+                parentKeyResult.setValueObtained(valueObtain);
+                keyResultRepository.updateKeyResultProgress(progressKey, valueObtain, parentKeyResult.getId());
             }
         }
-        keyResultRepository.saveAll(parentKeyResults);
 
-        if(parentObjective.getParentId() != 0){
-            Map<Long,Double> changingList = setListChangingKeyResult(oldParentValue,parentKeyResults);
-            calculateProgressAllObjective(parentObjective,changingList);
+        if (parentObjective.getParentId() != 0) {
+            Map<Long, Double> changingList = setListChangingKeyResult(oldParentValue, parentKeyResults);
+            calculateProgressAllObjective(parentObjective, changingList);
         }
 
     }
 
-    private double calculatePercentObjective(Objective child, Objective parent){
+    private double calculatePercentObjective(Objective child, Objective parent) {
         double totalWeight = 0;
         List<Objective> children = objectiveRepository.findAllByParentId(parent.getId());
         for (Objective objective : children) {
-            if(objective.getType() == 1){
-                totalWeight += objective.getWeight()*objective.getExecute().getProject().getWeight();
-            } else{
+            if (objective.getType() == 1) {
+                totalWeight += objective.getWeight() * objective.getExecute().getProject().getWeight();
+            } else {
                 totalWeight += objective.getWeight();
             }
         }
-        if(child.getType() == 1){
-            return child.getWeight() * child.getExecute().getProject().getWeight()/totalWeight;
-        } else{
-            return child.getWeight()/totalWeight;
+        if (child.getType() == 1) {
+            return child.getWeight() * child.getExecute().getProject().getWeight() / totalWeight;
+        } else {
+            return child.getWeight() / totalWeight;
         }
     }
 
-    private Map<Long,Double> setListChangingKeyResult(Map<Long,Double> olds, List<KeyResult> news){
-        Map<Long,Double> map = new HashMap<>();
+    private Map<Long, Double> setListChangingKeyResult(Map<Long, Double> olds, List<KeyResult> news) {
+        Map<Long, Double> map = new HashMap<>();
         for (KeyResult keyResult : news) {
             double oldProgress = olds.get(keyResult.getId());
             map.put(keyResult.getParentId(), keyResult.getProgress() - oldProgress);
@@ -542,11 +553,15 @@ public class ReportServiceImpl implements ReportService {
         return map;
     }
 
-    private Map<Long,Double> saveOldValueKeyResult(List<KeyResult> olds){
-        Map<Long,Double> oldValue = new HashMap<>();
-        olds.forEach(old ->{
-            oldValue.put(old.getId(),old.getProgress());
+    private Map<Long, Double> saveOldValueKeyResult(List<KeyResult> olds) {
+        Map<Long, Double> oldValue = new HashMap<>();
+        olds.forEach(old -> {
+            oldValue.put(old.getId(), old.getProgress());
         });
         return oldValue;
+    }
+
+    private double calculateValueObtainKeyResult(KeyResult keyResult) {
+        return keyResult.getProgress() * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
     }
 }
