@@ -1,6 +1,7 @@
 package capstone.backend.api.entity.ApiResponse.Objective;
 
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
+import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,4 +22,5 @@ public class ObjectiveCheckin {
     private String status;
     private long checkinId;
     private List<Map<String,Object>> keyResults;
+    private MetaDataResponse project;
 }

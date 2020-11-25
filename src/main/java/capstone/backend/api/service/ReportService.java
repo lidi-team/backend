@@ -11,7 +11,7 @@ public interface ReportService {
 
     ResponseEntity<?> addCheckin(CheckinDto checkinDto) throws Exception;
 
-    ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId,long projectId) throws Exception;
+    ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId,long projectId,int page, int limit) throws Exception;
 
     ResponseEntity<?> getCheckinDetailByObjectiveId(long id) throws Exception;
 

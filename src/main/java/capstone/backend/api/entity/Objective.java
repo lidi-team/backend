@@ -1,9 +1,11 @@
 package capstone.backend.api.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -58,6 +60,9 @@ public class Objective {
 
     @Builder.Default
     private boolean isDelete = false;
+
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date createAt;
 
     public double calculateProgress(){
         return this.weight * this.progress;

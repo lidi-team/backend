@@ -15,6 +15,8 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
 
     Report findFirstByObjectiveIdOrderByIdDesc(long id);
 
+    List<Report> findAllByObjectiveIdAndStatusContains(long id,String status);
+
     @Query(value = "select r from Report r " +
             "join Objective o on r.objective.id = o.id " +
             "where r.status = :status " +
@@ -22,5 +24,13 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "and r.authorizedUser.id = :reviewerId " +
             "order by r.checkinDate desc ")
     Page<Report> findByReviewerAndStatusAndCycle(long reviewerId, String status, long cycleId,Pageable pageable);
+
+    Report findFirstByObjectiveId(long id);
+
+    @Query(value = "select r from Report r " +
+            "where r.objective.id = :id " +
+            "and r.status in ('Reviewed','Pending') ")
+    List<Report> findAllReportByObjectiveIdAndStatus(long id);
+
 
 }
