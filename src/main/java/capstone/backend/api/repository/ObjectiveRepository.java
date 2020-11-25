@@ -1,6 +1,8 @@
 package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.Objective;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,8 +36,28 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     List<Objective> findAllByProjectIdAndCycleIdAndType(@Param(value = "projectId") long projectId,
                                                         @Param(value = "cycleId") long cycleId,
                                                         @Param(value = "type") int type);
-    @Query(value = "select o from Objective o where o.type = :type and o.cycle.id = :cycleId and o.isDelete = false")
-    List<Objective> findAllByTypeAndCycleId(@Param(value = "type")int type,@Param(value = "cycleId") long cycleId);
+
+    @Query(value = "select o from Objective o " +
+            "where o.type = :type " +
+            "and o.cycle.id = :cycleId " +
+            "and o.execute.user.id = :userId " +
+            "and o.isDelete = false")
+    Page<Objective> findAllByTypeAndCycleIdAndUserId(@Param(value = "type")int type,
+                                                     @Param(value = "cycleId") long cycleId,
+                                                     @Param(value = "userId") long userId,
+                                                     Pageable pageable);
+
+    @Query(value = "select o from Objective o " +
+            "where o.type = :type " +
+            "and o.cycle.id = :cycleId " +
+            "and o.execute.user.id = :userId " +
+            "and o.execute.project.id =:projectId " +
+            "and o.isDelete = false")
+    Page<Objective> findAllByTypeAndCycleIdAndUserIdAndProjectId(@Param(value = "type")int type,
+                                                     @Param(value = "cycleId") long cycleId,
+                                                     @Param(value = "userId") long userId,
+                                                     @Param(value = "projectId") long projectId,
+                                                     Pageable pageable);
 
     @Query(value = "select o from Objective o " +
             "join Execute e on o.execute.id = e.id " +

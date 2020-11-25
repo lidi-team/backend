@@ -62,9 +62,13 @@ public class ReportController {
                                                        @ApiParam(value = "id của chu kì hiện tại")
                                                        @RequestParam(name = "cycleId") long cycleId,
                                                        @ApiParam(value = "id của project hiện tại")
-                                                       @RequestParam(name = "projectId") long projectId) {
+                                                       @RequestParam(name = "projectId") long projectId,
+                                                       @ApiParam(value = "số thứ tự trang hiện tại")
+                                                       @RequestParam(value = "page") int page,
+                                                       @ApiParam(value = "tổng số item giới hạn trong trang")
+                                                       @RequestParam(value = "limit") int limit) {
         try {
-            return reportService.getListObjectiveByCycleId(token, cycleId,projectId);
+            return reportService.getListObjectiveByCycleId(token, cycleId, projectId, page, limit);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
@@ -79,7 +83,7 @@ public class ReportController {
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/history/{id}")
     public ResponseEntity<?> getListCheckinHistory(@ApiParam(value = "id của objective hiện tại")
-                                                       @PathVariable(name = "id") long id) {
+                                                   @PathVariable(name = "id") long id) {
         try {
             return reportService.getCheckinHistoryByObjectiveId(id);
         } catch (Exception e) {
@@ -96,7 +100,7 @@ public class ReportController {
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/objective/{id}")
     public ResponseEntity<?> getCheckinDetailByObjectiveId(@ApiParam(value = "id của objective hiện tại")
-                                                   @PathVariable(name = "id") long id) {
+                                                           @PathVariable(name = "id") long id) {
         try {
             return reportService.getCheckinDetailByObjectiveId(id);
         } catch (Exception e) {
@@ -122,7 +126,7 @@ public class ReportController {
             @RequestParam(value = "cycleId") long cycleId
     ) {
         try {
-            return reportService.getListRequestCheckin(token,page,limit,cycleId);
+            return reportService.getListRequestCheckin(token, page, limit, cycleId);
         } catch (Exception e) {
             logger.error("get list request checkin failed");
             logger.error(e.getMessage());
@@ -137,7 +141,7 @@ public class ReportController {
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getListRequestCheckin(@ApiParam(value = "id của checkin hiện tại")
-                                                         @PathVariable(name = "id") long id) {
+                                                   @PathVariable(name = "id") long id) {
         try {
             return reportService.getDetailCheckinByCheckinId(id);
         } catch (Exception e) {

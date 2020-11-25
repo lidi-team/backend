@@ -7,6 +7,7 @@ import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.*;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.ObjectiveRepository;
+import capstone.backend.api.repository.ReportRepository;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.ObjectiveService;
 import capstone.backend.api.utils.CommonUtils;
@@ -18,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,6 +44,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     private  final CommonUtils commonUtils;
 
+    private final ReportRepository reportRepository;
+
     @Override
     public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
@@ -65,6 +69,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             objective = Objective.builder()
                     .name(objectvieDto.getTitle())
                     .cycle(cycle)
+                    .createAt(new Date())
                     .alignmentObjectives(alignmentObjectives)
                     .parentId(objectvieDto.getParentId())
                     .execute(execute)
@@ -73,10 +78,12 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .weight(objectvieDto.getWeight())
                     .build();
         } else {
+            objective = objectiveRepository.findById(objectvieDto.getId()).get();
             objective = Objective.builder()
                     .id(objectvieDto.getId())
                     .name(objectvieDto.getTitle())
                     .cycle(cycle)
+                    .createAt(objective.getCreateAt())
                     .alignmentObjectives(alignmentObjectives)
                     .parentId(objectvieDto.getParentId())
                     .execute(execute)
@@ -475,7 +482,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                         .weight(childObjective.getWeight())
                                         .progress(childObjective.getProgress())
                                         .changing(childObjective.getChanging())
-                                        .delete(true)
+                                        .delete(checkDeleteObjective(childObjective))
+                                        .update(checkUpdateObjective(childObjective))
                                         .keyResults(childKeyResultResponses)
                                         .parentId(childObjective.getParentId())
                                         .childObjectives(new ArrayList<>())
@@ -490,6 +498,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                     .type(objective.getType())
                                     .weight(objective.getWeight())
                                     .progress(objective.getProgress())
+                                    .update(checkUpdateObjective(objective))
                                     .changing(objective.getChanging())
                                     .keyResults(keyResultResponses)
                                     .childObjectives(childItems)
@@ -715,5 +724,15 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         });
 
         return keyResultResponses;
+    }
+
+    private boolean checkDeleteObjective(Objective objective){
+        Report report = reportRepository.findFirstByObjectiveId(objective.getId());
+        return (report == null);
+    }
+
+    private boolean checkUpdateObjective(Objective objective){
+        List<Report> reports = reportRepository.findAllReportByObjectiveIdAndStatus(objective.getId());
+        return (reports.size() == 0);
     }
 }
