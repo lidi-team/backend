@@ -64,13 +64,6 @@ public class CommonUtils {
         return sb.toString();
     }
 
-    public double calculateProgressKeyResult(KeyResult keyResult){
-        return Math.abs(
-                100*(keyResult.getValueObtained()- keyResult.getFromValue())
-                /(keyResult.getToValue() - keyResult.getFromValue())
-        );
-    }
-
     public ArrayList<Long> stringToArray(String string) {
         ArrayList<Long> longArray = new ArrayList<>();
         if (string != null && !string.trim().isEmpty()) {

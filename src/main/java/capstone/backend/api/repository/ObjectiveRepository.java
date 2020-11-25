@@ -59,6 +59,13 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     @Query("update Objective o set o.isDelete = true where o.id = :id")
     void deleteObjective(@Param(value = "id") long id);
 
+    @Modifying
+    @Transactional
+    @Query("update Objective o set o.changing = :changing , o.progress = :progress where o.id = :id")
+    void updateChangingAndProgressObjective(@Param(value="changing")double changing,
+                                            @Param(value = "progress") double progress,
+                                            @Param(value = "id") long id);
+
     Objective findFirstByParentId(long parentId);
 
     @Query(value = "select o from Objective o where o.id = :id and o.isDelete = false")

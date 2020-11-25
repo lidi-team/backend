@@ -24,8 +24,16 @@ public interface KeyResultRepository extends JpaRepository<KeyResult, Long> {
     @Modifying
     @Transactional
     @Query(value = "update key_results set parent_id = 0 where id in (" +
-                    " select c.id from( \n" +
-                        " select id from key_results where parent_id = :id) " +
-                    " as c)",nativeQuery = true)
+            " select c.id from( \n" +
+            " select id from key_results where parent_id = :id) " +
+            " as c)", nativeQuery = true)
     void updateKeyResultParentId(@Param(value = "id") long id);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update KeyResult k " +
+            "set k.progress = :progress, k.valueObtained = :valueObtain where k.id = :id ")
+    void updateKeyResultProgress(@Param(value = "progress") double progress,
+                                 @Param(value = "valueObtain") double valueObtain,
+                                 @Param(value = "id") long id);
 }
