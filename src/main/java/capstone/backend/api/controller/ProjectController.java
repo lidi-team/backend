@@ -121,4 +121,37 @@ public class ProjectController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ project có thể là parent project")
+    @GetMapping(path = "/parents")
+    public ResponseEntity<?> getListParentProject(){
+        try {
+            return projectService.getListParentProject();
+        } catch (Exception e) {
+            logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "lấy toàn bộ project có thể là parent project")
+    @GetMapping(path = "/pm")
+    public ResponseEntity<?> getListStaffForPm(
+            @ApiParam(value = "tên của staffs")
+            @RequestParam(value = "text") String text){
+        try {
+            return projectService.getListStaffForPm(text);
+        } catch (Exception e) {
+            logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 }

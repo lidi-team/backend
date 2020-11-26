@@ -26,7 +26,7 @@ import java.util.*;
 @Service
 @AllArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
-    ProjectRepository projectRepository;
+    private final ProjectRepository projectRepository;
 
     private final CommonProperties commonProperties;
 
@@ -168,9 +168,10 @@ public class ProjectServiceImpl implements ProjectService {
                             .startDate(project.getFromDate())
                             .endDate(project.getEndDate())
                             .description(project.getDescription())
-                            .status(project.isClose()?"Closed":"Active")
+                            .status(project.isClose()? 0 : 1)
                             .pm(execute.getUser().getFullName())
                             .weight(project.getWeight())
+                            .parentId(project.getParent()==null? 0 : project.getParent().getId())
                             .build()
             );
         });
@@ -310,6 +311,54 @@ public class ProjectServiceImpl implements ProjectService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(project.getId())
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListParentProject() throws Exception {
+        List<MetaDataResponse> responses = new ArrayList<>();
+
+        List<Project> projects = projectRepository.findAllParentProject();
+        projects.forEach(project -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(project.getId())
+                            .name(project.getName())
+                            .build()
+            );
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListStaffForPm(String text) throws Exception {
+        List<MetaDataResponse> responses = new ArrayList<>();
+        Role role = roleRepository.findRoleByName("ROLE_USER").get();
+        List<User> users = userRepository.findByFullNameContains(text.toLowerCase());
+
+        users.forEach(user -> {
+            if(user.getRoles().contains(role)){
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(user.getId())
+                                .name(user.getFullName())
+                                .build()
+                );
+            }
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
                         .build()
         );
     }
