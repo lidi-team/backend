@@ -10,7 +10,7 @@ public interface ProjectPositionService {
 
     ResponseEntity<ApiResponse> getListMetaDataPosition() throws Exception;
 
-    ResponseEntity<ApiResponse> getAllPosition(int page, int size, String sort, String jwtToken) throws Exception;
+    ResponseEntity<ApiResponse> getAllPosition(int page, int size, String text, String jwtToken) throws Exception;
 
     ResponseEntity<ApiResponse> createPosition(ProjectPositionDto positionDto, String jwtToken) throws Exception;
 

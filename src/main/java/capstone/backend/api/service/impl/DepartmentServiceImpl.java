@@ -64,16 +64,20 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public ResponseEntity<?> getAllDepartment(int page, int limit, String sort, String jwtToken) throws Exception {
+    public ResponseEntity<?> getAllDepartment(int page, int limit, String text, String jwtToken) throws Exception {
         if (limit == 0){
             limit = 10;
         }
 
-        if (sort == null) {
-            sort = "id";
+        Page<Department> departments;
+
+        if (text == null) {
+            departments = departmentRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by("id")));
+        } else{
+            departments = departmentRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page-1, limit, Sort.by("id")));
         }
 
-        Page<Department> departments = departmentRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by(sort)));
+
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
 

@@ -13,4 +13,6 @@ public interface EvaluationCriteriaRepository extends JpaRepository<EvaluationCr
     Page<EvaluationCriteria> findByIsDeleteFalse(Pageable of);
 
     EvaluationCriteria findByIdAndIsDeleteFalse(long id);
+
+    Page findByContentContainsAndIsDeleteFalse(String name, Pageable pageable);
 }

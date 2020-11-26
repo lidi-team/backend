@@ -11,7 +11,7 @@ public interface EvaluationCriteriaService {
 
     ResponseEntity<?> getListMetaDataEvaluation() throws Exception;
 
-    ResponseEntity<?> getAllEvaluation(int page, int limit, String sort, String jwtToken) throws Exception;
+    ResponseEntity<?> getAllEvaluation(int page, int limit, String text, String jwtToken) throws Exception;
 
     ResponseEntity<?> createEvaluation(EvaluationCriteriaDto evaluationCriteriaDto, String jwtToken) throws Exception;
 

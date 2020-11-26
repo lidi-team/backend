@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface UnitOfKeyResultService {
     UnitOfKeyResult getUnitById(long id);
 
-    ResponseEntity<?> getAllMeasure(int page, int size, String sort, String jwtToken) throws Exception;
+    ResponseEntity<?> getAllMeasure(int page, int size, String text, String jwtToken) throws Exception;
 
     ResponseEntity<?> createMeasure(MeasureDto unit, String jwtToken) throws Exception;
 

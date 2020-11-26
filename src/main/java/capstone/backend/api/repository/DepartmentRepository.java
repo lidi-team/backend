@@ -12,4 +12,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Page<Department> findByIsDeleteFalse(Pageable of);
 
     Department findByIdAndIsDeleteFalse(long id);
+
+    Page findByNameContainsAndIsDeleteFalse(String name, Pageable pageable);
 }
