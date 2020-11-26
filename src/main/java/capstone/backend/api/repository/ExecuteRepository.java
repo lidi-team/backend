@@ -1,6 +1,10 @@
 package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.Execute;
+import capstone.backend.api.entity.Objective;
+import capstone.backend.api.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -54,4 +58,17 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "and p.close = false and e.is_delete = false\n" +
             "and e.is_pm = true",nativeQuery = true)
     int findOtherProjectUserIsPm(@Param(value = "userId") long userId,@Param(value = "projectId")long projectId);
+
+    @Query(value = "select e from Execute e " +
+            "where e.reviewer.id = :userId " +
+            "and e.user.id <> :userId ")
+    Page<Execute> findExecuteByReviewerId(@Param(value = "userId") long userId, Pageable pageable);
+
+    @Query(value = "select e from Execute e " +
+            "where e.reviewer.id = :userId " +
+            "and e.user.id <> :userId " +
+            "and e.project.id = :projectId ")
+    Page<Execute> findExecuteByReviewerIdAndProjectId(@Param(value = "userId") long userId,
+                                                @Param(value = "projectId") long projectId,
+                                                Pageable pageable);
 }
