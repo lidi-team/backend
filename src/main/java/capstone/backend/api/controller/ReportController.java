@@ -58,15 +58,16 @@ public class ReportController {
 
     @ApiOperation(value = "Danh sách objective của user theo chu kì")
     @GetMapping(path = "")
-    public ResponseEntity<?> getListObjectiveByCycleId(@RequestHeader(name = "Authorization") String token,
-                                                       @ApiParam(value = "id của chu kì hiện tại")
-                                                       @RequestParam(name = "cycleId") long cycleId,
-                                                       @ApiParam(value = "id của project hiện tại")
-                                                       @RequestParam(name = "projectId") long projectId,
-                                                       @ApiParam(value = "số thứ tự trang hiện tại")
-                                                       @RequestParam(value = "page") int page,
-                                                       @ApiParam(value = "tổng số item giới hạn trong trang")
-                                                       @RequestParam(value = "limit") int limit) {
+    public ResponseEntity<?> getListObjectiveByCycleId(
+            @RequestHeader(name = "Authorization") String token,
+            @ApiParam(value = "id của chu kì hiện tại")
+            @RequestParam(name = "cycleId") long cycleId,
+            @ApiParam(value = "id của project hiện tại")
+            @RequestParam(name = "projectId") long projectId,
+            @ApiParam(value = "số thứ tự trang hiện tại")
+            @RequestParam(value = "page") int page,
+            @ApiParam(value = "tổng số item giới hạn trong trang")
+            @RequestParam(value = "limit") int limit) {
         try {
             return reportService.getListObjectiveByCycleId(token, cycleId, projectId, page, limit);
         } catch (Exception e) {
@@ -144,6 +145,31 @@ public class ReportController {
                                                    @PathVariable(name = "id") long id) {
         try {
             return reportService.getDetailCheckinByCheckinId(id);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "Danh sách checkin history của user objective")
+    @GetMapping(path = "/inferior")
+    public ResponseEntity<?> getListOKRInferior(
+            @RequestHeader(value = "Authorization") String token,
+            @ApiParam(value = "số thứ tự trang hiện tại")
+            @RequestParam(value = "page") int page,
+            @ApiParam(value = "tổng số item giới hạn trong trang")
+            @RequestParam(value = "limit") int limit,
+            @ApiParam(value = "id cua chu ki")
+            @RequestParam(value = "cycleId") long cycleId,
+            @ApiParam(value = "id của project hiện tại")
+            @RequestParam(name = "projectId") long projectId) {
+        try {
+            return reportService.getListCheckinInferior(token, page, limit, cycleId, projectId);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());

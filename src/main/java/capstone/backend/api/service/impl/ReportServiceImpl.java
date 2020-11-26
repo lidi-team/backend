@@ -43,9 +43,9 @@ public class ReportServiceImpl implements ReportService {
 
     private final ReportDetailRepository detailRepository;
 
-    private final ExecuteRepository executeRepository;
-
     private final KeyResultRepository keyResultRepository;
+
+    private final ExecuteRepository executeRepository;
 
     private final CycleRepository cycleRepository;
 
@@ -321,6 +321,59 @@ public class ReportServiceImpl implements ReportService {
         }
         response.put("items", items);
         response.put("meta", commonUtils.paging(reports, page));
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListCheckinInferior(String token, int page, int limit, long cycleId, long projectId) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+        List<Map<String,Object>> inferiors = new ArrayList<>();
+        if (limit == 0) {
+            limit = 10;
+        }
+        if (page == 0) {
+            page = 1;
+        }
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+        Page<Execute> pages;
+        if(projectId == 0){
+            pages = executeRepository.findExecuteByReviewerId(
+                    user.getId(),PageRequest.of(page -1,limit));
+        } else {
+            pages = executeRepository.findExecuteByReviewerIdAndProjectId(
+                            user.getId(),projectId,PageRequest.of(page -1,limit));
+        }
+
+        pages.getContent().forEach(execute -> {
+            Map<String,Object> inferior = new HashMap<>();
+            MetaDataResponse position = MetaDataResponse.builder()
+                    .id(execute.getPosition().getId())
+                    .name(execute.getPosition().getName())
+                    .build();
+            MetaDataResponse project = MetaDataResponse.builder()
+                    .id(execute.getProject().getId())
+                    .name(execute.getProject().getName())
+                    .build();
+
+            inferior.put("id",execute.getUser().getId());
+            inferior.put("fullName",execute.getUser().getFullName());
+            inferior.put("avatarURL",execute.getUser().getAvatarImage());
+            inferior.put("position",position);
+            inferior.put("project",project);
+
+            inferiors.add(inferior);
+        });
+
+        response.put("items",inferiors);
+        response.put("meta",commonUtils.paging(pages,page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
