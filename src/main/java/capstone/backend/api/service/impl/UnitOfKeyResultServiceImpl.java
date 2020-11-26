@@ -38,17 +38,17 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     }
 
     @Override
-    public ResponseEntity<?> getAllMeasure(int page, int size, String sort, String jwtToken) throws Exception {
+    public ResponseEntity<?> getAllMeasure(int page, int size, String text, String jwtToken) throws Exception {
         if (size == 0){
             size = 10;
         }
 
-        if(sort==null) {
-            sort = "id";
+        Page<UnitOfKeyResult> measureList;
+        if(text==null) {
+            measureList = unitRepository.findByIsDeleteFalse(PageRequest.of(page - 1, size, Sort.by("id").ascending()));
+        }else{
+            measureList = unitRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page - 1, size, Sort.by("id").ascending()));
         }
-
-        Page<UnitOfKeyResult> measureList = unitRepository.findByIsDeleteFalse(PageRequest.of(page-1, size, Sort.by(sort).ascending()));
-
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
 
@@ -57,6 +57,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
             Map<String, Object> item = new HashMap<>();
             item.put("id", measure.getId());
             item.put("present", measure.getPreset());
+            item.put("name", measure.getName());
             item.put("type", measure.getName());
             item.put("index", measure.getMeasureIndex());
             items.add(item);

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProjectPositionRepository extends JpaRepository<ProjectPosition, Long> {
+    Page findByNameContainsAndIsDeleteFalse(String name, Pageable pageable);
+
     Page<ProjectPosition> findAll(Pageable of);
 
     Page<ProjectPosition> findByIsDeleteFalse(Pageable of);

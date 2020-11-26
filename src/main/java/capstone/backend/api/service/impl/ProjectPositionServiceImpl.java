@@ -52,17 +52,21 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getAllPosition(int page, int limit, String sort, String jwtToken) throws Exception {
+    public ResponseEntity<ApiResponse> getAllPosition(int page, int limit, String text, String jwtToken) throws Exception {
 
         if (limit == 0){
             limit = 10;
         }
 
-        if (sort == null) {
-            sort = "id";
+        Page<ProjectPosition> positions;
+
+        if (text == null) {
+            positions = positionRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by("id")));
+        }else{
+            positions = positionRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page-1, limit, Sort.by("id")));
         }
 
-        Page<ProjectPosition> positions = positionRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by(sort)));
+
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
 

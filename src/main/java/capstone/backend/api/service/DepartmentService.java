@@ -12,7 +12,7 @@ public interface DepartmentService {
 
     ResponseEntity<?> getListMetaDataDepartment() throws Exception;
 
-    ResponseEntity<?> getAllDepartment(int page, int size, String sort, String jwtToken) throws Exception;
+    ResponseEntity<?> getAllDepartment(int page, int size, String text, String jwtToken) throws Exception;
 
     ResponseEntity<?> createDepartment(DepartmentDto departmentDto, String jwtToken) throws Exception;
 

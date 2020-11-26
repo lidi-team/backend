@@ -54,16 +54,19 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
     }
 
     @Override
-    public ResponseEntity<?> getAllEvaluation(int page, int limit, String sort, String jwtToken) throws Exception {
+    public ResponseEntity<?> getAllEvaluation(int page, int limit, String text, String jwtToken) throws Exception {
         if (limit == 0){
             limit = 10;
         }
 
-        if (sort == null) {
-            sort = "id";
+        Page<EvaluationCriteria> evaluationCriterias;
+
+        if (text == null) {
+            evaluationCriterias = evaluationRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by("id")));
+        }else{
+            evaluationCriterias = evaluationRepository.findByContentContainsAndIsDeleteFalse(text, PageRequest.of(page-1, limit, Sort.by("id")));
         }
 
-        Page<EvaluationCriteria> evaluationCriterias = evaluationRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by(sort)));
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
 
