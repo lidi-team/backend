@@ -25,4 +25,10 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             "where p.fromDate <= :date and p.endDate > :date ")
     List<Project> findAllByFromDateAndEndDate(Date date);
 
+    @Query(value = "select p from Project p " +
+            "where (p.parent.id = 0  or p.parent is null) " +
+            "and p.close = false " +
+            "and p.isDelete = false ")
+    List<Project> findAllParentProject();
+
 }

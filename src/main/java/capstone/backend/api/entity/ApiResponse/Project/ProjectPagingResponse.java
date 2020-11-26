@@ -16,8 +16,9 @@ public class ProjectPagingResponse {
     private String name;
     private Date startDate;
     private Date endDate;
-    private String status;
+    private int status;
     private String description;
     private String pm;
     private int weight;
+    private long parentId;
 }

@@ -18,4 +18,7 @@ public interface ProjectService {
 
     ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception;
 
+    ResponseEntity<?> getListParentProject() throws Exception;
+
+    ResponseEntity<?> getListStaffForPm(String text) throws Exception;
 }
