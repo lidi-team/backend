@@ -484,6 +484,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                         .changing(childObjective.getChanging())
                                         .delete(checkDeleteObjective(childObjective))
                                         .update(checkUpdateObjective(childObjective))
+                                        .alignObjectives(setListAlign(childObjective.getAlignmentObjectives()))
                                         .keyResults(childKeyResultResponses)
                                         .parentId(childObjective.getParentId())
                                         .childObjectives(new ArrayList<>())
@@ -501,6 +502,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                     .update(checkUpdateObjective(objective))
                                     .changing(objective.getChanging())
                                     .keyResults(keyResultResponses)
+                                    .alignObjectives(setListAlign(objective.getAlignmentObjectives()))
                                     .childObjectives(childItems)
                                     .parentId(objective.getParentId())
                                     .delete(childItems.size() == 0)
@@ -734,5 +736,25 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private boolean checkUpdateObjective(Objective objective){
         List<Report> reports = reportRepository.findAllReportByObjectiveIdAndStatus(objective.getId());
         return (reports.size() == 0);
+    }
+
+    private List<MetaDataResponse> setListAlign(String alignStr){
+        List<MetaDataResponse> responses = new ArrayList<>();
+        if(alignStr == null || alignStr.isEmpty()){
+            return responses;
+        }
+        List<Long> aligns = commonUtils.stringToArray(alignStr);
+
+        List<Objective> objectives = objectiveRepository.findAllObjectiveByListId(aligns);
+
+        objectives.forEach(objective -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(objective.getId())
+                            .name(objective.getName())
+                            .build()
+            );
+        });
+        return responses;
     }
 }

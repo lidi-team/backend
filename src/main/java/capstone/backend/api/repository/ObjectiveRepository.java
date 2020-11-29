@@ -121,4 +121,7 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
             " and o.type = 0")
     List<Objective> findCompanyObjective(@Param(value = "cycleId") long cycleId);
 
+    @Query(value = "select o from Objective o " +
+            "where o.id in :list")
+    List<Objective> findAllObjectiveByListId(@Param(value = "list") List<Long> list);
 }

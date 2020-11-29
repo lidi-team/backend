@@ -1,8 +1,11 @@
 package capstone.backend.api.service;
 
+import capstone.backend.api.dto.AddStaffToProjectDto;
 import capstone.backend.api.dto.CreateProjectDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface ProjectService {
@@ -10,7 +13,7 @@ public interface ProjectService {
 
     ResponseEntity<?> getListMetaDataProject() throws Exception;
 
-    ResponseEntity<?> getAllAvailableProjectOfUser(String token, int type) throws Exception;
+    ResponseEntity<?> getAllAvailableProjectOfUser(String token) throws Exception;
 
     ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text) throws Exception;
 
@@ -21,4 +24,6 @@ public interface ProjectService {
     ResponseEntity<?> getListParentProject() throws Exception;
 
     ResponseEntity<?> getListStaffForPm(String text) throws Exception;
+
+    ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception;
 }

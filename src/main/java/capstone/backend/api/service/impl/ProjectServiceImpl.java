@@ -1,6 +1,7 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.AddStaffToProjectDto;
 import capstone.backend.api.dto.CreateProjectDto;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
@@ -87,47 +88,23 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getAllAvailableProjectOfUser(String token, int type) throws Exception {
+    public ResponseEntity<?> getAllAvailableProjectOfUser(String token) throws Exception {
         List<MetaDataResponse> responses = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
-        if (user.getRoles().stream().noneMatch(
-                role -> role.getName().equals("ROLE_PM")) && type == 1) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_SUCCESS())
-                            .message(commonProperties.getMESSAGE_SUCCESS())
-                            .data(responses).build()
-            );
-        }
-
         List<Execute> executes = executeRepository.findAllByUserIdAndOpenProject(user.getId());
-        if (type == 1) {
-            executes.forEach(execute -> {
-                if (execute.getProject() != null && execute.getPosition().getName()
-                        .equalsIgnoreCase("project manager")) {
-                    responses.add(
-                            MetaDataResponse.builder()
-                                    .id(execute.getProject().getId())
-                                    .name(execute.getProject().getName())
-                                    .build()
-                    );
-                }
-            });
-        } else if(type == 2){
-            executes.forEach(execute -> {
-                if (execute.getProject() != null) {
-                    responses.add(
-                            MetaDataResponse.builder()
-                                    .id(execute.getProject().getId())
-                                    .name(execute.getProject().getName())
-                                    .build()
-                    );
-                }
-            });
-        }
+        executes.forEach(execute -> {
+            if (execute.getProject() != null) {
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(execute.getProject().getId())
+                                .name(execute.getProject().getName())
+                                .build()
+                );
+            }
+        });
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
@@ -361,5 +338,11 @@ public class ProjectServiceImpl implements ProjectService {
                         .data(responses)
                         .build()
         );
+    }
+
+    @Override
+    public ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception {
+
+        return null;
     }
 }
