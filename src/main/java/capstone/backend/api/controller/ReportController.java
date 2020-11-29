@@ -181,4 +181,26 @@ public class ReportController {
         }
     }
 
+    @ApiOperation(value = "Danh sách checkin history của user objective")
+    @GetMapping(path = "/inferior-objective")
+    public ResponseEntity<?> getListObjectiveInferior(
+            @ApiParam(value = "tổng số item giới hạn trong trang")
+            @RequestParam(value = "userId") long userId,
+            @ApiParam(value = "id cua chu ki")
+            @RequestParam(value = "cycleId") long cycleId,
+            @ApiParam(value = "id của project hiện tại")
+            @RequestParam(name = "projectId") long projectId) {
+        try {
+            return reportService.getListObjectiveInferior(userId,cycleId,projectId);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

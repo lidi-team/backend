@@ -6,6 +6,7 @@ import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultCheckin;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveCheckin;
+import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveInferior;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectObjectiveResponse;
 import capstone.backend.api.entity.ApiResponse.Report.*;
 import capstone.backend.api.entity.*;
@@ -380,6 +381,31 @@ public class ReportServiceImpl implements ReportService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(response)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getListObjectiveInferior(long userId, long cycleId, long projectId) throws Exception {
+        List<ObjectiveInferior> responses = new ArrayList<>();
+
+        Page<Objective> objectives = objectiveRepository.findAllByTypeAndCycleIdAndUserIdAndProjectId(2,cycleId,userId,projectId,PageRequest.of(0,20));
+        objectives.getContent().forEach(objective -> {
+            ObjectiveInferior item = ObjectiveInferior.builder()
+                    .id(objective.getId())
+                    .progress(objective.getProgress())
+                    .title(objective.getName())
+                    .createAt(objective.getCreateAt())
+                    .build();
+
+            responses.add(item);
+
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
                         .build()
         );
     }
