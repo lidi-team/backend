@@ -1,6 +1,7 @@
 package capstone.backend.api.entity.ApiResponse.Objective;
 
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
+import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class ObjectiveProjectItem {
     private boolean delete;
     private boolean update;
     private long parentId;
-    private List<ObjectiveProjectItem> alignObjectives;
+    private List<MetaDataResponse> alignObjectives;
     private List<KeyResultResponse> keyResults;
     private List<ObjectiveProjectItem> childObjectives;
 }

@@ -1,6 +1,7 @@
 package capstone.backend.api.controller;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.AddStaffToProjectDto;
 import capstone.backend.api.dto.CreateProjectDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.service.impl.ObjectiveServiceImpl;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -44,11 +47,9 @@ public class ProjectController {
     @GetMapping(path = "/available")
     public ResponseEntity<?> getAllCurrentProjectOfUser(
             @ApiParam(value = "token",required = true)
-            @RequestHeader(name = "Authorization") String token,
-            @ApiParam(value = "loại của objective, loại 1 dành cho PM, loại 2 dành cho staff")
-            @RequestParam(name = "type") int type){
+            @RequestHeader(name = "Authorization") String token){
         try {
-            return projectService.getAllAvailableProjectOfUser(token,type);
+            return projectService.getAllAvailableProjectOfUser(token);
         } catch (Exception e) {
             logger.error("get list project available of a user failed");
             logger.error(e.getMessage());
@@ -111,7 +112,7 @@ public class ProjectController {
         try {
             return projectService.createProject(projectDto);
         } catch (Exception e) {
-            logger.error("get detail project failed");
+            logger.error("create project failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -127,7 +128,7 @@ public class ProjectController {
         try {
             return projectService.getListParentProject();
         } catch (Exception e) {
-            logger.error("get detail project failed");
+            logger.error("get parent project failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
@@ -145,6 +146,26 @@ public class ProjectController {
         try {
             return projectService.getListStaffForPm(text);
         } catch (Exception e) {
+            logger.error("get list staff failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "update toan bo staff cua project")
+    @PutMapping(path = "/staff")
+    public ResponseEntity<?> updateListStaff(
+            @ApiParam(value = "list staff")
+            @RequestBody() List<AddStaffToProjectDto> dto,
+            @ApiParam(value = "id cua project")
+            @RequestParam(value = "projectId")long projectId){
+        try {
+            return null;
+        } catch (Exception e) {
             logger.error("get detail project failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
@@ -154,4 +175,6 @@ public class ProjectController {
             );
         }
     }
+
+
 }
