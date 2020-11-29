@@ -1,0 +1,2169 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "objectives": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "string"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "objectives"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "objectives": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "progress": {
+                        "type": "number"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "change": {
+                        "type": "number"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "checkinId": {
+                        "type": "integer"
+                      },
+                      "keyResults": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          },
+                          {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "startValue": {
+                                "type": "number"
+                              },
+                              "valueObtained": {
+                                "type": "number"
+                              },
+                              "targetedValue": {
+                                "type": "number"
+                              },
+                              "progress": {
+                                "type": "number"
+                              },
+                              "content": {
+                                "type": "string"
+                              },
+                              "measureUnitId": {
+                                "type": "integer"
+                              },
+                              "reference": {
+                                "type": "null"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "startValue",
+                              "valueObtained",
+                              "targetedValue",
+                              "progress",
+                              "content",
+                              "measureUnitId",
+                              "reference"
+                            ]
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "progress",
+                      "title",
+                      "change",
+                      "status",
+                      "checkinId",
+                      "keyResults"
+                    ]
+                  }
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "objectives"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

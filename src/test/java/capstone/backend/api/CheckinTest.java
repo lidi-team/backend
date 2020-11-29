@@ -23,7 +23,7 @@ import java.util.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ObjectivesTest extends BaseClass {
+public class CheckinTest extends BaseClass {
 
 
 	//Test POST request: create new Objective
@@ -79,15 +79,41 @@ public class ObjectivesTest extends BaseClass {
 	// }
 
 
-	// //Test GET request: get keyresult by objectiveID
+	//Test GET request: get keyresult by objectiveID
 	// @Test
 	// public void T01() {
 	// 	Header headers = new Header("Authorization", "lidi " + token);
-	// 	given().header(headers).when().get("objective/key_result/23/").then().assertThat()
-	// 			.body("message", equalTo("Thành công")).body("code", equalTo(200))
-	// 			.body(matchesJsonSchemaInClasspath("jsonschema.json"));
+	// 	given().header(headers).when().get("checkin?cycleId=2").then().assertThat()
+    //             .body("message", equalTo("Thành công")).body("code", equalTo(200))
+	// 			.body(matchesJsonSchemaInClasspath("getListObjectiveByCycleID.json"));
+	// }
+	// @Test
+	// public void T02() {
+	// 	Header headers = new Header("Authorization", "lidi " + token);
+	// 	given().header(headers).when().get("checkin?cycleId=a").then().assertThat()
+	// 			// .body("message", equalTo("Thành công"))
+	// 			.body("status", equalTo(400))
+	// 			.body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
 	// }
 
+	// @Test
+	// public void T03() {
+	// 	Header headers = new Header("Authorization", "lidi " + token);
+	// 	given().header(headers).when().get("checkin?cycleId=43db").then().assertThat()
+	// 			// .body("message", equalTo("Thành công"))
+	// 			.body("status", equalTo(400))
+	// 			.body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
+	// }
+
+
+	// @Test
+	// public void T04() {
+	// 	Header headers = new Header("Authorization", "lidi " + token);
+	// 	given().header(headers).when().get("checkin?cycleId=100").then().assertThat()
+	// 			// .body("message", equalTo("Thành công"))
+	// 			.body("code", equalTo(402))
+	// 			.body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
+	// }
 	// @Test
 	// public void T02() {
 	// 	Header headers = new Header("Authorization", "lidi " + token);
