@@ -146,7 +146,7 @@ public class ProjectServiceImpl implements ProjectService {
                             .endDate(project.getEndDate())
                             .description(project.getDescription())
                             .status(project.isClose()? 0 : 1)
-                            .pm(execute.getUser().getFullName())
+                            .pmId(execute.getUser().getId())
                             .weight(project.getWeight())
                             .parentId(project.getParent()==null? 0 : project.getParent().getId())
                             .build()
