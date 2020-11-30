@@ -15,7 +15,7 @@ public class CreateProjectDto {
     private long id;
     private String name;
     private long pmId;
-    private long parentProjectId;
+    private long parentId;
     private String startDate;
     private String endDate;
     private String description;

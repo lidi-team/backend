@@ -211,7 +211,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception {
         Role rolePm = roleRepository.findRoleByName("ROLE_PM").get();
         ProjectPosition position = positionRepository.findById(1L).get();
-        Project parentProject = projectRepository.findById(projectDto.getParentProjectId()).orElse(null);
+        Project parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
 
         String fromDateStr = projectDto.getStartDate();
         String endDateStr = projectDto.getEndDate();
@@ -249,6 +249,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         Execute execute = executeRepository.findPmByProjectId(project.getId());
 
+        User director = userRepository.findDirector();
 
         if(execute != null ){
             User oldUser = execute.getUser();
@@ -269,6 +270,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .isPm(true)
                     .isDelete(false)
                     .position(position)
+                    .reviewer(director)
                     .build();
         }else{
             execute = Execute.builder()
@@ -279,6 +281,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .isPm(true)
                     .isDelete(false)
                     .position(position)
+                    .reviewer(director)
                     .build();
         }
         executeRepository.save(execute);

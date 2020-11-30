@@ -41,5 +41,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select u from User u where lower(u.fullName) like %:name% and u.isDelete = false and u.isActive = true ")
     List<User> findByFullNameContains(@Param(value = "name") String name);
 
+    @Query(value = "select e.user from Execute e where e.project is null")
+    User findDirector();
 
 }
