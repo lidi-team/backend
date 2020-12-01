@@ -346,10 +346,10 @@ public class ReportServiceImpl implements ReportService {
         User user = userRepository.findByEmail(email).get();
         Page<Execute> pages;
         if(projectId == 0){
-            pages = executeRepository.findExecuteByReviewerId(
+            pages = executeRepository.findExecuteByReviewerId(cycleId,
                     user.getId(),PageRequest.of(page -1,limit));
         } else {
-            pages = executeRepository.findExecuteByReviewerIdAndProjectId(
+            pages = executeRepository.findExecuteByReviewerIdAndProjectId(cycleId,
                             user.getId(),projectId,PageRequest.of(page -1,limit));
         }
 
@@ -366,7 +366,7 @@ public class ReportServiceImpl implements ReportService {
 
             inferior.put("id",execute.getUser().getId());
             inferior.put("fullName",execute.getUser().getFullName());
-            inferior.put("avatarURL",execute.getUser().getAvatarImage());
+            inferior.put("urlImage",execute.getUser().getAvatarImage());
             inferior.put("position",position);
             inferior.put("project",project);
 
