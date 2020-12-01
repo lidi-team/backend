@@ -1,8 +1,6 @@
 package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.Execute;
-import capstone.backend.api.entity.Objective;
-import capstone.backend.api.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -56,19 +54,24 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "join projects p on e.project_id = p.id\n" +
             "where p.id <> :projectId and e.user_id = :userId\n" +
             "and p.close = false and e.is_delete = false\n" +
-            "and e.is_pm = true",nativeQuery = true)
-    int findOtherProjectUserIsPm(@Param(value = "userId") long userId,@Param(value = "projectId")long projectId);
-
-    @Query(value = "select e from Execute e " +
-            "where e.reviewer.id = :userId " +
-            "and e.user.id <> :userId ")
-    Page<Execute> findExecuteByReviewerId(@Param(value = "userId") long userId, Pageable pageable);
+            "and e.is_pm = true", nativeQuery = true)
+    int findOtherProjectUserIsPm(@Param(value = "userId") long userId, @Param(value = "projectId") long projectId);
 
     @Query(value = "select e from Execute e " +
             "where e.reviewer.id = :userId " +
             "and e.user.id <> :userId " +
-            "and e.project.id = :projectId ")
-    Page<Execute> findExecuteByReviewerIdAndProjectId(@Param(value = "userId") long userId,
-                                                @Param(value = "projectId") long projectId,
-                                                Pageable pageable);
+            "and e.isDelete = false " +
+            "and (select count(o.id) from Objective o where o.execute = e and o.cycle.id = :cycleId) > 0 ")
+    Page<Execute> findExecuteByReviewerId(@Param(value = "cycleId") long cycleId, @Param(value = "userId") long userId, Pageable pageable);
+
+    @Query(value = "select e from Execute e " +
+            "where e.reviewer.id = :userId " +
+            "and e.user.id <> :userId " +
+            "and e.project.id = :projectId " +
+            "and e.isDelete = false " +
+            "and (select count(o.id) from Objective o where o.execute = e and o.cycle.id = :cycleId) > 0 ")
+    Page<Execute> findExecuteByReviewerIdAndProjectId(@Param(value = "cycleId") long cycleId,
+                                                      @Param(value = "userId") long userId,
+                                                      @Param(value = "projectId") long projectId,
+                                                      Pageable pageable);
 }
