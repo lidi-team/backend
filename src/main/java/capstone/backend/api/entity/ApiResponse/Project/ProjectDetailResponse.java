@@ -17,9 +17,10 @@ public class ProjectDetailResponse {
     private String name;
     private Date startDate;
     private Date endDate;
-    private String status;
+    private int status;
     private String description;
     private StaffInformation pm;
     private int weight;
+    private long parentId;
     private List<StaffInformation> staffs;
 }

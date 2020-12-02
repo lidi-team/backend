@@ -191,11 +191,12 @@ public class ProjectServiceImpl implements ProjectService {
                 .id(project.getId())
                 .name(project.getName())
                 .description(project.getDescription())
-                .status(project.isClose()?"Closed":"Active")
+                .status(project.isClose()? 0 : 1)
                 .startDate(project.getFromDate())
                 .endDate(project.getEndDate())
                 .pm(pmResponse)
                 .weight(project.getWeight())
+                .parentId(project.getParent() == null ? 0 : project.getParent().getId())
                 .staffs(staffResponse)
                 .build();
 
