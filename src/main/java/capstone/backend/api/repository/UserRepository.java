@@ -48,4 +48,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where u.star > 0 order by u.star desc")
     List<User> findRankingStar();
 
+    List<User> findAllByIdIn(List<Long> ids);
 }

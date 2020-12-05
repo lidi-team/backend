@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -19,8 +20,7 @@ public class ProjectDetailResponse {
     private Date endDate;
     private int status;
     private String description;
-    private StaffInformation pm;
+    private Map<String,Object> pm;
     private int weight;
     private long parentId;
-    private List<StaffInformation> staffs;
 }

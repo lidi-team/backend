@@ -157,16 +157,74 @@ public class ProjectController {
     }
 
     @ApiOperation(value = "update toan bo staff cua project")
-    @PutMapping(path = "/staff")
+    @PutMapping(path = "{projectId}/staff")
     public ResponseEntity<?> updateListStaff(
             @ApiParam(value = "list staff")
             @RequestBody() List<AddStaffToProjectDto> dto,
             @ApiParam(value = "id cua project")
-            @RequestParam(value = "projectId")long projectId){
+            @PathVariable(value = "projectId")long projectId){
         try {
-            return null;
+            return projectService.updateListStaff(dto,projectId);
         } catch (Exception e) {
             logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "add staff vao project")
+    @PostMapping(path = "/{projectId}/staff")
+    public ResponseEntity<?> addStaffToProject(
+            @ApiParam(value = "list staff")
+            @RequestBody() List<Long> dtos,
+            @ApiParam(value = "id cua project")
+            @PathVariable(value = "projectId")long projectId){
+        try {
+            return projectService.addStaffToProject(dtos,projectId);
+        } catch (Exception e) {
+            logger.error("get detail project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "lấy toàn bộ staff cua project")
+    @GetMapping(path = "/{projectId}/staff")
+    public ResponseEntity<?> getListStaffByProjectId(
+            @ApiParam(value = "id cua project")
+            @PathVariable(value = "projectId") long projectId){
+        try {
+            return projectService.getListStaffByProjectId(projectId);
+        } catch (Exception e) {
+            logger.error("get list staff failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "xoa 1 user khoi project")
+    @DeleteMapping(path = "/{projectId}/staff/{userId}")
+    public ResponseEntity<?> removeStaffFromProject(
+            @ApiParam(value = "id cua project")
+            @PathVariable(value = "projectId") long projectId,
+            @ApiParam(value = "id cua user")
+            @PathVariable(value = "userId") long userId){
+        try {
+            return projectService.removeStaff(projectId, userId);
+        } catch (Exception e) {
+            logger.error("remove staff failed");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
