@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,7 +30,7 @@ public class Cfr {
 
     @ManyToOne
     @JoinColumn(name = "reportId")
-    private Objective report;
+    private Report report;
 
     @ManyToOne
     @JoinColumn(name = "objectiveId")
@@ -42,5 +43,8 @@ public class Cfr {
     @ManyToOne
     @JoinColumn(name = "evaluationCriteriaId")
     private EvaluationCriteria evaluationCriteria;
+
+    @Builder.Default
+    private Date createAt = new Date();
 
 }

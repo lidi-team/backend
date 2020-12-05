@@ -18,5 +18,6 @@ public class CheckinDto {
     private String nextCheckinDate;
     private String status;
     private double progress;
+    private boolean objectComplete;
     private List<CheckinDetailDto> checkinDetails;
 }
