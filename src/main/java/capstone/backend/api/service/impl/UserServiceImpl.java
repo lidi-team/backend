@@ -313,6 +313,20 @@ public class UserServiceImpl implements UserService {
         User currentUser = userRepository.findById(id).orElse(null);
 
         if (currentUser != null) {
+            for (Role role : currentUser.getRoles()) {
+                if(role.getName().equalsIgnoreCase("ROLE_DIRECTOR")){
+                    return ResponseEntity.status(401).body(
+                            ApiResponse.builder().code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                                    .message("Người dùng này đang có quyền giám đốc")
+                    );
+                }
+                if(role.getName().equalsIgnoreCase("ROLE_PM")){
+                    return ResponseEntity.status(401).body(
+                            ApiResponse.builder().code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                                    .message("Người dùng này đang là PM của dự án")
+                    );
+                }
+            }
             currentUser.setActive(isActive);
             userRepository.save(currentUser);
         }

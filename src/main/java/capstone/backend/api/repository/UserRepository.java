@@ -44,4 +44,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "select e.user from Execute e where e.project is null")
     User findDirector();
 
+    @Query(value = "select u from User u " +
+            "where u.star > 0 order by u.star desc")
+    List<User> findRankingStar();
+
 }

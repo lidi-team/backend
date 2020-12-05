@@ -138,6 +138,11 @@ public class ReportServiceImpl implements ReportService {
             t.start();
 
         }
+        if(checkinDto.isObjectComplete()){
+            objective.setStatus("completed");
+            objectiveRepository.save(objective);
+        }
+
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
