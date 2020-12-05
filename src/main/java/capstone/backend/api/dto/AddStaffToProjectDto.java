@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class AddStaffToProjectDto {
-    private String userEmail;
+    private long userId;
     private long positionId;
-    private String reviewerEmail;
+    private long reviewerId;
 
 }

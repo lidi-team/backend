@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class StaffInformation {
     private long id;
     private String name;
-    private String position;
-    private String department;
+    private long position;
+    private long department;
+    private long reviewerId;
+    private String email;
 }

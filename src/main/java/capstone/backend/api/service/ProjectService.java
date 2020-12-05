@@ -26,4 +26,10 @@ public interface ProjectService {
     ResponseEntity<?> getListStaffForPm(String text) throws Exception;
 
     ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception;
+
+    ResponseEntity<?> getListStaffByProjectId(long projectId) throws Exception;
+
+    ResponseEntity<?> addStaffToProject(List<Long> ids, long projectId) throws Exception;
+
+    ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception;
 }

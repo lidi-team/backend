@@ -168,24 +168,11 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).get();
 
         Execute pm = executeRepository.findPmByProjectId(id);
-        StaffInformation pmResponse = StaffInformation.builder()
-                .id(pm.getUser().getId())
-                .name(pm.getUser().getFullName())
-                .position(pm.getPosition().getName())
-                .department(pm.getUser().getDepartment().getName())
-                .build();
-        List<StaffInformation> staffResponse = new ArrayList<>();
-        List<Execute> staffs = executeRepository.findAllStaffByProjectId(id);
-        staffs.forEach(staff->{
-            staffResponse.add(
-                    StaffInformation.builder()
-                            .id(staff.getUser().getId())
-                            .name(staff.getUser().getFullName())
-                            .department(staff.getUser().getDepartment().getName())
-                            .position(staff.getPosition().getName())
-                            .build()
-            );
-        });
+        Map<String,Object> pmResponse = new HashMap<>();
+        pmResponse.put("id",pm.getUser().getId());
+        pmResponse.put("name",pm.getUser().getFullName());
+        pmResponse.put("position",pm.getPosition().getName());
+        pmResponse.put("Department",pm.getUser().getDepartment().getName());
 
         ProjectDetailResponse response = ProjectDetailResponse.builder()
                 .id(project.getId())
@@ -197,7 +184,6 @@ public class ProjectServiceImpl implements ProjectService {
                 .pm(pmResponse)
                 .weight(project.getWeight())
                 .parentId(project.getParent() == null ? 0 : project.getParent().getId())
-                .staffs(staffResponse)
                 .build();
 
         return ResponseEntity.ok().body(
@@ -346,7 +332,119 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception {
+        Project project = projectRepository.findById(projectId).get();
+        List<Execute> oldStaffs = executeRepository.findAllStaffByProjectId(projectId);
 
-        return null;
+        for (AddStaffToProjectDto dto : dtos) {
+            boolean exist = false;
+            for (Execute oldStaff : oldStaffs) {
+                if (dto.getUserId() == oldStaff.getUser().getId()) {
+                    if(dto.getReviewerId() != oldStaff.getReviewer().getId()){
+                        User reviewer = userRepository.findById(dto.getReviewerId()).get();
+                        oldStaff.setReviewer(reviewer);
+                    }
+                    ProjectPosition position = positionRepository.findById(dto.getPositionId()).get();
+                    oldStaff.setPosition(position);
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                User user = userRepository.findById(dto.getUserId()).get();
+                User reviewer = userRepository.findById(dto.getReviewerId()).get();
+                ProjectPosition position = positionRepository.findById(dto.getPositionId()).get();
+
+                Execute execute = Execute.builder()
+                        .user(user)
+                        .reviewer(reviewer)
+                        .position(position)
+                        .fromDate(project.getFromDate())
+                        .endDate(project.getEndDate())
+                        .isPm(false)
+                        .isDelete(false)
+                        .build();
+                oldStaffs.add(execute);
+            }
+        }
+
+        executeRepository.saveAll(oldStaffs);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .build()
+        );
     }
+
+    @Override
+    public ResponseEntity<?> getListStaffByProjectId(long projectId) throws Exception {
+        List<StaffInformation> responses = new ArrayList<>();
+        List<Execute> staffs = executeRepository.findAllStaffByProjectId(projectId);
+        staffs.forEach(staff->{
+            responses.add(
+                    StaffInformation.builder()
+                            .id(staff.getUser().getId())
+                            .name(staff.getUser().getFullName())
+                            .department(staff.getUser().getDepartment().getId())
+                            .position(staff.getPosition() == null ? 0 : staff.getPosition().getId())
+                            .email(staff.getUser().getEmail())
+                            .reviewerId(staff.getReviewer().getId())
+                            .build()
+            );
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> addStaffToProject(List<Long> ids, long projectId) throws Exception {
+        List<Execute> inserts = new ArrayList<>();
+        List<User> staffs = userRepository.findAllByIdIn(ids);
+
+        Execute pm = executeRepository.findPmByProjectId(projectId);
+
+        staffs.forEach(staff->{
+            inserts.add(
+                    Execute.builder()
+                            .user(staff)
+                            .isDelete(false)
+                            .isPm(false)
+                            .endDate(pm.getEndDate())
+                            .fromDate(pm.getFromDate())
+                            .reviewer(pm.getUser())
+                            .project(pm.getProject())
+                            .build()
+            );
+        });
+
+        executeRepository.saveAll(inserts);
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
+
+        executeRepository.removeStaff(projectId,userId);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .build()
+        );
+    }
+
+
 }
