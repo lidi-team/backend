@@ -446,5 +446,84 @@ public class ProjectServiceImpl implements ProjectService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getListCandidate(long projectId) throws Exception {
+        List<Long> memberIds = userRepository.findMemberProject(projectId);
+        List<User> all = userRepository.findAllByIdNotIn(memberIds);
+        List<MetaDataResponse> responses = new ArrayList<>();
+        all.forEach(user -> {
+            if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_USER"))){
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(user.getId())
+                                .name(user.getFullName())
+                                .build()
+                );
+            }
+        });
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getAllProjectManagePaging(int page, int limit, String sortWith, String type, String text,String token) throws Exception {
+        Page<Project> projects;
+        List<ProjectPagingResponse> list = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
+        if (limit == 0){
+            limit = 10;
+        }
+        if(sortWith.equalsIgnoreCase("status")){
+            sortWith = "close";
+        }
+        if(text == null){
+            text = "";
+        }
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        List<Long> ids = executeRepository.findAllProjectIdByUserId(user.getId());
+
+        if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
+            projects = projectRepository.findAllByNameContainsAndIdIn(text,ids,PageRequest.of(page-1,limit, Sort.by(sortWith)));
+        }else{
+            projects = projectRepository.findAllByCloseAndNameContainsAndIdIn(
+                    !type.equalsIgnoreCase("active"),text,ids,
+                    PageRequest.of(page-1,limit, Sort.by(sortWith)));
+        }
+
+        projects.getContent().forEach(project -> {
+            Execute execute = executeRepository.findPmByProjectId(project.getId());
+            list.add(
+                    ProjectPagingResponse.builder()
+                            .id(project.getId())
+                            .name(project.getName())
+                            .startDate(project.getFromDate())
+                            .endDate(project.getEndDate())
+                            .description(project.getDescription())
+                            .status(project.isClose()? 0 : 1)
+                            .pmId(execute.getUser().getId())
+                            .weight(project.getWeight())
+                            .parentId(project.getParent()==null? 0 : project.getParent().getId())
+                            .build()
+            );
+        });
+        response.put("data", list);
+        response.put("meta", commonUtils.paging(projects,page));
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response).build()
+        );
+    }
+
 
 }

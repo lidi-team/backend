@@ -105,7 +105,7 @@ public class ProjectController {
         }
     }
 
-    @ApiOperation(value = "lấy thông tin của project theo id")
+    @ApiOperation(value = "tao moi project")
     @PostMapping(path = "/create")
     public ResponseEntity<?> createProject(
             @RequestBody() CreateProjectDto projectDto){
@@ -234,5 +234,51 @@ public class ProjectController {
         }
     }
 
+    @ApiOperation(value = "lấy toàn bộ staff cua project")
+    @GetMapping(path = "/{projectId}/candidate")
+    public ResponseEntity<?> getListStaffCanAddToProject(
+            @ApiParam(value = "id cua project")
+            @PathVariable(value = "projectId") long projectId){
+        try {
+            return projectService.getListCandidate(projectId);
+        } catch (Exception e) {
+            logger.error("get list staff failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
+    @ApiOperation(value = "lấy toàn bộ staff cua project")
+    @GetMapping(path = "/manage")
+    public ResponseEntity<?> getListProjectManage(
+            @ApiParam(value = "số thứ tự trang hiện tại")
+            @RequestParam(value = "page") int page,
+            @ApiParam(value = "tổng số item giới hạn trong trang")
+            @RequestParam(value = "limit") int limit,
+            @ApiParam(value = "filter sort theo thứ tự gì")
+            @RequestParam(value = "sortWith") String sortWith,
+            @ApiParam(value = "status của project, null = total")
+            @RequestParam(value = "type") String type,
+            @ApiParam(value = "name của project")
+            @RequestParam(value = "text") String text,
+            @ApiParam(value = "token",required = true)
+            @RequestHeader(name = "Authorization") String token
+    ){
+        try {
+            return projectService.getAllProjectManagePaging(page, limit, sortWith, type, text, token);
+        } catch (Exception e) {
+            logger.error("get list project failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 
 }

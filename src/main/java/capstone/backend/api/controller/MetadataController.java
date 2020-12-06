@@ -19,19 +19,19 @@ public class MetadataController {
 
     private static final Logger logger = LoggerFactory.getLogger(ObjectiveController.class);
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
-    private DepartmentServiceImpl departmentService;
+    private final DepartmentServiceImpl departmentService;
 
-    private ProjectServiceImpl projectService;
+    private final ProjectServiceImpl projectService;
 
-    private ProjectPositionServiceImpl positionService;
+    private final ProjectPositionServiceImpl positionService;
 
-    private CycleServiceImpl cycleService;
+    private final CycleServiceImpl cycleService;
 
-    private EvaluationCriteriaServiceImpl criteriaService;
+    private final EvaluationCriteriaServiceImpl criteriaService;
 
-    private UnitOfKeyResultServiceImpl unitService;
+    private final UnitOfKeyResultServiceImpl unitService;
 
     @ApiOperation(value = "lấy toàn bộ department cho dropdown list")
     @GetMapping(path = "/departments")

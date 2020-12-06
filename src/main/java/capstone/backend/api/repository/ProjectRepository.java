@@ -31,4 +31,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             "and p.isDelete = false ")
     List<Project> findAllParentProject();
 
+    Page<Project> findAllByNameContainsAndIdIn(String text,List<Long> ids,Pageable pageable);
+
+    Page<Project> findAllByCloseAndNameContainsAndIdIn(boolean active,String text,List<Long> ids, Pageable pageable);
+
 }
