@@ -48,7 +48,7 @@ public class UserInforResponse {
                     projectResponses.add(ProjectResponse.builder()
                             .id(execute.getProject().getId())
                             .name(execute.getProject().getName())
-                            .position(execute.getPosition().getName())
+                            .position(execute.getPosition() == null ? null : execute.getPosition().getName())
                             .isPm(execute.isPm()).build());
                 }
             });
