@@ -49,8 +49,13 @@ public class CfrServiceImpl implements CfrService {
         Map<String,Object> superior = new HashMap<>();
         Map<String,Object> inferior = new HashMap<>();
 
-        if(page == 0){
-            page =1;
+        if(page <= 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                            .build()
+            );
         }
         if(limit == 0){
             limit = 10;
@@ -97,11 +102,24 @@ public class CfrServiceImpl implements CfrService {
         Map<String,Object> response = new HashMap<>();
         List<Map<String,Object>> items = new ArrayList<>();
         Page<Cfr> pages;
-        if(page == 0){
-            page =1;
+        if(page <= 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                            .build()
+            );
         }
         if(limit == 0){
             limit = 10;
+        }
+        if(type <1 || type > 3){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                            .build()
+            );
         }
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
