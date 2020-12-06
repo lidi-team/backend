@@ -13,7 +13,7 @@ public interface ReportService {
 
     ResponseEntity<?> getListObjectiveByCycleId(String token, long cycleId,long projectId,int page, int limit) throws Exception;
 
-    ResponseEntity<?> getCheckinDetailByObjectiveId(long id) throws Exception;
+    ResponseEntity<?> getCheckinDetailByObjectiveId(long id,String token) throws Exception;
 
     ResponseEntity<?> getDetailCheckinByCheckinId(long id, String token) throws Exception;
 
