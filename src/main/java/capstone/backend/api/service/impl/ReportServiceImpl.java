@@ -236,7 +236,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getDetailCheckinByCheckinId(long id) throws Exception {
+    public ResponseEntity<?> getDetailCheckinByCheckinId(long id,String token) throws Exception {
         Map<String, Object> response = new HashMap<>();
         Report report = reportRepository.findById(id).orElse(null);
         if (report == null)
@@ -247,7 +247,12 @@ public class ReportServiceImpl implements ReportService {
                             .build()
             );
 
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
         Objective objective = report.getObjective();
+
+
+
         Map<String, Object> objectiveMap = new HashMap<>();
         objectiveMap.put("id", objective.getId());
         objectiveMap.put("progress", objective.getProgress());
@@ -261,6 +266,15 @@ public class ReportServiceImpl implements ReportService {
 
         Chart chart = setListChartByObjectiveId(objective);
 
+        String role = "";
+        if(user.getId() == objective.getExecute().getUser().getId()){
+            role = "user";
+        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
+            role = "reviewer";
+        } else {
+            role = "guest";
+        }
+
         response.put("id", report.getId());
         response.put("progress", report.getProgress());
         response.put("checkinAt", report.getCheckinDate());
@@ -270,6 +284,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("objective", objectiveMap);
         response.put("checkinDetails", reportDetails);
         response.put("chart", chart);
+        response.put("role", role);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
