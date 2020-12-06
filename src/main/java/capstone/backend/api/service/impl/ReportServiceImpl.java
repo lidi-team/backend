@@ -200,10 +200,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getCheckinDetailByObjectiveId(long id) {
+    public ResponseEntity<?> getCheckinDetailByObjectiveId(long id, String token) {
         Map<String, Object> response = new HashMap<>();
         Map<String, Object> checkin = new HashMap<>();
         List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail> details = new ArrayList<>();
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
 
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
@@ -217,6 +220,15 @@ public class ReportServiceImpl implements ReportService {
             details = setListDetailByReportId(report.getId(), keyResultCheckins);
         }
 
+        String role = "";
+        if(user.getId() == objective.getExecute().getUser().getId()){
+            role = "user";
+        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
+            role = "reviewer";
+        } else {
+            role = "guest";
+        }
+
         response.put("id", objective.getId());
         response.put("title", objective.getName());
         response.put("progress", objective.getProgress());
@@ -225,6 +237,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
+        response.put("role", role);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

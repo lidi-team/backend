@@ -100,10 +100,12 @@ public class ReportController {
 
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/objective/{id}")
-    public ResponseEntity<?> getCheckinDetailByObjectiveId(@ApiParam(value = "id của objective hiện tại")
-                                                           @PathVariable(name = "id") long id) {
+    public ResponseEntity<?> getCheckinDetailByObjectiveId(
+            @RequestHeader(value = "Authorization") String token,
+            @ApiParam(value = "id của objective hiện tại")
+            @PathVariable(name = "id") long id) {
         try {
-            return reportService.getCheckinDetailByObjectiveId(id);
+            return reportService.getCheckinDetailByObjectiveId(id,token);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
@@ -145,7 +147,7 @@ public class ReportController {
                                                    @PathVariable(name = "id") long id,
                                                    @RequestHeader(value = "Authorization") String token) {
         try {
-            return reportService.getDetailCheckinByCheckinId(id,token);
+            return reportService.getDetailCheckinByCheckinId(id, token);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
@@ -192,7 +194,7 @@ public class ReportController {
             @ApiParam(value = "id của project hiện tại")
             @RequestParam(name = "projectId") long projectId) {
         try {
-            return reportService.getListObjectiveInferior(userId,cycleId,projectId);
+            return reportService.getListObjectiveInferior(userId, cycleId, projectId);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
