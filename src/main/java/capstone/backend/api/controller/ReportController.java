@@ -142,9 +142,10 @@ public class ReportController {
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getListRequestCheckin(@ApiParam(value = "id của checkin hiện tại")
-                                                   @PathVariable(name = "id") long id) {
+                                                   @PathVariable(name = "id") long id,
+                                                   @RequestHeader(value = "Authorization") String token) {
         try {
-            return reportService.getDetailCheckinByCheckinId(id);
+            return reportService.getDetailCheckinByCheckinId(id,token);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());
