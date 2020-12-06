@@ -49,4 +49,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findRankingStar();
 
     List<User> findAllByIdIn(List<Long> ids);
+
+    @Query(value = "select u.id from User u " +
+            "join Execute e on u.id = e.user.id " +
+            "where e.project.id = :projectId " +
+            "and e.isDelete = false")
+    List<Long> findMemberProject(long projectId);
+
+    List<User> findAllByIdNotIn(List<Long> ids);
 }

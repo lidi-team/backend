@@ -32,4 +32,8 @@ public interface ProjectService {
     ResponseEntity<?> addStaffToProject(List<Long> ids, long projectId) throws Exception;
 
     ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception;
+
+    ResponseEntity<?> getListCandidate(long projectId) throws Exception;
+
+    ResponseEntity<?> getAllProjectManagePaging(int page, int limit, String sortWith, String type,String text,String token) throws Exception;
 }

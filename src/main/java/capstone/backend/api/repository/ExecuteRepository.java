@@ -81,4 +81,12 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     @Modifying
     @Query(value = "update Execute e set e.isDelete = true where e.user.id = :userId and e.project.id = :projectId")
     void removeStaff(long projectId, long userId);
+
+    @Query(value = "select e.user.id from Execute e " +
+            "where e.user.id = :id " +
+            "and e.isPm = true " +
+            "and e.isDelete = false ")
+    List<Long> findAllProjectIdByUserId(long id);
+
+
 }
