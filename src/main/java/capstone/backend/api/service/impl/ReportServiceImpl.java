@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -144,10 +145,10 @@ public class ReportServiceImpl implements ReportService {
         }
 
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Tạo check-in thành công!")
                         .build()
         );
     }
@@ -220,14 +221,7 @@ public class ReportServiceImpl implements ReportService {
             details = setListDetailByReportId(report.getId(), keyResultCheckins);
         }
 
-        String role = "";
-        if(user.getId() == objective.getExecute().getUser().getId()){
-            role = "user";
-        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
-            role = "reviewer";
-        } else {
-            role = "guest";
-        }
+        boolean isAuthor = (user.getId() == objective.getExecute().getUser().getId());
 
         response.put("id", objective.getId());
         response.put("title", objective.getName());
@@ -237,7 +231,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
-        response.put("role", role);
+        response.put("isAuthor", isAuthor);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
