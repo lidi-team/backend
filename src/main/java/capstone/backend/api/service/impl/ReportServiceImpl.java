@@ -307,15 +307,25 @@ public class ReportServiceImpl implements ReportService {
         Map<String, Object> response = new HashMap<>();
         List<Map<String, Object>> items = new ArrayList<>();
 
-        if (limit == 0) {
+        if (limit <= 0) {
             limit = 10;
         }
         if (page == 0) {
             page = 1;
         }
 
+        Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
+        if (cycle== null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
+
 
         Page<Report> reports = reportRepository.findByReviewerAndStatusAndCycle(
                 user.getId(), "Pending", cycleId,
