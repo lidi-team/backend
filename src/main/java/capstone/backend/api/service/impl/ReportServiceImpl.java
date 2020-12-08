@@ -282,16 +282,21 @@ public class ReportServiceImpl implements ReportService {
             role = "guest";
         }
 
-        response.put("id", report.getId());
+        Map<String,Object> checkin = new HashMap<>();
+
+        checkin.put("id", report.getId());
+        checkin.put("checkinAt", report.getCheckinDate());
+        checkin.put("nextCheckinDate", report.getNextCheckinDate());
+        checkin.put("status", report.getStatus());
+
         response.put("progress", report.getProgress());
-        response.put("checkinAt", report.getCheckinDate());
-        response.put("nextCheckinDate", report.getNextCheckinDate());
-        response.put("status", report.getStatus());
         response.put("teamLeaderId", report.getAuthorizedUser().getId());
         response.put("objective", objectiveMap);
         response.put("checkinDetail", reportDetails);
         response.put("chart", chart);
         response.put("role", role);
+        response.put("checkin",checkin);
+
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
