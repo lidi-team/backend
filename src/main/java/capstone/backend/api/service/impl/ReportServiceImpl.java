@@ -289,7 +289,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("status", report.getStatus());
         response.put("teamLeaderId", report.getAuthorizedUser().getId());
         response.put("objective", objectiveMap);
-        response.put("checkinDetails", reportDetails);
+        response.put("checkinDetail", reportDetails);
         response.put("chart", chart);
         response.put("role", role);
 
