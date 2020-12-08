@@ -250,4 +250,22 @@ public class ObjectiveController {
         }
     }
 
+    @ApiOperation(value = "Danh sách objective cua user")
+    @GetMapping(path = "/meta-data")
+    public ResponseEntity<?> getListMetaDataObjectiveByUserId(
+            @ApiParam(value = "Id của user",required = true)
+            @RequestParam(value = "userId") long userId) {
+        try {
+            return objectiveService.getListMetaDataOfUser(userId);
+        } catch (Exception e) {
+            logger.error("get list objectives failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

@@ -681,6 +681,31 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception {
+
+        List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
+
+        List<MetaDataResponse> responses = new ArrayList<>();
+
+        objectives.forEach(objective -> {
+            responses.add(
+                    MetaDataResponse.builder()
+                            .id(objective.getId())
+                            .name(objective.getName())
+                            .build()
+            );
+        });
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
+                        .build()
+        );
+    }
+
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty();
     }

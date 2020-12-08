@@ -30,4 +30,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getAlignObjectiveById(long id) throws Exception;
 
     ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
+
+    ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception;
 }
