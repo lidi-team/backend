@@ -452,6 +452,54 @@ public class ReportServiceImpl implements ReportService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getDetailCheckinFeedbackByCheckinId(long id) {
+        Map<String,Object> response = new HashMap<>();
+
+        Report report = reportRepository.findById(id).get();
+
+        List<ReportDetail> details = detailRepository.findAllByReportId(id);
+
+        Objective objective = report.getObjective();
+        Map<String,Object> objectMap = new HashMap<>();
+        Map<String,Object> userMap = new HashMap<>();
+        objectMap.put("title",objective.getName());
+        userMap.put("fullName",objective.getExecute().getUser().getFullName());
+        objectMap.put("user",userMap);
+
+
+        List<Map<String,Object>> checkinDetails = new ArrayList<>();
+        details.forEach(detail -> {
+            Map<String,Object> keyresult = new HashMap<>();
+            keyresult.put("targetValue",detail.getKeyResult().getToValue());
+            keyresult.put("content",detail.getKeyResult().getContent());
+
+            Map<String,Object> checkin = new HashMap<>();
+            checkin.put("valueObtained",detail.getValueObtained());
+            checkin.put("confidentLevel",detail.getConfidentLevel());
+            checkin.put("progress",detail.getProgress());
+            checkin.put("problems",detail.getProblems());
+            checkin.put("plans",detail.getPlans());
+            checkin.put("keyResult",keyresult);
+
+            checkinDetails.add(checkin);
+        });
+
+        response.put("id",report.getId());
+        response.put("checkinAt",report.getCheckinDate());
+        response.put("objective",objectMap);
+        response.put("checkinDetails",checkinDetails);
+
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
     private void setObjectiveResponse(List<ObjectiveCheckin> objectivesResponse, List<Objective> objectives) {
         objectives.forEach(objective -> {
             List<Map<String, Object>> keyResultResponses = new ArrayList<>();

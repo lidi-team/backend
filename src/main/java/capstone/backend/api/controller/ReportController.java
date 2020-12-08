@@ -206,4 +206,22 @@ public class ReportController {
         }
     }
 
+    @ApiOperation(value = "chi tiet check in")
+    @GetMapping(path = "/list-waiting-feedback/{id}")
+    public ResponseEntity<?> getListWaitingFeedbackByCheckinId(
+            @ApiParam(value = "id của project hiện tại")
+            @PathVariable(name = "id") long id) {
+        try {
+            return reportService.getDetailCheckinFeedbackByCheckinId(id);
+        } catch (Exception e) {
+            logger.error("get list objective checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }
