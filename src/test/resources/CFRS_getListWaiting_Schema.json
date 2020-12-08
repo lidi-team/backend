@@ -1,0 +1,413 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "integer"
+    },
+    "message": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "superior": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "checkins": {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    },
+                    "currentPage": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["totalItems", "totalPages", "currentPage"]
+                },
+                "items": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    }
+                  ]
+                }
+              },
+              "required": ["meta", "items"]
+            }
+          },
+          "required": ["type", "checkins"]
+        },
+        "inferior": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string"
+            },
+            "checkins": {
+              "type": "object",
+              "properties": {
+                "meta": {
+                  "type": "object",
+                  "properties": {
+                    "totalItems": {
+                      "type": "integer"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    },
+                    "currentPage": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": ["totalItems", "totalPages", "currentPage"]
+                },
+                "items": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "checkinAt": {
+                          "type": "string"
+                        },
+                        "reviewer": {
+                          "type": "object",
+                          "properties": {
+                            "avatarUrl": {
+                              "type": "string"
+                            },
+                            "fullName": {
+                              "type": "string"
+                            },
+                            "id": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": ["avatarUrl", "fullName", "id"]
+                        },
+                        "objective": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "integer"
+                            },
+                            "title": {
+                              "type": "string"
+                            },
+                            "user": {
+                              "type": "object",
+                              "properties": {
+                                "avatarUrl": {
+                                  "type": "string"
+                                },
+                                "fullName": {
+                                  "type": "string"
+                                },
+                                "id": {
+                                  "type": "integer"
+                                }
+                              },
+                              "required": ["avatarUrl", "fullName", "id"]
+                            }
+                          },
+                          "required": ["id", "title", "user"]
+                        }
+                      },
+                      "required": ["id", "checkinAt", "reviewer", "objective"]
+                    }
+                  ]
+                }
+              },
+              "required": ["meta", "items"]
+            }
+          },
+          "required": ["type", "checkins"]
+        }
+      },
+      "required": ["superior", "inferior"]
+    }
+  },
+  "required": ["code", "message", "data"]
+}

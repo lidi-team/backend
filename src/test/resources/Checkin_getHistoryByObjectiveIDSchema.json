@@ -1,0 +1,237 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "checkinAt": {
+                "type": "string"
+              },
+              "nextCheckinDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "teamLeaderId": {
+                "type": "integer"
+              },
+              "objective": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "checkinAt",
+              "nextCheckinDate",
+              "status",
+              "teamLeaderId",
+              "objective"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "checkinAt": {
+                "type": "string"
+              },
+              "nextCheckinDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "teamLeaderId": {
+                "type": "integer"
+              },
+              "objective": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "checkinAt",
+              "nextCheckinDate",
+              "status",
+              "teamLeaderId",
+              "objective"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "checkinAt": {
+                "type": "string"
+              },
+              "nextCheckinDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "teamLeaderId": {
+                "type": "integer"
+              },
+              "objective": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "checkinAt",
+              "nextCheckinDate",
+              "status",
+              "teamLeaderId",
+              "objective"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "checkinAt": {
+                "type": "string"
+              },
+              "nextCheckinDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "teamLeaderId": {
+                "type": "integer"
+              },
+              "objective": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "checkinAt",
+              "nextCheckinDate",
+              "status",
+              "teamLeaderId",
+              "objective"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "checkinAt": {
+                "type": "string"
+              },
+              "nextCheckinDate": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "teamLeaderId": {
+                "type": "integer"
+              },
+              "objective": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "name"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "checkinAt",
+              "nextCheckinDate",
+              "status",
+              "teamLeaderId",
+              "objective"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

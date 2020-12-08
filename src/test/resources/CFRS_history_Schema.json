@@ -1,0 +1,514 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "totalItems": {
+                "type": "integer"
+              },
+              "totalPages": {
+                "type": "integer"
+              },
+              "currentPage": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "totalItems",
+              "totalPages",
+              "currentPage"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "checkin": {
+                    "type": "null"
+                  },
+                  "receiver": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "sender": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "evaluationCriteria": {
+                    "type": "object",
+                    "properties": {
+                      "numberOfStar": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "numberOfStar",
+                      "id",
+                      "type",
+                      "content"
+                    ]
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "createAt": {
+                    "type": "string"
+                  },
+                  "objective": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "title"
+                    ]
+                  }
+                },
+                "required": [
+                  "checkin",
+                  "receiver",
+                  "sender",
+                  "evaluationCriteria",
+                  "id",
+                  "type",
+                  "content",
+                  "createAt",
+                  "objective"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "checkin": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "objective": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "objective"
+                    ]
+                  },
+                  "receiver": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "sender": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "evaluationCriteria": {
+                    "type": "object",
+                    "properties": {
+                      "numberOfStar": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "numberOfStar",
+                      "id",
+                      "type",
+                      "content"
+                    ]
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "createAt": {
+                    "type": "string"
+                  },
+                  "objective": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "checkin",
+                  "receiver",
+                  "sender",
+                  "evaluationCriteria",
+                  "id",
+                  "type",
+                  "content",
+                  "createAt",
+                  "objective"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "checkin": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "objective": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "objective"
+                    ]
+                  },
+                  "receiver": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "sender": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "evaluationCriteria": {
+                    "type": "object",
+                    "properties": {
+                      "numberOfStar": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "numberOfStar",
+                      "id",
+                      "type",
+                      "content"
+                    ]
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "createAt": {
+                    "type": "string"
+                  },
+                  "objective": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "checkin",
+                  "receiver",
+                  "sender",
+                  "evaluationCriteria",
+                  "id",
+                  "type",
+                  "content",
+                  "createAt",
+                  "objective"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "checkin": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "objective": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "title"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "objective"
+                    ]
+                  },
+                  "receiver": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "sender": {
+                    "type": "object",
+                    "properties": {
+                      "avatarUrl": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "id": {
+                        "type": "integer"
+                      }
+                    },
+                    "required": [
+                      "avatarUrl",
+                      "fullName",
+                      "id"
+                    ]
+                  },
+                  "evaluationCriteria": {
+                    "type": "object",
+                    "properties": {
+                      "numberOfStar": {
+                        "type": "integer"
+                      },
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "numberOfStar",
+                      "id",
+                      "type",
+                      "content"
+                    ]
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "type": {
+                    "type": "string"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "createAt": {
+                    "type": "string"
+                  },
+                  "objective": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "checkin",
+                  "receiver",
+                  "sender",
+                  "evaluationCriteria",
+                  "id",
+                  "type",
+                  "content",
+                  "createAt",
+                  "objective"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "meta",
+          "items"
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

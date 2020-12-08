@@ -1,0 +1,611 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "array",
+        "items": [
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "position": {
+                "type": "integer"
+              },
+              "department": {
+                "type": "integer"
+              },
+              "reviewerId": {
+                "type": "integer"
+              },
+              "email": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "position",
+              "department",
+              "reviewerId",
+              "email"
+            ]
+          }
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

@@ -1,0 +1,291 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "nextCheckinDate": {
+            "type": "string"
+          },
+          "teamLeaderId": {
+            "type": "integer"
+          },
+          "checkinDetails": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "confidentLevel": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "string"
+                  },
+                  "problems": {
+                    "type": "string"
+                  },
+                  "plans": {
+                    "type": "string"
+                  },
+                  "keyResult": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "valueObtained": {
+                        "type": "number"
+                      },
+                      "targetedValue": {
+                        "type": "number"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "valueObtained",
+                      "targetedValue",
+                      "content"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "valueObtained",
+                  "confidentLevel",
+                  "progress",
+                  "problems",
+                  "plans",
+                  "keyResult"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "confidentLevel": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "string"
+                  },
+                  "problems": {
+                    "type": "string"
+                  },
+                  "plans": {
+                    "type": "string"
+                  },
+                  "keyResult": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "valueObtained": {
+                        "type": "number"
+                      },
+                      "targetedValue": {
+                        "type": "number"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "valueObtained",
+                      "targetedValue",
+                      "content"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "valueObtained",
+                  "confidentLevel",
+                  "progress",
+                  "problems",
+                  "plans",
+                  "keyResult"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "confidentLevel": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "string"
+                  },
+                  "problems": {
+                    "type": "string"
+                  },
+                  "plans": {
+                    "type": "string"
+                  },
+                  "keyResult": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "valueObtained": {
+                        "type": "number"
+                      },
+                      "targetedValue": {
+                        "type": "number"
+                      },
+                      "content": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "valueObtained",
+                      "targetedValue",
+                      "content"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "valueObtained",
+                  "confidentLevel",
+                  "progress",
+                  "problems",
+                  "plans",
+                  "keyResult"
+                ]
+              }
+            ]
+          },
+          "progress": {
+            "type": "number"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "checkinAt": {
+            "type": "string"
+          },
+          "chart": {
+            "type": "object",
+            "properties": {
+              "progress": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "checkinAt": {
+                "type": "array",
+                "items": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "progress",
+              "checkinAt"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "objective": {
+            "type": "object",
+            "properties": {
+              "progress": {
+                "type": "number"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "userId": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "progress",
+              "id",
+              "title",
+              "userId"
+            ]
+          }
+        },
+        "required": [
+          "role",
+          "nextCheckinDate",
+          "teamLeaderId",
+          "checkinDetails",
+          "progress",
+          "id",
+          "checkinAt",
+          "chart",
+          "status",
+          "objective"
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

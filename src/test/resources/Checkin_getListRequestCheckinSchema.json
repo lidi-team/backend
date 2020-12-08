@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "totalItems": {
+                "type": "integer"
+              },
+              "totalPages": {
+                "type": "integer"
+              },
+              "currentPage": {
+                "type": "integer"
+              }
+            },
+            "required": [
+              "totalItems",
+              "totalPages",
+              "currentPage"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "project": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "name"
+                    ]
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "objective": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "fullName": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "fullName"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "title",
+                      "user"
+                    ]
+                  }
+                },
+                "required": [
+                  "createdAt",
+                  "project",
+                  "id",
+                  "objective"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "meta",
+          "items"
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

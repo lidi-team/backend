@@ -1,0 +1,221 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          },
+          "progress": {
+            "type": "number"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          },
+          "project": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          },
+          "parentObjective": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "name"
+            ]
+          },
+          "childObjectives": {
+            "type": "array",
+            "items": {}
+          },
+          "alignmentObjectives": {
+            "type": "array",
+            "items": {}
+          },
+          "keyResults": {
+            "type": "array",
+            "items": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "startValue": {
+                    "type": "number"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "targetedValue": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "number"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "measureUnitId": {
+                    "type": "integer"
+                  },
+                  "reference": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "id",
+                  "startValue",
+                  "valueObtained",
+                  "targetedValue",
+                  "progress",
+                  "content",
+                  "measureUnitId",
+                  "reference"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "startValue": {
+                    "type": "number"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "targetedValue": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "number"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "measureUnitId": {
+                    "type": "integer"
+                  },
+                  "reference": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "id",
+                  "startValue",
+                  "valueObtained",
+                  "targetedValue",
+                  "progress",
+                  "content",
+                  "measureUnitId",
+                  "reference"
+                ]
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "startValue": {
+                    "type": "number"
+                  },
+                  "valueObtained": {
+                    "type": "number"
+                  },
+                  "targetedValue": {
+                    "type": "number"
+                  },
+                  "progress": {
+                    "type": "number"
+                  },
+                  "content": {
+                    "type": "string"
+                  },
+                  "measureUnitId": {
+                    "type": "integer"
+                  },
+                  "reference": {
+                    "type": "null"
+                  }
+                },
+                "required": [
+                  "id",
+                  "startValue",
+                  "valueObtained",
+                  "targetedValue",
+                  "progress",
+                  "content",
+                  "measureUnitId",
+                  "reference"
+                ]
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "weight",
+          "progress",
+          "user",
+          "project",
+          "parentObjective",
+          "childObjectives",
+          "alignmentObjectives",
+          "keyResults"
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }

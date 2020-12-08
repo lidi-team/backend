@@ -1,0 +1,80 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+      "code": {
+        "type": "integer"
+      },
+      "message": {
+        "type": "string"
+      },
+      "data": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "endDate": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "description": {
+            "type": "string"
+          },
+          "pm": {
+            "type": "object",
+            "properties": {
+              "Department": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "id": {
+                "type": "integer"
+              },
+              "position": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "Department",
+              "name",
+              "id",
+              "position"
+            ]
+          },
+          "weight": {
+            "type": "integer"
+          },
+          "parentId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "startDate",
+          "endDate",
+          "status",
+          "description",
+          "pm",
+          "weight",
+          "parentId"
+        ]
+      }
+    },
+    "required": [
+      "code",
+      "message",
+      "data"
+    ]
+  }
