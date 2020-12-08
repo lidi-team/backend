@@ -39,6 +39,8 @@ public class CfrServiceImpl implements CfrService {
 
     private final EvaluationCriteriaRepository criteriaRepository;
 
+    private final CycleRepository cycleRepository;
+
     private final JwtUtils jwtUtils;
 
     private final CommonUtils commonUtils;
@@ -119,6 +121,15 @@ public class CfrServiceImpl implements CfrService {
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
                             .build()
+            );
+        }
+
+        Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
+        if (cycle== null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
         }
 

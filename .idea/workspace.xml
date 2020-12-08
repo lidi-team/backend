@@ -39,9 +39,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="update chuyên nghiệp">
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="fix checkin/checkin_request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/ReportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/CfrServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/CfrServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,7 +247,7 @@
       <workItem from="1607397602575" duration="685000" />
       <workItem from="1607409448095" duration="1828000" />
       <workItem from="1607411294082" duration="10562000" />
-      <workItem from="1607434342822" duration="3483000" />
+      <workItem from="1607434342822" duration="6511000" />
     </task>
     <task id="LOCAL-00001" summary="User API">
       <created>1603196899661</created>
@@ -284,7 +284,14 @@
       <option name="project" value="LOCAL" />
       <updated>1605727923416</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="fix checkin/checkin_request">
+      <created>1607439556713</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1607439556714</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,6 +316,7 @@
     <MESSAGE value="Thêm chút đồng bộ,&#10;Thêm chút chuyên nghiệp,&#10;Thêm nhiều warning,&#10;Add more bug," />
     <MESSAGE value="Add more bug," />
     <MESSAGE value="update chuyên nghiệp" />
-    <option name="LAST_COMMIT_MESSAGE" value="update chuyên nghiệp" />
+    <MESSAGE value="fix checkin/checkin_request" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix checkin/checkin_request" />
   </component>
 </project>
