@@ -223,15 +223,30 @@ public class ReportServiceImpl implements ReportService {
 
         boolean isAuthor = (user.getId() == objective.getExecute().getUser().getId());
 
-        response.put("id", objective.getId());
-        response.put("title", objective.getName());
-        response.put("progress", objective.getProgress());
-        response.put("progressSuggest", setProgressSuggest(objective));
+        String role = "";
+        if(user.getId() == objective.getExecute().getUser().getId()){
+            role = "user";
+        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
+            role = "reviewer";
+        } else {
+            role = "guest";
+        }
+
+        Map<String, Object> objectiveMap = new HashMap<>();
+        objectiveMap.put("id", objective.getId());
+        objectiveMap.put("progress", objective.getProgress());
+        objectiveMap.put("title", objective.getName());
+        objectiveMap.put("userId", objective.getExecute().getUser().getId());
+        objectiveMap.put("progressSuggest", setProgressSuggest(objective));
+
         response.put("keyResults", keyResultCheckins);
+        response.put("teamLeaderId", report.getAuthorizedUser().getId());
+        response.put("objective",objectiveMap);
         response.put("chart", chart);
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
         response.put("isAuthor", isAuthor);
+        response.put("role", role);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -265,7 +280,7 @@ public class ReportServiceImpl implements ReportService {
         objectiveMap.put("progress", objective.getProgress());
         objectiveMap.put("title", objective.getName());
         objectiveMap.put("userId", objective.getExecute().getUser().getId());
-
+        objectiveMap.put("progressSuggest", 0);
         List<KeyResultCheckin> keyResultCheckins = setListKeyResultCheckin(objective.getId());
 
         List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail>
@@ -273,6 +288,7 @@ public class ReportServiceImpl implements ReportService {
 
         Chart chart = setListChartByObjectiveId(objective);
 
+        boolean isAuthor = (user.getId() == objective.getExecute().getUser().getId());
         String role = "";
         if(user.getId() == objective.getExecute().getUser().getId()){
             role = "user";
@@ -289,6 +305,7 @@ public class ReportServiceImpl implements ReportService {
         checkin.put("nextCheckinDate", report.getNextCheckinDate());
         checkin.put("status", report.getStatus());
 
+        response.put("keyResults", new ArrayList<>());
         response.put("progress", report.getProgress());
         response.put("teamLeaderId", report.getAuthorizedUser().getId());
         response.put("objective", objectiveMap);
@@ -296,7 +313,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("role", role);
         response.put("checkin",checkin);
-
+        response.put("isAuthor", isAuthor);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
