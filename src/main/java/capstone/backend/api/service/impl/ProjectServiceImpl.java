@@ -450,15 +450,15 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getListCandidate(long projectId) throws Exception {
         List<Long> memberIds = userRepository.findMemberProject(projectId);
         List<User> all = userRepository.findAllByIdNotIn(memberIds);
-        List<MetaDataResponse> responses = new ArrayList<>();
+        List<Map<String,Object>> responses = new ArrayList<>();
         all.forEach(user -> {
             if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_USER"))){
-                responses.add(
-                        MetaDataResponse.builder()
-                                .id(user.getId())
-                                .name(user.getFullName())
-                                .build()
-                );
+                Map<String,Object> candidate = new HashMap<>();
+                candidate.put("id",user.getId());
+                candidate.put("name",user.getFullName());
+                candidate.put("email",user.getEmail());
+
+                responses.add(candidate);
             }
         });
         return ResponseEntity.ok().body(
