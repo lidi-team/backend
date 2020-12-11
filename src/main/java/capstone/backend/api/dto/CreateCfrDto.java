@@ -15,5 +15,4 @@ public class CreateCfrDto {
     private long objectiveId;
     private long checkinId;
     private long receiverId;
-    private long senderId;
 }

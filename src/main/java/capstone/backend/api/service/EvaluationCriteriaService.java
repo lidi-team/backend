@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EvaluationCriteriaService {
 
-    ResponseEntity<?> getListMetaDataEvaluation() throws Exception;
+    ResponseEntity<?> getListMetaDataEvaluation(String type) throws Exception;
 }

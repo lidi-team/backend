@@ -15,5 +15,5 @@ public interface CfrService {
 
     ResponseEntity<?> getDetailCfr(long id) throws Exception;
 
-    ResponseEntity<?> createCfr(CreateCfrDto dto) throws Exception;
+    ResponseEntity<?> createCfr(CreateCfrDto dto, String token) throws Exception;
 }

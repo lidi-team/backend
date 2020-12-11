@@ -88,5 +88,7 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "and e.isDelete = false ")
     List<Long> findAllProjectIdByUserId(long id);
 
+    Execute findFirstByProjectIsNull();
+
 
 }

@@ -7,6 +7,7 @@ import capstone.backend.api.entity.EvaluationCriteria;
 import capstone.backend.api.repository.EvaluationCriteriaRepository;
 import capstone.backend.api.service.EvaluationCriteriaService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,16 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
     private CommonProperties commonProperties;
 
     @Override
-    public ResponseEntity<?> getListMetaDataEvaluation() throws Exception {
-        List<EvaluationCriteria> criterias = evaluationRepository.findAll();
+    public ResponseEntity<?> getListMetaDataEvaluation(String type) throws Exception {
+        if(!type.equalsIgnoreCase("leader_to_member") && !type.equalsIgnoreCase("member_to_leader")){
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .message("type is leader_to_member or member_to_leader only")
+                            .build()
+            );
+        }
+        List<EvaluationCriteria> criterias = evaluationRepository.findEvaluationCriteriaByType(type);
 
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
         criterias.forEach(criteria -> {

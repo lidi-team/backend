@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -306,13 +307,14 @@ public class CfrServiceImpl implements CfrService {
     }
 
     @Override
-    public ResponseEntity<?> createCfr(CreateCfrDto dto) throws Exception {
+    public ResponseEntity<?> createCfr(CreateCfrDto dto,String token) throws Exception {
 
         EvaluationCriteria eva = criteriaRepository.findById(dto.getEvaluationCriteriaId()).get();
 
-        User sender = userRepository.findById(dto.getSenderId()).get();
-
         User receiver = userRepository.findById(dto.getReceiverId()).get();
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User sender = userRepository.findByEmail(email).get();
 
         Objective objective = null;
         Report report = null;
@@ -322,14 +324,25 @@ public class CfrServiceImpl implements CfrService {
         }
         if(dto.getCheckinId() != 0) {
             report = reportRepository.findById(dto.getCheckinId()).orElse(null);
-            if(report != null){
-                if (eva.getType().equalsIgnoreCase("leader_to_member")) {
-                    report.setLeaderFeedback(true);
-                } else {
-                    report.setStaffFeedback(true);
-                }
-                reportRepository.save(report);
+
+        }
+        if((objective == null && eva.getType().equalsIgnoreCase("recognition"))
+            || (report == null && !eva.getType().equalsIgnoreCase("recognition"))){
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message("Nếu type là recognition thì objective ko được null, nếu type khác recognition thì report ko được null")
+                            .build()
+            );
+        }
+
+        if(report != null){
+            if (eva.getType().equalsIgnoreCase("leader_to_member")) {
+                report.setLeaderFeedback(true);
+            } else {
+                report.setStaffFeedback(true);
             }
+            reportRepository.save(report);
         }
 
         Cfr cfr = Cfr.builder()

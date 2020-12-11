@@ -61,7 +61,14 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
-        Execute execute = executeService.getExecuteByUserIdAndProjectId(user.getId(), objectvieDto.getProjectId());
+        Execute execute;
+        if(objectvieDto.getType() == 0){
+            execute = executeService.findDirectorExecute();
+
+        } else {
+            execute = executeService.getExecuteByUserIdAndProjectId(user.getId(), objectvieDto.getProjectId());
+        }
+
         String alignmentObjectives = commonUtils.arrayToString(objectvieDto.getAlignmentObjectives());
         Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
 
