@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface EvaluationCriteriaService {
 
-    ResponseEntity<?> getListMetaDataEvaluation() throws Exception;
+    ResponseEntity<?> getListMetaDataEvaluation(String type) throws Exception;
 
     ResponseEntity<?> getAllEvaluation(int page, int limit, String text, String jwtToken) throws Exception;
 

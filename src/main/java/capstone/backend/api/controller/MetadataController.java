@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -99,9 +100,9 @@ public class MetadataController {
 
     @ApiOperation(value = "lấy toàn bộ criteria cho dropdown list")
     @GetMapping(path = "/evaluationCriteria")
-    public ResponseEntity<?> getListMetaDataEvaluationCriteria() {
+    public ResponseEntity<?> getListMetaDataEvaluationCriteria(@RequestParam(value = "type") String type) {
         try {
-            return criteriaService.getListMetaDataEvaluation();
+            return criteriaService.getListMetaDataEvaluation(type);
         } catch (Exception e) {
             logger.error("get meta data evaluation criteria failed");
             logger.error(e.getMessage());

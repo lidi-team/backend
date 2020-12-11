@@ -112,10 +112,11 @@ public class CFRsController {
     @ApiOperation(value = "tao moi cfr")
     @PostMapping(path = "")
     public ResponseEntity<?> createCfr(
-            @RequestBody() CreateCfrDto dto
+            @RequestBody() CreateCfrDto dto,
+            @RequestHeader(value = "Authorization") String token
     ) {
         try {
-            return cfrService.createCfr(dto);
+            return cfrService.createCfr(dto, token);
         } catch (Exception e) {
             logger.error("create");
             logger.error(e.getMessage());

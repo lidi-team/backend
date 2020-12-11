@@ -24,4 +24,10 @@ public class ExecuteServiceImpl implements ExecuteService {
     public Execute getExecuteByUserIdAndProjectId(long userId, long projectId) throws Exception {
         return executeRepository.findByUserIdAndProjectId(userId, projectId).orElse(null);
     }
+
+    public Execute findDirectorExecute(){
+        return executeRepository.findFirstByProjectIsNull() == null ?
+                executeRepository.findById(1l).get()
+                : executeRepository.findFirstByProjectIsNull();
+    }
 }
