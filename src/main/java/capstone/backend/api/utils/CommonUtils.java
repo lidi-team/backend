@@ -79,8 +79,13 @@ public class CommonUtils {
 
     public String arrayToString(List<Long> longArray) {
         StringBuilder string = new StringBuilder(",");
+        if(longArray == null || longArray.size() == 0){
+            return string.toString();
+        }
         for (Long along : longArray) {
-            string.append(along).append(",");
+            if(along != null) {
+                string.append(along).append(",");
+            }
         }
         return string.toString();
     }

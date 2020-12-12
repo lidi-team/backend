@@ -694,6 +694,14 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         List<Objective> objectives = objectiveRepository.findAllByUserId(userId);
 
+        for (int i = 0; i < objectives.size(); i++) {
+            if(reportRepository.findAllByObjectiveId(objectives.get(i).getId()).size() == 0){
+                objectives.remove(objectives.get(i));
+                i--;
+            }
+
+        }
+
         List<MetaDataResponse> responses = new ArrayList<>();
 
         objectives.forEach(objective -> {
