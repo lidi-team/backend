@@ -43,6 +43,12 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "and e.isPm = true")
     Execute findPmByProjectId(@Param(value = "id") long id);
 
+    @Query(value = "select e from Execute e " +
+            "join Project p on e.project.id = p.id " +
+            "where e.project.id = :id " +
+            "and e.isPm = true")
+    Execute findPmAllByProjectId(@Param(value = "id") long id);
+
 
     @Query(value = "select e from Execute e " +
             "join Project p on e.project.id = p.id " +
