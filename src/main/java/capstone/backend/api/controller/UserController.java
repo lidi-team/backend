@@ -60,9 +60,9 @@ public class UserController {
         } catch (Exception e) {
             logger.error("change password failed for user: ");
             logger.error(e.getMessage());
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }
@@ -204,8 +204,8 @@ public class UserController {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message("Ngu Controller").build()
+                            .code(commonProperties.getCODE_UPDATE_SUCCESS())
+                            .message("Không thể cập nhật thông tin tài khoản").build()
             );
         }
     }
@@ -265,7 +265,7 @@ public class UserController {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }

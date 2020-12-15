@@ -120,9 +120,9 @@ public class CFRsController {
         } catch (Exception e) {
             logger.error("create");
             logger.error(e.getMessage());
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }

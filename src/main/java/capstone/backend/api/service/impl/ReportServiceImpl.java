@@ -145,9 +145,9 @@ public class ReportServiceImpl implements ReportService {
         }
 
 
-        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message("Tạo check-in thành công!")
                         .build()
         );
@@ -221,8 +221,6 @@ public class ReportServiceImpl implements ReportService {
             details = setListDetailByReportId(report.getId(), keyResultCheckins);
         }
 
-        boolean isAuthor = (user.getId() == objective.getExecute().getUser().getId());
-
         String role = "";
         if(user.getId() == objective.getExecute().getUser().getId()){
             role = "user";
@@ -245,7 +243,6 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
-        response.put("isAuthor", isAuthor);
         response.put("role", role);
 
         return ResponseEntity.ok().body(
@@ -288,7 +285,6 @@ public class ReportServiceImpl implements ReportService {
 
         Chart chart = setListChartByObjectiveId(objective);
 
-        boolean isAuthor = (user.getId() == objective.getExecute().getUser().getId());
         String role = "";
         if(user.getId() == objective.getExecute().getUser().getId()){
             role = "user";
@@ -313,7 +309,6 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("role", role);
         response.put("checkin",checkin);
-        response.put("isAuthor", isAuthor);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

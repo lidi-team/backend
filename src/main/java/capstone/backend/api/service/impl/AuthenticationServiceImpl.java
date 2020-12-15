@@ -44,9 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
                 || StringUtils.isEmpty(userLoginDto.getPassword().trim())) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
@@ -54,9 +54,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!user.isActive() || user.isDelete()) {
             logger.error("Account locked!");
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Tài khoản bị khóa!").build()
             );
         }
@@ -64,9 +64,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword(), authenticationManager);
 
         logger.info("authenticate Ok!");
-        return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(tokenResponseInfo).build()
         );
@@ -79,7 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             logger.error("Parameter invalid!");
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
@@ -89,7 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             logger.error("Email is not correct");
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Email này không tồn tại trong hệ thống!").build()
             );
         }
@@ -102,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (Exception ignored) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_TIME_OUT())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Không thể gửi mail!").build()
             );
         }
@@ -113,7 +113,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS()).build()
         );
     }

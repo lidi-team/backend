@@ -139,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projects.getContent().forEach(project -> {
-            Execute execute = executeRepository.findPmAllByProjectId(project.getId());
+            Execute execute = executeRepository.findPmByProjectId(project.getId());
             list.add(
                     ProjectPagingResponse.builder()
                             .id(project.getId())
@@ -289,9 +289,9 @@ public class ProjectServiceImpl implements ProjectService {
             objectiveRepository.updateCompletedObjectiveByExecuteIdIn(executeIds);
         }
 
-        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(project.getId())
                         .build()
@@ -385,9 +385,9 @@ public class ProjectServiceImpl implements ProjectService {
 
         executeRepository.saveAll(oldStaffs);
 
-        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
@@ -443,7 +443,7 @@ public class ProjectServiceImpl implements ProjectService {
         executeRepository.saveAll(inserts);
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
@@ -459,7 +459,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );

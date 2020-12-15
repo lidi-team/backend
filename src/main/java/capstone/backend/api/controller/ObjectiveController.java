@@ -39,9 +39,9 @@ public class ObjectiveController {
             logger.error("add objective failed : " + objectvieDto.getTitle());
             logger.error(e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }
@@ -58,7 +58,7 @@ public class ObjectiveController {
         } catch (Exception e) {
             logger.error("delete objective failed : " + id);
             logger.error(e.getMessage());
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
