@@ -24,9 +24,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class ProjectPositionServiceImpl implements ProjectPositionService {
 
-    private CommonProperties commonProperties;
+    private final CommonProperties commonProperties;
 
-    private ProjectPositionRepository positionRepository;
+    private final ProjectPositionRepository positionRepository;
 
     private final CommonUtils commonUtils;
 
@@ -36,12 +36,14 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
 
         positions.forEach(projectPosition -> {
-            responses.add(
-                    MetaDataResponse.builder()
-                            .id(projectPosition.getId())
-                            .name(projectPosition.getName())
-                            .build()
-            );
+            if(!projectPosition.isDelete()){
+                responses.add(
+                        MetaDataResponse.builder()
+                                .id(projectPosition.getId())
+                                .name(projectPosition.getName())
+                                .build()
+                );
+            }
         });
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

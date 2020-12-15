@@ -124,4 +124,14 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     @Query(value = "select o from Objective o " +
             "where o.id in :list")
     List<Objective> findAllObjectiveByListId(@Param(value = "list") List<Long> list);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update Objective o set o.status = 'Completed' where o.execute.id = :executeId")
+    void updateCompletedObjectiveByExecuteId(@Param(value = "executeId") Long executeId);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update Objective o set o.status = 'Completed' where o.execute.id in :executeIds")
+    void updateCompletedObjectiveByExecuteIdIn(@Param(value = "executeId") List<Long> executeIds);
 }

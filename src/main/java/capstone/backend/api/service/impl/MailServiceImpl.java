@@ -29,9 +29,9 @@ public class MailServiceImpl implements MailService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public void CreateMailVerifyCode(String userEmail, String code) throws MessagingException {
+    public void createMailVerifyCode(String userEmail, String code) throws MessagingException {
         Context context = new Context();
-        context.setVariable("title", "Get new password for your Account at LiDiOKRs");
+        context.setVariable("title", "Mật khẩu mới của bạn tại LiDiOKRs");
         context.setVariable("code", code);
 
         String body = templateEngine.process("getVerificationCodeTempl", context);
@@ -39,7 +39,7 @@ public class MailServiceImpl implements MailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(userEmail);
-        helper.setSubject("Get new password for your Account at LiDiOKRs");
+        helper.setSubject("Mật khẩu mới cho tài khoản của bạn tại LiDiOKRs");
         helper.setText(body, true);
         javaMailSender.send(message);
         logger.info("email sent to email: " + userEmail);
@@ -50,7 +50,7 @@ public class MailServiceImpl implements MailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         map.forEach((user, code) -> {
             Context context = new Context();
-            context.setVariable("title", "Welcome to LiDi OKRs Management System!");
+            context.setVariable("title", "Chào mừng bạn đến với Hệ thống quản trị Mục tiêu - Kết quả then chốt LiDi OKRs!");
             context.setVariable("fullName", user.getFullName());
             context.setVariable("code", code);
 
@@ -58,7 +58,7 @@ public class MailServiceImpl implements MailService {
             try {
                 MimeMessageHelper helper = new MimeMessageHelper(message, true);
                 helper.setTo(user.getEmail());
-                helper.setSubject("Get new password for your Account at LiDiOKRs");
+                helper.setSubject("Mật khẩu mới cho tài khoản của bạn tại LiDiOKRs");
                 helper.setText(body, true);
                 javaMailSender.send(message);
                 logger.info("email sent to email: " + user.getEmail());

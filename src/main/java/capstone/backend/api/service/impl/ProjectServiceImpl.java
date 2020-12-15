@@ -37,6 +37,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ExecuteRepository executeRepository;
 
+    private final ObjectiveRepository objectiveRepository;
+
     private final CommonUtils commonUtils;
 
     private final RoleRepository roleRepository;
@@ -273,6 +275,14 @@ public class ProjectServiceImpl implements ProjectService {
         }
         executeRepository.save(execute);
 
+        if(projectDto.getStatus() == 0){
+            List<Long> executeIds = executeRepository.findAllByProjectId(projectDto.getId());
+
+            executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
+
+            objectiveRepository.updateCompletedObjectiveByExecuteIdIn(executeIds);
+        }
+
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
@@ -437,6 +447,9 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
 
         executeRepository.removeStaff(projectId,userId);
+
+        Execute execute = executeRepository.findByProjectIdAndUserId(projectId,userId);
+        objectiveRepository.updateCompletedObjectiveByExecuteId(execute.getId());
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

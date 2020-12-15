@@ -90,5 +90,15 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     Execute findFirstByProjectIsNull();
 
+    Execute findByProjectIdAndUserId(long projectId, long userId);
+
+    @Query(value = "select e.id from Execute e where e.project.id = :id")
+    List<Long> findAllByProjectId(@Param(value = "id") long id);
+
+    @Transactional
+    @Modifying
+    @Query(value = "update Execute e set e.isDelete = true where e.project.id = :id")
+    void updateAllStatusWhenCloseProject(@Param(value = "id") long id);
+
 
 }
