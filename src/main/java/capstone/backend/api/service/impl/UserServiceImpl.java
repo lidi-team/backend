@@ -93,9 +93,9 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> changePassword(UserChangePasswordDto userPassDto, String jwtToken) throws Exception {
         if (!validateChangePasswordInformation(userPassDto)) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
@@ -103,17 +103,17 @@ public class UserServiceImpl implements UserService {
         String email = jwtUtils.getUserNameFromJwtToken(jwtToken.substring(5));
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
         }
 
         if (!passwordEncoder.matches(userPassDto.getOldPassword(), user.getPassword())) {
             logger.error("Old password is incorrect!");
-            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+            return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
             );
         }
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         logger.info("update successful!");
 
-        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+        return ResponseEntity.status(commonProperties.getCODE_UPDATE_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS()).build()
@@ -440,18 +440,18 @@ public class UserServiceImpl implements UserService {
                 }
             })).start();
 
-            return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_SUCCESS())
+                            .code(commonProperties.getCODE_UPDATE_SUCCESS())
                             .message(commonProperties.getMESSAGE_SUCCESS())
                             .data(failResponse)
                             .build()
             );
         }
 
-        return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
+        return ResponseEntity.badRequest().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_PARAM_FORMAT_INVALID())
+                        .code(commonProperties.getCODE_UPDATE_FAILED())
                         .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
                         .data(failResponse)
                         .build()

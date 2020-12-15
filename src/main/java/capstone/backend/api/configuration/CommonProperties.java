@@ -26,8 +26,8 @@ public class CommonProperties {
     private String MESSAGE_UNDEFINE_ERROR;
     private String MESSAGE_PARAM_FORMAT_INVALID;
     private String MESSAGE_EXIST_VALUE;
-    private int HTTP_SUCCESS;
-    private int HTTP_FAILED;
+    private int CODE_UPDATE_SUCCESS;
+    private int CODE_UPDATE_FAILED;
     private int CODE_SUCCESS;
     private int CODE_BAD_REQUEST;
     private int CODE_AUTH_FAILED;
