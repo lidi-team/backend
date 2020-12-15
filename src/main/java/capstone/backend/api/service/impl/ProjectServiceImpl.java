@@ -139,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projects.getContent().forEach(project -> {
-            Execute execute = executeRepository.findPmByProjectId(project.getId());
+            Execute execute = executeRepository.findPmAllByProjectId(project.getId());
             list.add(
                     ProjectPagingResponse.builder()
                             .id(project.getId())
@@ -200,7 +200,11 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception {
         Role rolePm = roleRepository.findRoleByName("ROLE_PM").get();
         ProjectPosition position = positionRepository.findById(1L).get();
-        Project parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
+        Project parentProject = null;
+        if(projectDto.getParentId() != 0){
+            parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
+        }
+
 
         String fromDateStr = projectDto.getStartDate();
         String endDateStr = projectDto.getEndDate();
@@ -216,6 +220,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .description(projectDto.getDescription())
+                    .isDelete(false)
                     .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
         }else{
@@ -226,6 +231,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .close(projectDto.getStatus() == 0)
                     .fromDate(fromDate)
                     .endDate(endDate)
+                    .isDelete(false)
                     .description(projectDto.getDescription())
                     .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
