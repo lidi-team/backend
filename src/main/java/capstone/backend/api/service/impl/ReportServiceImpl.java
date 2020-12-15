@@ -240,7 +240,7 @@ public class ReportServiceImpl implements ReportService {
         objectiveMap.put("progressSuggest", setProgressSuggest(objective));
 
         response.put("keyResults", keyResultCheckins);
-        response.put("teamLeaderId", report.getAuthorizedUser().getId());
+        response.put("teamLeaderId", objective.getExecute().getReviewer().getId());
         response.put("objective",objectiveMap);
         response.put("chart", chart);
         response.put("checkin", checkin);
