@@ -289,7 +289,7 @@ public class ProjectServiceImpl implements ProjectService {
             objectiveRepository.updateCompletedObjectiveByExecuteIdIn(executeIds);
         }
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
@@ -385,7 +385,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         executeRepository.saveAll(oldStaffs);
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())

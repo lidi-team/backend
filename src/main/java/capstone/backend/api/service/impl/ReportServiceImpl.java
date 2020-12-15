@@ -145,7 +145,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message("Tạo check-in thành công!")
