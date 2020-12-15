@@ -128,4 +128,22 @@ public class CFRsController {
         }
     }
 
+    @ApiOperation(value = "Detail cfr")
+    @GetMapping(path = "/inferior-staff")
+    public ResponseEntity<?> getListInferiorForCFRs(
+            @ApiParam(value = "token",required = true)
+            @RequestHeader(name = "Authorization") String token) {
+        try {
+            return null;
+        } catch (Exception e) {
+            logger.error("get list history cfrs");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

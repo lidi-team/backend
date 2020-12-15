@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface MailService {
-    void CreateMailVerifyCode(String email, String code) throws MessagingException;
+    void createMailVerifyCode(String email, String code) throws MessagingException;
 
     void sendWelcomeEmail(HashMap<User, String> map) throws MessagingException;
 }

@@ -98,7 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String verifyCode = utils.generateRandomCode(commonProperties.getCodeSize());
 
         try {
-            mailService.CreateMailVerifyCode(email, verifyCode);
+            mailService.createMailVerifyCode(email, verifyCode);
         } catch (Exception ignored) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
