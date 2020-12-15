@@ -35,24 +35,26 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
 
     @Override
     public ResponseEntity<?> getListMetaDataEvaluation(String type) throws Exception {
-        if(!type.equalsIgnoreCase("leader_to_member") && !type.equalsIgnoreCase("member_to_leader")){
+        if(!type.equalsIgnoreCase("leader_to_member")
+            && !type.equalsIgnoreCase("member_to_leader")
+            && !type.equalsIgnoreCase("recognition")){
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                            .message("type is leader_to_member or member_to_leader only")
+                            .message("type is leader_to_member or member_to_leader or recognition only")
                             .build()
             );
         }
         List<EvaluationCriteria> criterias = evaluationRepository.findEvaluationCriteriaByType(type);
 
-        ArrayList<MetaDataResponse> responses = new ArrayList<>();
+        ArrayList<Map<String,Object>> responses = new ArrayList<>();
+
         criterias.forEach(criteria -> {
-            responses.add(
-                    MetaDataResponse.builder()
-                            .id(criteria.getId())
-                            .name(criteria.getContent())
-                            .build()
-            );
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",criteria.getId());
+            map.put("name",criteria.getContent());
+            map.put("numberOfStar",criteria.getNumberOfStar());
+            responses.add(map);
         });
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

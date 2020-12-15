@@ -51,7 +51,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -106,7 +106,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if (objectvieDto.getKeyResults() != null) {
             if (!keyResultService.validateKeyResults(objectvieDto.getKeyResults())) {
                 logger.error("Parameter is empty!");
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                         ApiResponse.builder()
                                 .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                                 .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -127,7 +127,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         ObjectiveResponse objectiveResponse = setObjective(objective, keyResultResponses);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message("Tạo mới/Cập nhật mục tiêu thành công!")
@@ -141,7 +141,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             logger.error("Objective not found!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
@@ -151,7 +151,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if ((objective.getType() == commonProperties.getOBJ_PROJECT() ||
                 objective.getType() == commonProperties.getOBJ_COMPANY())
                 && objectiveRepository.findFirstByParentId(objective.getId()) != null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
                             .message("Không thể xóa mục tiêu của công ty/dự án khi nó đã có mục tiêu con").build()
@@ -161,7 +161,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         keyResultService.deleteKeyResultByObjectiveId(id);
         objectiveRepository.deleteObjective(id);
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())

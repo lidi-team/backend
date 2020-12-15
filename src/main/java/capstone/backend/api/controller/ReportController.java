@@ -48,7 +48,7 @@ public class ReportController {
         } catch (Exception e) {
             logger.error("get list checkin history failed");
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()

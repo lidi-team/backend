@@ -44,7 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (StringUtils.isEmpty(userLoginDto.getEmail().trim())
                 || StringUtils.isEmpty(userLoginDto.getPassword().trim())) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -54,7 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!user.isActive() || user.isDelete()) {
             logger.error("Account locked!");
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message("Tài khoản bị khóa!").build()
@@ -64,7 +64,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         TokenResponseInfo tokenResponseInfo = jwtUtils.generateTokenResponseInfo(userLoginDto.getEmail(), userLoginDto.getPassword(), authenticationManager);
 
         logger.info("authenticate Ok!");
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())

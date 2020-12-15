@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> changePassword(UserChangePasswordDto userPassDto, String jwtToken) throws Exception {
         if (!validateChangePasswordInformation(userPassDto)) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_EMPTY())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
         String email = jwtUtils.getUserNameFromJwtToken(jwtToken.substring(5));
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            return ResponseEntity.ok().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 
         if (!passwordEncoder.matches(userPassDto.getOldPassword(), user.getPassword())) {
             logger.error("Old password is incorrect!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         logger.info("update successful!");
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS()).build()
@@ -422,7 +422,7 @@ public class UserServiceImpl implements UserService {
 
         divineList(successes, fails, userRegisters, map);
 
-        userRepository.saveAll(successes);
+
 
         UserFailResponse failResponse = UserFailResponse.builder()
                 .numberOfSuccess(successes.size())
@@ -430,18 +430,29 @@ public class UserServiceImpl implements UserService {
                 .list(fails)
                 .build();
 
-        (new Thread(() -> {
-            try {
-                mailService.sendWelcomeEmail(map);
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-        })).start();
+        if(fails.isEmpty()){
+            userRepository.saveAll(successes);
+            (new Thread(() -> {
+                try {
+                    mailService.sendWelcomeEmail(map);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                }
+            })).start();
 
-        return ResponseEntity.ok().body(
+            return ResponseEntity.status(commonProperties.getHTTP_SUCCESS()).body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_SUCCESS())
+                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .data(failResponse)
+                            .build()
+            );
+        }
+
+        return ResponseEntity.status(commonProperties.getHTTP_FAILED()).body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .code(commonProperties.getCODE_PARAM_FORMAT_INVALID())
+                        .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
                         .data(failResponse)
                         .build()
         );
