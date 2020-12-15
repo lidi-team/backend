@@ -58,7 +58,8 @@ public class KeyResult {
     private boolean isDelete = false;
 
     public double calculateProgress(){
-        return Math.abs(100*(this.getValueObtained() - this.getFromValue())/(this.getToValue() - this.getFromValue()));
+        double num = (this.getToValue() - this.getFromValue());
+        return Math.abs(100*(this.getValueObtained() - this.getFromValue())/ (num == 0 ? 1 : num));
     }
 
 }
