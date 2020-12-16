@@ -236,13 +236,13 @@ public class ProjectServiceImpl implements ProjectService {
                     .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
         }
-        project = projectRepository.save(project);
+
 
         User pm = userRepository.findById(projectDto.getPmId()).get();
         pm.getRoles().add(rolePm);
         pm = userRepository.save(pm);
 
-        Execute execute = executeRepository.findPmByProjectId(project.getId());
+        Execute execute = executeRepository.findPmAllByProjectId(project.getId());
 
         User director = userRepository.findDirector();
 
@@ -259,7 +259,6 @@ public class ProjectServiceImpl implements ProjectService {
             execute = Execute.builder()
                     .id(execute.getId())
                     .user(pm)
-                    .project(project)
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .isPm(true)
@@ -270,7 +269,6 @@ public class ProjectServiceImpl implements ProjectService {
         }else{
             execute = Execute.builder()
                     .user(pm)
-                    .project(project)
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .isPm(true)
@@ -279,14 +277,17 @@ public class ProjectServiceImpl implements ProjectService {
                     .reviewer(director)
                     .build();
         }
+        project = projectRepository.save(project);
+        execute.setProject(project);
         executeRepository.save(execute);
 
         if(projectDto.getStatus() == 0){
-            List<Long> executeIds = executeRepository.findAllByProjectId(projectDto.getId());
 
             executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
 
-            objectiveRepository.updateCompletedObjectiveByExecuteIdIn(executeIds);
+            List<Long> objectiveIds = objectiveRepository.getListIdObjectiveByProjectId(projectDto.getId());
+
+            objectiveRepository.updateCompletedObjectiveByIdIn(objectiveIds);
         }
 
         return ResponseEntity.ok().body(

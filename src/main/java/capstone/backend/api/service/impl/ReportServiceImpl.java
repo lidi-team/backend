@@ -95,7 +95,7 @@ public class ReportServiceImpl implements ReportService {
         List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
         Map<Long, Double> valueOlds = saveOldValueKeyResult(keyResults);
 
-        User authorizedUser = objective.getExecute().getUser();
+        User authorizedUser = objective.getExecute().getReviewer();
 
         Report report;
         if (checkinDto.getId() != 0) {

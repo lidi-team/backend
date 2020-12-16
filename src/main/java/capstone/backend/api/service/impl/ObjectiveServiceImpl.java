@@ -788,7 +788,12 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     private boolean checkUpdateObjective(Objective objective){
         List<Report> reports = reportRepository.findAllReportByObjectiveIdAndStatus(objective.getId());
-        return (reports.size() == 0);
+        Execute execute = objective.getExecute();
+        if (reports.size() != 0 || execute.isDelete() || execute.isClose()
+                || objective.getStatus().equalsIgnoreCase("completed")){
+            return false;
+        };
+        return true;
     }
 
     private List<MetaDataResponse> setListAlign(String alignStr){

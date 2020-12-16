@@ -49,5 +49,8 @@ public class Execute {
     private Date endDate;
 
     @Builder.Default
+    private boolean close = false;
+
+    @Builder.Default
     private boolean isDelete = false;
 }

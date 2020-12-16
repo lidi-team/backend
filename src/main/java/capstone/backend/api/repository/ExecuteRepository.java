@@ -55,6 +55,7 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "where e.project.id = :id " +
             "and p.close = false " +
             "and e.isDelete = false " +
+            "and e.close = false " +
             "and e.isPm = false")
     List<Execute> findAllStaffByProjectId(@Param(value = "id") long id);
 
@@ -85,7 +86,7 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update Execute e set e.isDelete = true where e.user.id = :userId and e.project.id = :projectId")
+    @Query(value = "update Execute e set e.isDelete = true, e.close = true where e.user.id = :userId and e.project.id = :projectId")
     void removeStaff(long projectId, long userId);
 
     @Query(value = "select e.user.id from Execute e " +
@@ -103,7 +104,7 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update Execute e set e.isDelete = true where e.project.id = :id")
+    @Query(value = "update Execute e set e.close = true where e.project.id = :id")
     void updateAllStatusWhenCloseProject(@Param(value = "id") long id);
 
 
