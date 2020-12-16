@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -34,5 +35,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Page<Project> findAllByNameContainsAndIdIn(String text,List<Long> ids,Pageable pageable);
 
     Page<Project> findAllByCloseAndNameContainsAndIdIn(boolean active,String text,List<Long> ids, Pageable pageable);
+
+    @Query(value = "select p.id from Project p " +
+            "join Execute e on p.id = e.project.id")
+    List<Long> findAllProjectOfUser(@Param(value = "userId") long userId);
 
 }
