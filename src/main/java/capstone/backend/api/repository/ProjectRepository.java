@@ -16,9 +16,9 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    Page<Project> findAllByNameContains(String text,Pageable pageable);
+    List<Project> findAllByNameContains(String text);
 
-    Page<Project> findAllByCloseAndNameContains(boolean active,String text, Pageable pageable);
+    List<Project> findAllByCloseAndNameContains(boolean active,String text);
 
     List<Project> findAllByParentId(long id);
 
