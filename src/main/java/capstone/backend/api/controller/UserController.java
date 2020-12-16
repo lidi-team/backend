@@ -211,14 +211,13 @@ public class UserController {
     }
 
     @ApiOperation(value = "Kích hoạt/ Huỷ kích hoạt tài khoản theo ID")
-    @GetMapping("is-active")
+    @PutMapping("active/{id}")
     public ResponseEntity<?> activeStaff(
             @ApiParam(value = "ID của tài khoản cần kích hoạt/ huỷ", required = true) @RequestParam(name = "id") long id,
-            @ApiParam(value = "true: kích hoạt, false: huỷ kích hoạt", required = true) @RequestParam(name = "isActive") boolean isActive,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Active/ De-active user id: " + id);
         try {
-            return userService.isActiveUserById(id, isActive, jwtToken);
+            return userService.isActiveUserById(id, jwtToken);
         } catch (Exception e) {
             logger.error("Get user information");
             logger.error(e.getMessage());

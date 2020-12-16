@@ -309,29 +309,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> isActiveUserById(long id, boolean isActive, String jwtToken) throws Exception {
+    public ResponseEntity<?> isActiveUserById(long id, String jwtToken) throws Exception {
         User currentUser = userRepository.findById(id).orElse(null);
 
-        if (currentUser != null) {
-            for (Role role : currentUser.getRoles()) {
-                if(role.getName().equalsIgnoreCase("ROLE_DIRECTOR")){
-                    return ResponseEntity.status(401).body(
-                            ApiResponse.builder().code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                                    .message("Người dùng này đang có quyền giám đốc")
-                    );
+        if (currentUser != null ) {
+            if(currentUser.isActive()){
+                for (Role role : currentUser.getRoles()) {
+                    if(role.getName().equalsIgnoreCase("ROLE_DIRECTOR")){
+                        return ResponseEntity.status(401).body(
+                                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                        .message("Người dùng này đang có quyền giám đốc")
+                        );
+                    }
+
+                    if(role.getName().equalsIgnoreCase("ROLE_PM")){
+                        return ResponseEntity.status(401).body(
+                                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                        .message("Người dùng này đang là PM của dự án")
+                        );
+                    }
+                    currentUser.setActive(false);
                 }
-                if(role.getName().equalsIgnoreCase("ROLE_PM")){
-                    return ResponseEntity.status(401).body(
-                            ApiResponse.builder().code(commonProperties.getCODE_PARAM_VALUE_INVALID())
-                                    .message("Người dùng này đang là PM của dự án")
-                    );
-                }
+            } else {
+                currentUser.setActive(true);
             }
-            currentUser.setActive(isActive);
             userRepository.save(currentUser);
         }
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(userRepository.findById(id).get().isActive()).build()
         );
