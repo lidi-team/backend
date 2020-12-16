@@ -1,9 +1,12 @@
 package capstone.backend.api.service;
 
+import capstone.backend.api.dto.KeyResultProgress;
 import capstone.backend.api.dto.ObjectvieDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public interface ObjectiveService {
@@ -32,4 +35,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
 
     ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception;
+
+    ResponseEntity<?> calculateProgress(List<KeyResultProgress> keyresult) throws Exception;
 }

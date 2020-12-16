@@ -268,7 +268,20 @@ public class ObjectiveController {
         }
     }
 
+    public ResponseEntity<?> calculateObjectiveProgress(){
+        try {
+            return null;
+        } catch (Exception e) {
+            logger.error("calculate failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
 
+    }
 
 
 }
