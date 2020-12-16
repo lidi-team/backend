@@ -1,6 +1,7 @@
 package capstone.backend.api.service.impl;
 
 import capstone.backend.api.configuration.CommonProperties;
+import capstone.backend.api.dto.KeyResultProgress;
 import capstone.backend.api.dto.ObjectvieDto;
 import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
@@ -720,6 +721,17 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         .data(responses)
                         .build()
         );
+    }
+
+    @Override
+    public ResponseEntity<?> calculateProgress(List<KeyResultProgress> keyresult) throws Exception {
+
+        for (KeyResultProgress keyResultProgress : keyresult) {
+
+        }
+
+
+        return null;
     }
 
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {

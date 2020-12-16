@@ -32,11 +32,14 @@ public class KeyResultServiceImpl implements KeyResultService {
         keyResultDtos.forEach(keyResultDto -> {
             UnitOfKeyResult unit = unitService.getUnitById(keyResultDto.getMeasureUnitId());
             KeyResult keyResult;
+            if(keyResultDto.getValueObtained() < keyResultDto.getStartValue()){
+                keyResultDto.setValueObtained(keyResultDto.getStartValue());
+            }
             if (keyResultDto.getId() == 0) {
                 keyResult = new KeyResult().builder()
                         .fromValue(keyResultDto.getStartValue())
                         .valueObtained(keyResultDto.getValueObtained())
-                        .toValue(keyResultDto.getTargetValue())
+                        .toValue(keyResultDto.getTargetedValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
                         .unitOfKeyResult(unit)
@@ -47,7 +50,7 @@ public class KeyResultServiceImpl implements KeyResultService {
                         .id(keyResultDto.getId())
                         .fromValue(keyResultDto.getStartValue())
                         .valueObtained(keyResultDto.getValueObtained())
-                        .toValue(keyResultDto.getTargetValue())
+                        .toValue(keyResultDto.getTargetedValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
                         .unitOfKeyResult(unit)

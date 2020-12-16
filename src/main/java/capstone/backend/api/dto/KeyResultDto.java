@@ -16,7 +16,7 @@ public class KeyResultDto {
     private long parentId;
     private double startValue;
     private long measureUnitId;
-    private double targetValue;
+    private double targetedValue;
     private String reference;
     private double valueObtained;
 }
