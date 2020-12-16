@@ -7,6 +7,7 @@ import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.*;
 import capstone.backend.api.entity.*;
+import capstone.backend.api.repository.ExecuteRepository;
 import capstone.backend.api.repository.ObjectiveRepository;
 import capstone.backend.api.repository.ReportRepository;
 import capstone.backend.api.repository.UserRepository;
@@ -47,6 +48,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private  final CommonUtils commonUtils;
 
     private final ReportRepository reportRepository;
+
+    private final ExecuteRepository executeRepository;
 
     @Override
     public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
@@ -463,8 +466,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         List<ProjectOfUserResponse> responses = new ArrayList<>();
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
+        Cycle cycle = cycleService.getCycleById(cycleId);
 
-        List<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+        List<Execute> executes = executeRepository
+                .findExecutesByUserIdAndCycle(user.getId(),cycle.getFromDate(),cycle.getEndDate());
 
         for (Execute execute : executes) {
             if (execute.getProject() != null) {

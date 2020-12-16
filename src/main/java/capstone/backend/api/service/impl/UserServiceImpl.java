@@ -228,7 +228,7 @@ public class UserServiceImpl implements UserService {
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalItems", count);
-        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        meta.put("totalPages", (count % size == 0 ? count / size : count / size + 1));
         response.put("meta", meta);
 
         return ResponseEntity.ok().body(
@@ -262,7 +262,7 @@ public class UserServiceImpl implements UserService {
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalItems", count);
-        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        meta.put("totalPages", (count % size == 0 ? count / size : count / size + 1));
         response.put("meta", meta);
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -272,13 +272,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> putUserInformationById(UpdateUserInfoDto userInfo,long id) throws Exception {
+    public ResponseEntity<?> putUserInformationById(UpdateUserInfoDto userInfo, long id) throws Exception {
         UserInforResponse userInforResponse = new UserInforResponse();
         User currentUser = userRepository.findById(id).orElse(null);
 
         if (currentUser != null) {
             Department department = departmentService.getDepartmentById(userInfo.getDepartmentId());
-            Date date = utils.stringToDate(userInfo.getDob(),"dd/MM/yyyy");
+            Date date = utils.stringToDate(userInfo.getDob(), "dd/MM/yyyy");
 
             currentUser.setFullName(userInfo.getFullName());
             currentUser.setEmail(userInfo.getEmail());
@@ -309,36 +309,48 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> isActiveUserById(long id, String jwtToken) throws Exception {
+    public ResponseEntity<?> isActiveUserById(long id) throws Exception {
         User currentUser = userRepository.findById(id).orElse(null);
 
-        if (currentUser != null ) {
-            if(currentUser.isActive()){
-                for (Role role : currentUser.getRoles()) {
-                    if(role.getName().equalsIgnoreCase("ROLE_DIRECTOR")){
-                        return ResponseEntity.status(401).body(
-                                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
-                                        .message("Người dùng này đang có quyền giám đốc")
-                        );
-                    }
-
-                    if(role.getName().equalsIgnoreCase("ROLE_PM")){
-                        return ResponseEntity.status(401).body(
-                                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
-                                        .message("Người dùng này đang là PM của dự án")
-                        );
-                    }
-                    currentUser.setActive(false);
+        if (currentUser == null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Người dùng này không tồn tại").build()
+            );
+        }
+        if (currentUser.isActive()) {
+            for (Role role : currentUser.getRoles()) {
+                if (role.getName().equalsIgnoreCase("ROLE_DIRECTOR")) {
+                    return ResponseEntity.badRequest().body(
+                            ApiResponse.builder()
+                                    .code(commonProperties.getCODE_UPDATE_FAILED())
+                                    .message("Người dùng này đang có quyền giám đốc").build()
+                    );
                 }
-            } else {
-                currentUser.setActive(true);
+
+                if (role.getName().equalsIgnoreCase("ROLE_PM")) {
+                    return ResponseEntity.badRequest().body(
+                            ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                    .message("Người dùng này đang là PM của dự án").build()
+                    );
+                }
+                currentUser.setActive(false);
             }
-            userRepository.save(currentUser);
+        } else {
+            currentUser.setActive(true);
+        }
+        userRepository.save(currentUser);
+
+        String message = "";
+        if (currentUser.isActive()) {
+            message = "Đã active thành công người dùng";
+        } else {
+            message = "Đã de-active người dùng này";
         }
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
-                        .data(userRepository.findById(id).get().isActive()).build()
+                        .message(message).build()
         );
     }
 
@@ -354,7 +366,7 @@ public class UserServiceImpl implements UserService {
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
         meta.put("totalItems", count);
-        meta.put("totalPages", (count%size == 0 ? count/size : count/size + 1 ));
+        meta.put("totalPages", (count % size == 0 ? count / size : count / size + 1));
         response.put("meta", meta);
 
         return ResponseEntity.ok().body(
@@ -364,28 +376,28 @@ public class UserServiceImpl implements UserService {
         );
     }
 
-    private Map<String, Object> customUserInformation(User user) throws Exception{
+    private Map<String, Object> customUserInformation(User user) throws Exception {
         Map<String, Object> userCustom = new HashMap<>();
 
-            try {
-                Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
-                Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
-                ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+        try {
+            Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
+            Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+            ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
 
-                userCustom.put("id", user.getId());
-                userCustom.put("email", user.getEmail());
-                userCustom.put("fullName", user.getFullName());
-                userCustom.put("avatarUrl", user.getAvatarImage());
-                userCustom.put("dob", user.getDob());
-                userCustom.put("gender", user.getGender());
-                userCustom.put("star", user.getStar());
-                userCustom.put("roles", roles);
-                userCustom.put("department", department == null ? null : new UserInforResponse().departmentResponse(department.getId(), department.getName()));
-                userCustom.put("projects", new UserInforResponse().projectResponses(executes));
-                userCustom.put("isActive", user.isActive());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            userCustom.put("id", user.getId());
+            userCustom.put("email", user.getEmail());
+            userCustom.put("fullName", user.getFullName());
+            userCustom.put("avatarUrl", user.getAvatarImage());
+            userCustom.put("dob", user.getDob());
+            userCustom.put("gender", user.getGender());
+            userCustom.put("star", user.getStar());
+            userCustom.put("roles", roles);
+            userCustom.put("department", department == null ? null : new UserInforResponse().departmentResponse(department.getId(), department.getName()));
+            userCustom.put("projects", new UserInforResponse().projectResponses(executes));
+            userCustom.put("isActive", user.isActive());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return userCustom;
     }
@@ -428,14 +440,13 @@ public class UserServiceImpl implements UserService {
         divineList(successes, fails, userRegisters, map);
 
 
-
         UserFailResponse failResponse = UserFailResponse.builder()
                 .numberOfSuccess(successes.size())
                 .numberOfFailed(fails.size())
                 .list(fails)
                 .build();
 
-        if(fails.isEmpty()){
+        if (fails.isEmpty()) {
             userRepository.saveAll(successes);
             (new Thread(() -> {
                 try {
@@ -449,7 +460,6 @@ public class UserServiceImpl implements UserService {
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_SUCCESS())
                             .message(commonProperties.getMESSAGE_SUCCESS())
-                            .data(failResponse)
                             .build()
             );
         }
@@ -541,8 +551,7 @@ public class UserServiceImpl implements UserService {
                         .build();
                 users.add(user);
                 map.put(user, password);
-            }
-            catch (ParseException ex){
+            } catch (ParseException ex) {
                 fails.add(
                         UserFailedItem.builder()
                                 .email(userRegister.getEmail())
@@ -553,8 +562,7 @@ public class UserServiceImpl implements UserService {
                                 .reason("Định dạng ngày không hợp lệ!")
                                 .build()
                 );
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 fails.add(
                         UserFailedItem.builder()
                                 .email(userRegister.getEmail())

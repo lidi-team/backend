@@ -212,19 +212,16 @@ public class UserController {
 
     @ApiOperation(value = "Kích hoạt/ Huỷ kích hoạt tài khoản theo ID")
     @PutMapping("active/{id}")
-    public ResponseEntity<?> activeStaff(
-            @ApiParam(value = "ID của tài khoản cần kích hoạt/ huỷ", required = true) @RequestParam(name = "id") long id,
-            @RequestHeader(value = "Authorization") String jwtToken) {
+    public ResponseEntity<?> activeStaff(@PathVariable(value = "id")long id) {
         logger.info("Active/ De-active user id: " + id);
         try {
-            return userService.isActiveUserById(id, jwtToken);
+            return userService.isActiveUserById(id);
         } catch (Exception e) {
-            logger.error("Get user information");
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message("Ngu Controller").build()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("cập nhật thất bại").build()
             );
         }
     }
