@@ -13,7 +13,7 @@ public class KeyResultDto {
 
     private long id;
     private String content;
-    private long parentId;
+    private long keyResultParentId;
     private double startValue;
     private long measureUnitId;
     private double targetedValue;

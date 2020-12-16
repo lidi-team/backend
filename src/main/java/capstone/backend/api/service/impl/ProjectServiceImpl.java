@@ -116,7 +116,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type, String text, String token) throws Exception {
-        Page<Project> projects;
+        List<Project> projects;
         List<ProjectPagingResponse> list = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
@@ -141,16 +141,15 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         if (type == null || type.equalsIgnoreCase("total") || type.isEmpty()) {
-            projects = projectRepository.findAllByNameContains(text, PageRequest.of(page - 1, limit, Sort.by(sortWith)));
+            projects = projectRepository.findAllByNameContains(text);
         } else {
             projects = projectRepository.findAllByCloseAndNameContains(
-                    !type.equalsIgnoreCase("active"), text,
-                    PageRequest.of(page - 1, limit, Sort.by(sortWith)));
+                    !type.equalsIgnoreCase("active"), text);
         }
 
         if (user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("role_director")
                 || role.getName().equalsIgnoreCase("role_admin"))) {
-            projects.getContent().forEach(project -> {
+            projects.forEach(project -> {
                 Execute execute = executeRepository.findPmAllByProjectId(project.getId());
                 list.add(
                         ProjectPagingResponse.builder()
@@ -167,7 +166,7 @@ public class ProjectServiceImpl implements ProjectService {
                 );
             });
         } else {
-            projects.getContent().forEach(project -> {
+            projects.forEach(project -> {
                 Execute execute = executeRepository.findPmAllByProjectId(project.getId());
                 if (ids.stream().anyMatch(id -> id == project.getId())) {
                     list.add(
