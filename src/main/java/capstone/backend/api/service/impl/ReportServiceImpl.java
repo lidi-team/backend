@@ -274,7 +274,7 @@ public class ReportServiceImpl implements ReportService {
 
         Map<String, Object> objectiveMap = new HashMap<>();
         objectiveMap.put("id", objective.getId());
-        objectiveMap.put("progress", report.getProgress());
+        objectiveMap.put("progress", objective.getProgress());
         objectiveMap.put("title", objective.getName());
         objectiveMap.put("userId", objective.getExecute().getUser().getId());
         objectiveMap.put("progressSuggest", 0);
