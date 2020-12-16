@@ -37,7 +37,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     Page<Project> findAllByCloseAndNameContainsAndIdIn(boolean active,String text,List<Long> ids, Pageable pageable);
 
     @Query(value = "select p.id from Project p " +
-            "join Execute e on p.id = e.project.id")
+            "join Execute e on p.id = e.project.id " +
+            "where e.user.id = :userId and e.isDelete = false and e.close = false ")
     List<Long> findAllProjectOfUser(@Param(value = "userId") long userId);
 
 }

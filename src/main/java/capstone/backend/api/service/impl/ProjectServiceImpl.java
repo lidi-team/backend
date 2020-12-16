@@ -3,13 +3,13 @@ package capstone.backend.api.service.impl;
 import capstone.backend.api.configuration.CommonProperties;
 import capstone.backend.api.dto.AddStaffToProjectDto;
 import capstone.backend.api.dto.CreateProjectDto;
-import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectDetailResponse;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectListResponse;
 import capstone.backend.api.entity.ApiResponse.Project.ProjectPagingResponse;
 import capstone.backend.api.entity.ApiResponse.Project.StaffInformation;
+import capstone.backend.api.entity.*;
 import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ProjectService;
 import capstone.backend.api.utils.CommonUtils;
@@ -21,7 +21,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.*;
 
 @Service
@@ -116,52 +115,88 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text,String token) throws Exception {
+    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type, String text, String token) throws Exception {
         Page<Project> projects;
         List<ProjectPagingResponse> list = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
-
-//        List<Long> id = projectRepository.find
+        List<Long> ids;
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("role_director")
+                || role.getName().equalsIgnoreCase("role_admin"))) {
+            ids = new ArrayList<>();
+        } else {
+            ids = projectRepository.findAllProjectOfUser(user.getId());
+        }
 
         Map<String, Object> response = new HashMap<>();
-        if (limit == 0){
+        if (limit == 0) {
             limit = 10;
         }
-        if(sortWith.equalsIgnoreCase("status")){
+        if (sortWith.equalsIgnoreCase("status")) {
             sortWith = "close";
         }
-        if(text == null){
+        if (text == null) {
             text = "";
         }
 
-        if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
-            projects = projectRepository.findAllByNameContains(text,PageRequest.of(page-1,limit, Sort.by(sortWith)));
-        }else{
+        if (type == null || type.equalsIgnoreCase("total") || type.isEmpty()) {
+            projects = projectRepository.findAllByNameContains(text, PageRequest.of(page - 1, limit, Sort.by(sortWith)));
+        } else {
             projects = projectRepository.findAllByCloseAndNameContains(
-                    !type.equalsIgnoreCase("active"),text,
-                    PageRequest.of(page-1,limit, Sort.by(sortWith)));
+                    !type.equalsIgnoreCase("active"), text,
+                    PageRequest.of(page - 1, limit, Sort.by(sortWith)));
         }
 
-        projects.getContent().forEach(project -> {
-            Execute execute = executeRepository.findPmAllByProjectId(project.getId());
-            list.add(
-                    ProjectPagingResponse.builder()
-                            .id(project.getId())
-                            .name(project.getName())
-                            .startDate(project.getFromDate())
-                            .endDate(project.getEndDate())
-                            .description(project.getDescription())
-                            .status(project.isClose()? 0 : 1)
-                            .pmId(execute.getUser().getId())
-                            .weight(project.getWeight())
-                            .parentId(project.getParent()==null? 0 : project.getParent().getId())
-                            .build()
-            );
-        });
+        if (user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("role_director")
+                || role.getName().equalsIgnoreCase("role_admin"))) {
+            projects.getContent().forEach(project -> {
+                Execute execute = executeRepository.findPmAllByProjectId(project.getId());
+
+                list.add(
+                        ProjectPagingResponse.builder()
+                                .id(project.getId())
+                                .name(project.getName())
+                                .startDate(project.getFromDate())
+                                .endDate(project.getEndDate())
+                                .description(project.getDescription())
+                                .status(project.isClose() ? 0 : 1)
+                                .pmId(execute.getUser().getId())
+                                .weight(project.getWeight())
+                                .parentId(project.getParent() == null ? 0 : project.getParent().getId())
+                                .build()
+                );
+            });
+        } else {
+            projects.getContent().forEach(project -> {
+                Execute execute = executeRepository.findPmAllByProjectId(project.getId());
+                if (ids.stream().anyMatch(id -> id == project.getId())) {
+                    list.add(
+                            ProjectPagingResponse.builder()
+                                    .id(project.getId())
+                                    .name(project.getName())
+                                    .startDate(project.getFromDate())
+                                    .endDate(project.getEndDate())
+                                    .description(project.getDescription())
+                                    .status(project.isClose() ? 0 : 1)
+                                    .pmId(execute.getUser().getId())
+                                    .weight(project.getWeight())
+                                    .parentId(project.getParent() == null ? 0 : project.getParent().getId())
+                                    .build()
+                    );
+                }
+            });
+        }
+
+
         response.put("data", list);
-        response.put("meta", commonUtils.paging(projects,page));
+        Map<String, Integer> meta = new HashMap<>();
+        int count = list.size();
+        int totalPage = (count%limit == 0 ? count/limit : count/limit + 1 );
+        meta.put("totalItems", count);
+        meta.put("currentPage",page);
+        meta.put("totalPages", totalPage == 0 ? 1 : totalPage);
+        response.put("meta", meta);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -176,17 +211,17 @@ public class ProjectServiceImpl implements ProjectService {
         Project project = projectRepository.findById(id).get();
 
         Execute pm = executeRepository.findPmByProjectId(id);
-        Map<String,Object> pmResponse = new HashMap<>();
-        pmResponse.put("id",pm.getUser().getId());
-        pmResponse.put("name",pm.getUser().getFullName());
-        pmResponse.put("position",pm.getPosition().getName());
-        pmResponse.put("Department",pm.getUser().getDepartment().getName());
+        Map<String, Object> pmResponse = new HashMap<>();
+        pmResponse.put("id", pm.getUser().getId());
+        pmResponse.put("name", pm.getUser().getFullName());
+        pmResponse.put("position", pm.getPosition().getName());
+        pmResponse.put("Department", pm.getUser().getDepartment().getName());
 
         ProjectDetailResponse response = ProjectDetailResponse.builder()
                 .id(project.getId())
                 .name(project.getName())
                 .description(project.getDescription())
-                .status(project.isClose()? 0 : 1)
+                .status(project.isClose() ? 0 : 1)
                 .startDate(project.getFromDate())
                 .endDate(project.getEndDate())
                 .pm(pmResponse)
@@ -207,18 +242,18 @@ public class ProjectServiceImpl implements ProjectService {
         Role rolePm = roleRepository.findRoleByName("ROLE_PM").get();
         ProjectPosition position = positionRepository.findById(1L).get();
         Project parentProject = null;
-        if(projectDto.getParentId() != 0){
+        if (projectDto.getParentId() != 0) {
             parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
         }
 
 
         String fromDateStr = projectDto.getStartDate();
         String endDateStr = projectDto.getEndDate();
-        Date fromDate = commonUtils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
-        Date endDate = commonUtils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
+        Date fromDate = commonUtils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
+        Date endDate = commonUtils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
 
         Project project;
-        if(projectDto.getId() == 0){
+        if (projectDto.getId() == 0) {
             project = Project.builder()
                     .name(projectDto.getName())
                     .parent(parentProject)
@@ -229,7 +264,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .isDelete(false)
                     .weight(projectDto.getWeight() == 0 ? 1 : projectDto.getWeight())
                     .build();
-        }else{
+        } else {
             project = Project.builder()
                     .id(projectDto.getId())
                     .name(projectDto.getName())
@@ -252,12 +287,12 @@ public class ProjectServiceImpl implements ProjectService {
 
         User director = userRepository.findDirector();
 
-        if(execute != null ){
+        if (execute != null) {
             User oldUser = execute.getUser();
             // check if pm of project is changed
-            if(oldUser.getId() != pm.getId()){
+            if (oldUser.getId() != pm.getId()) {
                 // check role PM of old pm -> decide to remove role pm or not
-                if(executeRepository.findOtherProjectUserIsPm(oldUser.getId(),project.getId()) == 0){
+                if (executeRepository.findOtherProjectUserIsPm(oldUser.getId(), project.getId()) == 0) {
                     oldUser.getRoles().remove(rolePm);
                     userRepository.save(oldUser);
                 }
@@ -272,7 +307,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .position(position)
                     .reviewer(director)
                     .build();
-        }else{
+        } else {
             execute = Execute.builder()
                     .user(pm)
                     .fromDate(fromDate)
@@ -287,7 +322,7 @@ public class ProjectServiceImpl implements ProjectService {
         execute.setProject(project);
         executeRepository.save(execute);
 
-        if(projectDto.getStatus() == 0){
+        if (projectDto.getStatus() == 0) {
 
             executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
 
@@ -334,7 +369,7 @@ public class ProjectServiceImpl implements ProjectService {
         List<User> users = userRepository.findByFullNameContains(text.toLowerCase());
 
         users.forEach(user -> {
-            if(user.getRoles().contains(role)){
+            if (user.getRoles().contains(role)) {
                 responses.add(
                         MetaDataResponse.builder()
                                 .id(user.getId())
@@ -362,7 +397,7 @@ public class ProjectServiceImpl implements ProjectService {
             boolean exist = false;
             for (Execute oldStaff : oldStaffs) {
                 if (dto.getUserId() == oldStaff.getUser().getId()) {
-                    if(dto.getReviewerId() != oldStaff.getReviewer().getId()){
+                    if (dto.getReviewerId() != oldStaff.getReviewer().getId()) {
                         User reviewer = userRepository.findById(dto.getReviewerId()).get();
                         oldStaff.setReviewer(reviewer);
                     }
@@ -372,7 +407,7 @@ public class ProjectServiceImpl implements ProjectService {
                     break;
                 }
             }
-            if(!exist){
+            if (!exist) {
                 User user = userRepository.findById(dto.getUserId()).get();
                 User reviewer = userRepository.findById(dto.getReviewerId()).get();
                 ProjectPosition position = positionRepository.findById(dto.getPositionId()).get();
@@ -404,7 +439,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getListStaffByProjectId(long projectId) throws Exception {
         List<StaffInformation> responses = new ArrayList<>();
         List<Execute> staffs = executeRepository.findAllStaffByProjectId(projectId);
-        staffs.forEach(staff->{
+        staffs.forEach(staff -> {
             responses.add(
                     StaffInformation.builder()
                             .id(staff.getUser().getId())
@@ -433,7 +468,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         Execute pm = executeRepository.findPmByProjectId(projectId);
 
-        staffs.forEach(staff->{
+        staffs.forEach(staff -> {
             inserts.add(
                     Execute.builder()
                             .user(staff)
@@ -459,9 +494,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
 
-        executeRepository.removeStaff(projectId,userId);
+        executeRepository.removeStaff(projectId, userId);
 
-        Execute execute = executeRepository.findByProjectIdAndUserId(projectId,userId);
+        Execute execute = executeRepository.findByProjectIdAndUserId(projectId, userId);
         objectiveRepository.updateCompletedObjectiveByExecuteId(execute.getId());
 
         return ResponseEntity.ok().body(
@@ -476,13 +511,13 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getListCandidate(long projectId) throws Exception {
         List<Long> memberIds = userRepository.findMemberProject(projectId);
         List<User> all = userRepository.findAllByIdNotIn(memberIds);
-        List<Map<String,Object>> responses = new ArrayList<>();
+        List<Map<String, Object>> responses = new ArrayList<>();
         all.forEach(user -> {
-            if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_USER"))){
-                Map<String,Object> candidate = new HashMap<>();
-                candidate.put("id",user.getId());
-                candidate.put("name",user.getFullName());
-                candidate.put("email",user.getEmail());
+            if (user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_USER"))) {
+                Map<String, Object> candidate = new HashMap<>();
+                candidate.put("id", user.getId());
+                candidate.put("name", user.getFullName());
+                candidate.put("email", user.getEmail());
 
                 responses.add(candidate);
             }
@@ -497,17 +532,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getAllProjectManagePaging(int page, int limit, String sortWith, String type, String text,String token) throws Exception {
+    public ResponseEntity<?> getAllProjectManagePaging(int page, int limit, String sortWith, String type, String text, String token) throws Exception {
         Page<Project> projects;
         List<ProjectPagingResponse> list = new ArrayList<>();
         Map<String, Object> response = new HashMap<>();
-        if (limit == 0){
+        if (limit == 0) {
             limit = 10;
         }
-        if(sortWith.equalsIgnoreCase("status")){
+        if (sortWith.equalsIgnoreCase("status")) {
             sortWith = "close";
         }
-        if(text == null){
+        if (text == null) {
             text = "";
         }
 
@@ -516,12 +551,12 @@ public class ProjectServiceImpl implements ProjectService {
 
         List<Long> ids = executeRepository.findAllProjectIdByUserId(user.getId());
 
-        if(type == null || type.equalsIgnoreCase("total") || type.isEmpty()){
-            projects = projectRepository.findAllByNameContainsAndIdIn(text,ids,PageRequest.of(page-1,limit, Sort.by(sortWith)));
-        }else{
+        if (type == null || type.equalsIgnoreCase("total") || type.isEmpty()) {
+            projects = projectRepository.findAllByNameContainsAndIdIn(text, ids, PageRequest.of(page - 1, limit, Sort.by(sortWith)));
+        } else {
             projects = projectRepository.findAllByCloseAndNameContainsAndIdIn(
-                    !type.equalsIgnoreCase("active"),text,ids,
-                    PageRequest.of(page-1,limit, Sort.by(sortWith)));
+                    !type.equalsIgnoreCase("active"), text, ids,
+                    PageRequest.of(page - 1, limit, Sort.by(sortWith)));
         }
 
         projects.getContent().forEach(project -> {
@@ -533,15 +568,15 @@ public class ProjectServiceImpl implements ProjectService {
                             .startDate(project.getFromDate())
                             .endDate(project.getEndDate())
                             .description(project.getDescription())
-                            .status(project.isClose()? 0 : 1)
+                            .status(project.isClose() ? 0 : 1)
                             .pmId(execute.getUser().getId())
                             .weight(project.getWeight())
-                            .parentId(project.getParent()==null? 0 : project.getParent().getId())
+                            .parentId(project.getParent() == null ? 0 : project.getParent().getId())
                             .build()
             );
         });
         response.put("data", list);
-        response.put("meta", commonUtils.paging(projects,page));
+        response.put("meta", commonUtils.paging(projects, page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
