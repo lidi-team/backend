@@ -629,6 +629,7 @@ public class ReportServiceImpl implements ReportService {
                             .content(keyResult.getContent())
                             .targetedValue(keyResult.getToValue())
                             .valueObtained(keyResult.getValueObtained())
+                            .startValue(keyResult.getFromValue())
                             .build()
             );
         });

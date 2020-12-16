@@ -116,9 +116,15 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text) throws Exception {
+    public ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text,String token) throws Exception {
         Page<Project> projects;
         List<ProjectPagingResponse> list = new ArrayList<>();
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+//        List<Long> id = projectRepository.find
+
         Map<String, Object> response = new HashMap<>();
         if (limit == 0){
             limit = 10;

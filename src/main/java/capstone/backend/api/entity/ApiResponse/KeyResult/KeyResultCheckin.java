@@ -14,5 +14,6 @@ public class KeyResultCheckin {
     private long id;
     private double valueObtained;
     private double targetedValue;
+    private double startValue;
     private String content;
 }

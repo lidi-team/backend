@@ -73,9 +73,11 @@ public class ProjectController {
             @ApiParam(value = "status của project, null = total")
             @RequestParam(value = "type") String type,
             @ApiParam(value = "name của project")
-            @RequestParam(value = "text") String text){
+            @RequestParam(value = "text") String text,
+            @ApiParam(value = "token")
+            @RequestHeader(value = "Authorization") String token){
         try {
-            return projectService.getAllProjectPaging(page,limit,sortWith,type,text);
+            return projectService.getAllProjectPaging(page,limit,sortWith,type,text,token);
         } catch (Exception e) {
             logger.error("get list project failed");
             logger.error(e.getMessage());
