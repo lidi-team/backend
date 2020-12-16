@@ -139,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
         projects.getContent().forEach(project -> {
-            Execute execute = executeRepository.findPmByProjectId(project.getId());
+            Execute execute = executeRepository.findPmAllByProjectId(project.getId());
             list.add(
                     ProjectPagingResponse.builder()
                             .id(project.getId())
