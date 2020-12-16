@@ -11,11 +11,18 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ExecuteRepository extends JpaRepository<Execute, Long> {
+
+
+    @Query(value = "select e from Execute  e where e.user.id = :id " +
+            "and ( e.fromDate < :startCycle or e.endDate > :endCycle) ")
+    ArrayList<Execute> findExecutesByUserIdAndCycle(long id, Date startCycle,Date endCycle);
+
     ArrayList<Execute> findAllByUserId(long id);
 
     Optional<Execute> findByUserIdAndProjectId(long userId, long projectId);

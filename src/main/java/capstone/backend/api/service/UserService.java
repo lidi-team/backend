@@ -34,7 +34,7 @@ public interface UserService {
 
     ResponseEntity<?> putUserInformationById(UpdateUserInfoDto userInfo,long id) throws Exception;
 
-    ResponseEntity<?> isActiveUserById(long id, String jwtToken) throws Exception;
+    ResponseEntity<?> isActiveUserById(long id) throws Exception;
 
     ResponseEntity<?> searchByName(String name, int page, int size, String sort, String jwtToken) throws Exception;
 

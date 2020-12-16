@@ -38,7 +38,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     @Query(value = "select p.id from Project p " +
             "join Execute e on p.id = e.project.id " +
-            "where e.user.id = :userId and e.isDelete = false and e.close = false ")
+            "where e.user.id = :userId and e.isDelete = false")
     List<Long> findAllProjectOfUser(@Param(value = "userId") long userId);
 
 }

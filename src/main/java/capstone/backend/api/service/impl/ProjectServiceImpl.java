@@ -152,7 +152,6 @@ public class ProjectServiceImpl implements ProjectService {
                 || role.getName().equalsIgnoreCase("role_admin"))) {
             projects.getContent().forEach(project -> {
                 Execute execute = executeRepository.findPmAllByProjectId(project.getId());
-
                 list.add(
                         ProjectPagingResponse.builder()
                                 .id(project.getId())
