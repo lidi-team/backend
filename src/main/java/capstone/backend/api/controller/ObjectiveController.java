@@ -235,7 +235,7 @@ public class ObjectiveController {
     public ResponseEntity<?> getListAlignProjectByObjectiveId(
             @ApiParam(value = "Id của project",required = true)
             @RequestParam(value = "projectId") long projectId,
-            @ApiParam(value = "Id của project",required = true)
+            @ApiParam(value = "Id của cycle",required = true)
             @RequestParam(value = "cycleId") long cycleId) {
         try {
             return objectiveService.getListAlignProjectByProjectIdAndCycleId(projectId,cycleId);
@@ -268,9 +268,13 @@ public class ObjectiveController {
         }
     }
 
-    public ResponseEntity<?> calculateObjectiveProgress(){
+    @GetMapping(path = "dashboard/progress")
+    public ResponseEntity<?> calculateObjectiveProgress(
+            @RequestHeader(name = "Authorization") String token,
+            @ApiParam(value = "Id của cycle",required = true)
+            @RequestParam(value = "cycleId") long cycleId){
         try {
-            return null;
+            return objectiveService.getProgressOKR(cycleId,token);
         } catch (Exception e) {
             logger.error("calculate failed");
             logger.error(e.getMessage());

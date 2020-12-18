@@ -17,13 +17,12 @@ import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -729,6 +728,69 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         .data(responses)
                         .build()
         );
+    }
+
+    @Override
+    public ResponseEntity<?> getProgressOKR(long cycleId, String token) throws Exception {
+        Map<String,Object> response = new HashMap<>();
+
+        Cycle cycle = cycleService.getCycleById(cycleId);
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
+        List<Execute> executes = executeOrigins.stream().filter(execute ->
+                !(execute.getEndDate().before(cycle.getFromDate())
+                        || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
+
+
+        List<Map<String,Object>> projectList = new ArrayList<>();
+        for (Execute execute : executes) {
+            if(execute.getProject() != null){
+                List<Objective> projectOKRs = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(),cycleId,1);
+                List<Objective> personalOKRs = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(),cycleId,2);
+
+                double projectProgress = calculateProgress(projectOKRs);
+                double personalProgress = calculateProgress(personalOKRs);
+
+                Map<String,Object> project = new HashMap<>();
+
+                project.put("id",execute.getProject().getId());
+                project.put("name",execute.getProject().getName());
+                project.put("projectProgress",projectProgress);
+                project.put("personalProgress",personalProgress);
+
+                projectList.add(project);
+            }
+        }
+
+        List<Objective> companyObjectives = objectiveRepository.findCompanyObjective(cycleId);
+        double companyProgress = calculateProgress(companyObjectives);
+
+        response.put("projects",projectList);
+        response.put("company",companyProgress);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
+    private double calculateProgress(List<Objective> OKRs) {
+        double weight = 0;
+        double totalProgress = 0;
+
+        for (Objective okr : OKRs) {
+            totalProgress += okr.getProgress()*okr.getWeight();
+            weight += okr.getWeight();
+        }
+        if(weight == 0){
+            weight = 1;
+        }
+        return totalProgress/weight;
     }
 
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {

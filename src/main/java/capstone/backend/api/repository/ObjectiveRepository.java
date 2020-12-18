@@ -139,4 +139,6 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
             "join Execute  e on o.execute.id = e.id  and e.isDelete = false " +
             "where e.project.id =:id")
     List<Long> getListIdObjectiveByProjectId(@Param(value = "id") long id);
+
+    List<Objective> findAllByExecuteIdAndCycleIdAndType(long executeId, long cycleId, int type);
 }
