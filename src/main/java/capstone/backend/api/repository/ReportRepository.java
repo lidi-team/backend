@@ -46,4 +46,10 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             "and r.isStaffFeedback = false ")
     Page<Report> findAllSuperiorRequest(@Param(value = "userId") long userId,
                                         Pageable pageable);
+    @Query(value = "select r from Report r " +
+            "join Objective o on r.objective.id = o.id " +
+            "where o.execute.user.id = :userId " +
+            "and o.cycle.id = :cycleId ")
+    List<Report> findAllByUserIdAndCycleId(@Param(value = "userId") long userId,
+                                           @Param(value = "cycleId") long cycleId);
 }

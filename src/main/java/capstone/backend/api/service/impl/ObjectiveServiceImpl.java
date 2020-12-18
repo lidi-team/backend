@@ -516,7 +516,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                     .type(objective.getType())
                                     .weight(objective.getWeight())
                                     .progress(objective.getProgress())
-                                    .update(checkUpdateForParentObjective(childItems))
+                                    .update(checkUpdateForParentObjective(childItems,objective))
                                     .changing(objective.getChanging())
                                     .keyResults(keyResultResponses)
                                     .alignObjectives(setListAlign(objective.getAlignmentObjectives()))
@@ -788,7 +788,12 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         return true;
     }
 
-    private boolean checkUpdateForParentObjective(List<ObjectiveProjectItem> children){
+    private boolean checkUpdateForParentObjective(List<ObjectiveProjectItem> children,Objective parent){
+        if(children.size() == 0){
+            if(parent.getExecute().isDelete() || parent.getExecute().isClose()){
+                return false;
+            }
+        }
        return children.stream().allMatch(ObjectiveProjectItem::isUpdate);
     }
 

@@ -492,9 +492,6 @@ public class ProjectServiceImpl implements ProjectService {
 
         executeRepository.removeStaff(projectId, userId);
 
-        Execute execute = executeRepository.findByProjectIdAndUserId(projectId, userId);
-        objectiveRepository.updateCompletedObjectiveByExecuteId(execute.getId());
-
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())

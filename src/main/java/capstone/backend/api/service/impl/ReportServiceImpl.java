@@ -514,6 +514,38 @@ public class ReportServiceImpl implements ReportService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getTotalCheckByCycleId(long cycleId,String token) {
+        Map<String,Integer> response = new HashMap<>();
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        List<Report> reports = reportRepository.findAllByUserIdAndCycleId(user.getId(),cycleId);
+        int reviewed = 0; int draft = 0; int pending = 0;
+        for (Report report : reports) {
+            if(report.getStatus().equalsIgnoreCase("reviewed")){
+                reviewed = reviewed + 1;
+            }else if(report.getStatus().equalsIgnoreCase("pending")){
+                pending = pending + 1;
+            }else if(report.getStatus().equalsIgnoreCase("draft")){
+                draft = draft + 1;
+            }
+        }
+        response.put("total",reports.size());
+        response.put("reviewed",reviewed);
+        response.put("pending",pending);
+        response.put("draft",draft);
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(response)
+                        .build()
+        );
+    }
+
     private void setObjectiveResponse(List<ObjectiveCheckin> objectivesResponse, List<Objective> objectives) {
         objectives.forEach(objective -> {
             List<Map<String, Object>> keyResultResponses = new ArrayList<>();
@@ -559,12 +591,14 @@ public class ReportServiceImpl implements ReportService {
         if (objective.getStatus().equalsIgnoreCase("completed")) {
             return "Completed";
         }
-
+        if(objective.getExecute().isClose() || objective.getExecute().isDelete()){
+            return "Closed";
+        }
         if (report == null) {
             return "Reviewed";
         }
 
-        if (report.getNextCheckinDate().before(new Date()) && report.getStatus().equalsIgnoreCase("draft")) {
+        if (report.getNextCheckinDate().before(new Date()) && report.getStatus().equalsIgnoreCase("Reviewed")) {
             return "Overdue";
         }
 
@@ -758,4 +792,5 @@ public class ReportServiceImpl implements ReportService {
 
         return cycle.getEndDate().before(execute.getEndDate())? cycle.getEndDate() : execute.getEndDate();
     }
+
 }
