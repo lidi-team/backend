@@ -321,12 +321,10 @@ public class ProjectServiceImpl implements ProjectService {
         executeRepository.save(execute);
 
         if (projectDto.getStatus() == 0) {
-
             executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
-
-            List<Long> objectiveIds = objectiveRepository.getListIdObjectiveByProjectId(projectDto.getId());
-
-            objectiveRepository.updateCompletedObjectiveByIdIn(objectiveIds);
+        }
+        if(projectDto.getStatus() == 1){
+            executeRepository.updateAllStatusWhenOpenProject(projectDto.getId());
         }
 
         return ResponseEntity.ok().body(
@@ -414,7 +412,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .user(user)
                         .reviewer(reviewer)
                         .position(position)
-                        .fromDate(project.getFromDate())
+                        .fromDate(new Date())
                         .endDate(project.getEndDate())
                         .isPm(false)
                         .isDelete(false)

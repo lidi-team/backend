@@ -499,8 +499,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                         .weight(childObjective.getWeight())
                                         .progress(childObjective.getProgress())
                                         .changing(childObjective.getChanging())
-                                        .delete(checkDeleteObjective(childObjective))
-                                        .update(checkUpdateObjective(childObjective))
+                                        .delete(checkDeleteAndUpdateObjective(childObjective))
+                                        .update(checkDeleteAndUpdateObjective(childObjective))
                                         .alignObjectives(setListAlign(childObjective.getAlignmentObjectives()))
                                         .keyResults(childKeyResultResponses)
                                         .parentId(childObjective.getParentId())
@@ -516,7 +516,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                     .type(objective.getType())
                                     .weight(objective.getWeight())
                                     .progress(objective.getProgress())
-                                    .update(checkUpdateObjective(objective))
+                                    .update(checkUpdateForParentObjective(childItems))
                                     .changing(objective.getChanging())
                                     .keyResults(keyResultResponses)
                                     .alignObjectives(setListAlign(objective.getAlignmentObjectives()))
@@ -731,17 +731,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
-    @Override
-    public ResponseEntity<?> calculateProgress(List<KeyResultProgress> keyresult) throws Exception {
-
-        for (KeyResultProgress keyResultProgress : keyresult) {
-
-        }
-
-
-        return null;
-    }
-
     private boolean validateObjectiveInformation(ObjectvieDto objectvieDto) {
         return !objectvieDto.getTitle().trim().isEmpty();
     }
@@ -789,19 +778,18 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         return keyResultResponses;
     }
 
-    private boolean checkDeleteObjective(Objective objective){
+    private boolean checkDeleteAndUpdateObjective(Objective objective){
         Report report = reportRepository.findFirstByObjectiveId(objective.getId());
-        return (report == null);
-    }
-
-    private boolean checkUpdateObjective(Objective objective){
-        List<Report> reports = reportRepository.findAllReportByObjectiveIdAndStatus(objective.getId());
         Execute execute = objective.getExecute();
-        if (reports.size() != 0 || execute.isDelete() || execute.isClose()
+        if (report == null || execute.isDelete() || execute.isClose()
                 || objective.getStatus().equalsIgnoreCase("completed")){
             return false;
         };
         return true;
+    }
+
+    private boolean checkUpdateForParentObjective(List<ObjectiveProjectItem> children){
+       return children.stream().allMatch(ObjectiveProjectItem::isUpdate);
     }
 
     private List<MetaDataResponse> setListAlign(String alignStr){
