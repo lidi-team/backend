@@ -21,4 +21,8 @@ public interface CfrRepository extends JpaRepository<Cfr, Long> {
             "join Objective o on r.objective.id = o.id " +
             "where o.cycle.id = :cycleId")
     List<Cfr> findAllByCycleId2(@Param(value = "cycleId") long cycleId);
+
+    List<Cfr> findAllByReceiverIdAndTypeIn(long id,List<String> types);
+
+    List<Cfr> findAllBySenderIdAndTypeIn(long id,List<String> types);
 }

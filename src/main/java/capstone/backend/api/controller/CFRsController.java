@@ -146,4 +146,22 @@ public class CFRsController {
         }
     }
 
+    @ApiOperation(value = "Detail cfr")
+    @GetMapping(path = "/total-cfr")
+    public ResponseEntity<?> getTotalCFRs(
+            @ApiParam(value = "token",required = true)
+            @RequestHeader(name = "Authorization") String token) {
+        try {
+            return cfrService.getTotalCfr(token);
+        } catch (Exception e) {
+            logger.error("get list history cfrs");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

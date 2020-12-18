@@ -380,6 +380,35 @@ public class CfrServiceImpl implements CfrService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getTotalCfr(String token) throws Exception {
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        Date today = new Date();
+        Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
+
+        List<String> types = Arrays.asList("LEADER_TO_MEMBER","MEMBER_TO_LEADER");
+
+        List<Cfr> receivers = cfrRepository.findAllByReceiverIdAndTypeIn(user.getId(),types)
+                .stream().filter(cfr -> cfr.getCreateAt().before(cycle.getEndDate()) && cfr.getCreateAt().after(cycle.getFromDate())).collect(Collectors.toList());
+        List<Cfr> senders = cfrRepository.findAllBySenderIdAndTypeIn(user.getId(),types)
+                .stream().filter(cfr -> cfr.getCreateAt().before(cycle.getEndDate()) && cfr.getCreateAt().after(cycle.getFromDate())).collect(Collectors.toList());
+
+        Map<String, Integer> map = new HashMap<>();
+        map.put("totalSend",senders.size());
+        map.put("totalGet",receivers.size());
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(map)
+                        .build()
+        );
+    }
+
     private List<Map<String,Object>> setListCheckin(Page<Report> reports){
         List<Map<String,Object>> items = new ArrayList<>();
         reports.getContent().forEach(report -> {

@@ -136,8 +136,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Không thể cập nhật ảnh đại diện").build()
             );
         }
         user.setAvatarImage(url);
@@ -145,8 +145,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS()).build()
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
+                        .message("Cập nhật avatar thành công").build()
         );
     }
 
