@@ -770,7 +770,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         response.put("projects",projectList);
         response.put("company",companyProgress);
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.ok().body(    
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
