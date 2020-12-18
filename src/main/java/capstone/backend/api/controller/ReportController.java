@@ -224,4 +224,22 @@ public class ReportController {
         }
     }
 
+    @ApiOperation(value = "chi tiet check in")
+    @GetMapping(path = "/dashboard")
+    public ResponseEntity<?> getDashboardTotalCheckinId(
+            @RequestHeader(value = "Authorization") String token,
+            @ApiParam(value = "id của project hiện tại")
+            @RequestParam(name = "cycleId") long cycleId) {
+        try {
+            return reportService.getTotalCheckByCycleId(cycleId,token);
+        } catch (Exception e) {
+            logger.error("get list checkin failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 }
