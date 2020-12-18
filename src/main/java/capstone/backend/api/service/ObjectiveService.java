@@ -35,6 +35,4 @@ public interface ObjectiveService {
     ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
 
     ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception;
-
-    ResponseEntity<?> calculateProgress(List<KeyResultProgress> keyresult) throws Exception;
 }

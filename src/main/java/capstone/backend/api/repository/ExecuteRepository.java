@@ -62,7 +62,6 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
             "where e.project.id = :id " +
             "and p.close = false " +
             "and e.isDelete = false " +
-            "and e.close = false " +
             "and e.isPm = false")
     List<Execute> findAllStaffByProjectId(@Param(value = "id") long id);
 
@@ -111,8 +110,12 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update Execute e set e.close = true where e.project.id = :id")
+    @Query(value = "update Execute e set e.close = true where e.project.id = :id and e.isDelete = false ")
     void updateAllStatusWhenCloseProject(@Param(value = "id") long id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "update Execute e set e.close = false where e.project.id = :id and e.isDelete = false ")
+    void updateAllStatusWhenOpenProject(@Param(value = "id") long id);
 
 }
