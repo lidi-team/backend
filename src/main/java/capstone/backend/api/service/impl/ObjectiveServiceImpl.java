@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -468,8 +469,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         User user = userRepository.findByEmail(email).get();
         Cycle cycle = cycleService.getCycleById(cycleId);
 
-        List<Execute> executes = executeRepository
-                .findExecutesByUserIdAndCycle(user.getId(),cycle.getFromDate(),cycle.getEndDate());
+        List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
+        List<Execute> executes = executeOrigins.stream().filter(execute ->
+                !(execute.getEndDate().before(cycle.getFromDate())
+                        || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
 
         for (Execute execute : executes) {
             if (execute.getProject() != null) {

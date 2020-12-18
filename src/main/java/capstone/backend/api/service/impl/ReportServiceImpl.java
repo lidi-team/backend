@@ -244,6 +244,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
         response.put("role", role);
+        response.put("limitDate",limitDate(objective));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -309,6 +310,7 @@ public class ReportServiceImpl implements ReportService {
         response.put("chart", chart);
         response.put("role", role);
         response.put("checkin",checkin);
+        response.put("limitDate",limitDate(objective));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -748,5 +750,12 @@ public class ReportServiceImpl implements ReportService {
 
     private double calculateValueObtainKeyResult(KeyResult keyResult) {
         return keyResult.getProgress() * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
+    }
+
+    private Date limitDate(Objective objective){
+        Cycle cycle = objective.getCycle();
+        Execute execute = objective.getExecute();
+
+        return cycle.getEndDate().before(execute.getEndDate())? cycle.getEndDate() : execute.getEndDate();
     }
 }

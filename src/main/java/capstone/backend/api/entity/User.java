@@ -42,6 +42,9 @@ public class User {
     @NonNull
     private int gender;
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(columnDefinition = "longtext")
     private String avatarImage;
 
 
