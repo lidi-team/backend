@@ -103,6 +103,7 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     Execute findFirstByProjectIsNull();
 
+    @Query(value = "")
     Execute findByProjectIdAndUserId(long projectId, long userId);
 
     @Query(value = "select e.id from Execute e where e.project.id = :id")

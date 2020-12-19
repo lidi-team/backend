@@ -7,10 +7,7 @@ import capstone.backend.api.entity.ApiResponse.*;
 import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.*;
 import capstone.backend.api.entity.*;
-import capstone.backend.api.repository.ExecuteRepository;
-import capstone.backend.api.repository.ObjectiveRepository;
-import capstone.backend.api.repository.ReportRepository;
-import capstone.backend.api.repository.UserRepository;
+import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ObjectiveService;
 import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
@@ -50,6 +47,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private final ReportRepository reportRepository;
 
     private final ExecuteRepository executeRepository;
+
+    private final ProjectRepository projectRepository;
 
     @Override
     public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
@@ -469,9 +468,14 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Cycle cycle = cycleService.getCycleById(cycleId);
 
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
+
         List<Execute> executes = executeOrigins.stream().filter(execute ->
                 !(execute.getEndDate().before(cycle.getFromDate())
                         || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
+
+        List<Long> projectIds = executes.stream().filter(execute -> execute.getProject() != null)
+                .map(execute -> execute.getProject().getId()).collect(Collectors.toList());
+        List<Project> projects = projectRepository.findAllByIdIn(projectIds);
 
         for (Execute execute : executes) {
             if (execute.getProject() != null) {
