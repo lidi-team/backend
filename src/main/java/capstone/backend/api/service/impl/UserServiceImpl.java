@@ -464,10 +464,10 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        return ResponseEntity.badRequest().body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_FAILED())
-                        .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                        .message("Thêm người dùng không thành công")
                         .data(failResponse)
                         .build()
         );
