@@ -135,6 +135,13 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
     public ResponseEntity<ApiResponse> deletePosition(long id, String jwtToken) throws Exception{
         ProjectPosition projectPosition = positionRepository.findByIdAndIsDeleteFalse(id);
 
+        if(positionRepository.checkExisted(id).size() > 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Vị trí này đang được sử dụng").build()
+            );
+        }
+
         if (projectPosition == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())

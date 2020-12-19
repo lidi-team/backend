@@ -163,15 +163,15 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     public ResponseEntity<?> deleteMeasure(long id, String jwtToken) throws Exception {
         UnitOfKeyResult unitOfKeyResult = unitRepository.findByIdAndIsDeleteFalse(id);
 
-        if (unitOfKeyResult == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+        if(unitRepository.checkExisted(unitOfKeyResult.getId()).size() > 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Đơn vị này đang được sử dụng").build()
             );
-        } else {
-            unitOfKeyResult.setDelete(true);
-            unitRepository.save(unitOfKeyResult);
         }
+
+        unitOfKeyResult.setDelete(true);
+        unitRepository.save(unitOfKeyResult);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())

@@ -178,6 +178,12 @@ public class CycleServiceImpl implements CycleService {
     public ResponseEntity<?> deleteCycle(long id, String jwtToken) throws Exception {
         Cycle currentCycle = cycleRepository.findById(id).orElse(null);
 
+        if(cycleRepository.checkExisted(id).size() > 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Chu kì này đang được sử dụng").build()
+            );
+        }
         if (currentCycle == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
