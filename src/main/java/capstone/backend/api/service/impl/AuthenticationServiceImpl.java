@@ -67,7 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Đăng nhập thành công")
                         .data(tokenResponseInfo).build()
         );
 

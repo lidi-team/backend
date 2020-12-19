@@ -123,9 +123,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         logger.info("update successful!");
 
-        return ResponseEntity.status(commonProperties.getCODE_UPDATE_SUCCESS()).body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
-                        .code(commonProperties.getCODE_SUCCESS())
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS()).build()
         );
     }

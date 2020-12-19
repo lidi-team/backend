@@ -74,7 +74,8 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
 
     @Override
     public ResponseEntity<?> createMeasure(MeasureDto unit, String jwtToken) throws Exception {
-        UnitOfKeyResult data = unitRepository.save(UnitOfKeyResult.builder()
+        UnitOfKeyResult data = unitRepository.save(
+                UnitOfKeyResult.builder()
                 .name(unit.getType())
                 .preset(unit.getPresent())
                 .measureIndex(unit.getIndex())

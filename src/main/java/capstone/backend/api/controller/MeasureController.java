@@ -59,8 +59,8 @@ public class MeasureController {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Tạo Đơn vị đo không thành công").build()
             );
         }
     }
