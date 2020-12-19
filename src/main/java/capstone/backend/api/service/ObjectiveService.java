@@ -35,4 +35,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getListAlignProjectByProjectIdAndCycleId(long projectId,long cycleId) throws Exception;
 
     ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception;
+
+    ResponseEntity<?> getProgressOKR(long cycleId, String token) throws Exception;
 }

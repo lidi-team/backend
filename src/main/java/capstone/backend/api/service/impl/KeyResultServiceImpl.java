@@ -42,6 +42,7 @@ public class KeyResultServiceImpl implements KeyResultService {
                         .toValue(keyResultDto.getTargetedValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
+                        .parentId(keyResultDto.getKeyResultParentId())
                         .unitOfKeyResult(unit)
                         .reference(keyResultDto.getReference())
                         .build();
@@ -53,6 +54,7 @@ public class KeyResultServiceImpl implements KeyResultService {
                         .toValue(keyResultDto.getTargetedValue())
                         .content(keyResultDto.getContent())
                         .objective(objective)
+                        .parentId(keyResultDto.getKeyResultParentId())
                         .unitOfKeyResult(unit)
                         .reference(keyResultDto.getReference())
                         .build();
