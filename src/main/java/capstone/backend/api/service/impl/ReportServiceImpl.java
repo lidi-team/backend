@@ -516,7 +516,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ResponseEntity<?> getTotalCheckByCycleId(long cycleId,String token) {
-        Map<String,Integer> response = new HashMap<>();
+        List<Map<String,Object>> response = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
@@ -532,10 +532,19 @@ public class ReportServiceImpl implements ReportService {
                 draft = draft + 1;
             }
         }
-        response.put("total",reports.size());
-        response.put("reviewed",reviewed);
-        response.put("pending",pending);
-        response.put("draft",draft);
+        Map<String,Object> reviewedMap = new HashMap<>();
+        reviewedMap.put("name","Đã duyệt");
+        reviewedMap.put("value",reviewed);
+        Map<String,Object> pendingMap = new HashMap<>();
+        pendingMap.put("name","Đang chờ duyệt");
+        pendingMap.put("value",pending);
+        Map<String,Object> draftMap = new HashMap<>();
+        draftMap.put("name","Đang chỉnh sửa");
+        draftMap.put("value",draft);
+
+        response.add(reviewedMap);
+        response.add(pendingMap);
+        response.add(draftMap);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

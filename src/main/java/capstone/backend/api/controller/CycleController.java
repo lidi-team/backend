@@ -103,9 +103,9 @@ public class CycleController {
     }
 
     @ApiOperation(value = "xoá một cycle theo id")
-    @DeleteMapping()
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteCycle(
-            @ApiParam(required = true) @RequestParam(name = "id") long id,
+            @ApiParam(required = true) @PathVariable(name = "id") long id,
             @RequestHeader(value = "Authorization") String jwtToken) {
         logger.info("Delete cycle: " + id);
         try {
