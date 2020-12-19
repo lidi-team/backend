@@ -847,7 +847,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     private boolean checkDeleteAndUpdateObjective(Objective objective){
         Report report = reportRepository.findFirstByObjectiveId(objective.getId());
         Execute execute = objective.getExecute();
-        if (report == null || execute.isDelete() || execute.isClose()
+        if (report != null || execute.isDelete() || execute.isClose()
                 || objective.getStatus().equalsIgnoreCase("completed")){
             return false;
         };
