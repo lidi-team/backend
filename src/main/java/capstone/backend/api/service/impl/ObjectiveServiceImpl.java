@@ -475,7 +475,6 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         List<Long> projectIds = executes.stream().filter(execute -> execute.getProject() != null)
                 .map(execute -> execute.getProject().getId()).collect(Collectors.toList());
-        List<Project> projects = projectRepository.findAllByIdIn(projectIds);
 
         for (Execute execute : executes) {
             if (execute.getProject() != null) {

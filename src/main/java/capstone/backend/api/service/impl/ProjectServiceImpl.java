@@ -294,17 +294,31 @@ public class ProjectServiceImpl implements ProjectService {
                     oldUser.getRoles().remove(rolePm);
                     userRepository.save(oldUser);
                 }
+
+                // check if new pm is in project
+                Execute newExecute = executeRepository.findByProjectIdAndUserId(execute.getProject().getId(),pm.getId());
+                if(newExecute != null){
+                    // add information of new pm
+                    newExecute.setPosition(position);
+                    newExecute.setPm(true);
+                    executeRepository.save(newExecute);
+                    // clear role old pm
+                    execute.setPm(false);
+                    execute.setPosition(null);
+                }
+            } else{
+                execute = Execute.builder()
+                        .id(execute.getId())
+                        .user(pm)
+                        .fromDate(fromDate)
+                        .endDate(endDate)
+                        .isPm(true)
+                        .isDelete(false)
+                        .position(position)
+                        .reviewer(director)
+                        .build();
             }
-            execute = Execute.builder()
-                    .id(execute.getId())
-                    .user(pm)
-                    .fromDate(fromDate)
-                    .endDate(endDate)
-                    .isPm(true)
-                    .isDelete(false)
-                    .position(position)
-                    .reviewer(director)
-                    .build();
+
         } else {
             execute = Execute.builder()
                     .user(pm)
@@ -490,6 +504,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
 
+        Execute execute = executeRepository.findByProjectIdAndUserId(projectId,userId);
         executeRepository.removeStaff(projectId, userId);
 
         return ResponseEntity.ok().body(

@@ -743,7 +743,7 @@ public class ReportServiceImpl implements ReportService {
             if (keyResultChanging.containsKey(parentKeyResult.getId())) {
                 double changeKey = keyResultChanging.get(parentKeyResult.getId());
                 double progressKey = parentKeyResult.getProgress() + changeKey * parentKeyResult.getProgress();
-                double valueObtain = calculateValueObtainKeyResult(parentKeyResult);
+                double valueObtain = calculateValueObtainKeyResult(parentKeyResult, progressKey);
                 parentKeyResult.setProgress(progressKey);
                 parentKeyResult.setValueObtained(valueObtain);
                 keyResultRepository.updateKeyResultProgress(progressKey, valueObtain, parentKeyResult.getId());
@@ -791,8 +791,8 @@ public class ReportServiceImpl implements ReportService {
         return oldValue;
     }
 
-    private double calculateValueObtainKeyResult(KeyResult keyResult) {
-        return keyResult.getProgress() * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
+    private double calculateValueObtainKeyResult(KeyResult keyResult, double progressKey) {
+        return progressKey * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
     }
 
     private Date limitDate(Objective objective){
