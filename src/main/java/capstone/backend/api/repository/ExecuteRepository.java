@@ -60,7 +60,6 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     @Query(value = "select e from Execute e " +
             "join Project p on e.project.id = p.id " +
             "where e.project.id = :id " +
-            "and p.close = false " +
             "and e.isDelete = false " +
             "and e.isPm = false")
     List<Execute> findAllStaffByProjectId(@Param(value = "id") long id);
