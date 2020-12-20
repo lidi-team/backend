@@ -45,7 +45,12 @@ public class ReportDetailServiceImpl implements ReportDetailService {
 
             if (keyResult != null && report.getStatus().equalsIgnoreCase("Reviewed")) {
                 double valueObtain = item.getValueObtained();
-                double progress = keyResult.calculateProgress() * item.getConfidentLevel();
+                double fromValue = keyResult.getFromValue();
+                double toValue = keyResult.getToValue();
+                double confidentLevel = item.getConfidentLevel();
+                double num = (toValue - fromValue);
+                double progress =  Math.abs(100*(valueObtain - fromValue)/ (num == 0 ? 1 : num)) * confidentLevel;
+
                 keyResultRepository.updateKeyResultProgress(progress,valueObtain,keyResult.getId());
 
                 int i = keyResults.indexOf(keyResult);
@@ -56,4 +61,5 @@ public class ReportDetailServiceImpl implements ReportDetailService {
         });
         detailRepository.saveAll(details);
     }
+
 }
