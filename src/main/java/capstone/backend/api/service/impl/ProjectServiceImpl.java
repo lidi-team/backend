@@ -446,8 +446,22 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getListStaffByProjectId(long projectId) throws Exception {
+    public ResponseEntity<?> getListStaffByProjectId(long projectId, String token) throws Exception {
         List<StaffInformation> responses = new ArrayList<>();
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectIdAndClose(user.getId(),projectId,false);
+        if(executes == null || executes.size() == 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UN_AUTHORIZED())
+                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                            .build()
+            );
+        }
+
         List<Execute> staffs = executeRepository.findAllStaffByProjectId(projectId);
         staffs.forEach(staff -> {
             responses.add(

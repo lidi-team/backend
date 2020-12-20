@@ -26,6 +26,8 @@ public class CommonProperties {
     private String MESSAGE_UNDEFINE_ERROR;
     private String MESSAGE_PARAM_FORMAT_INVALID;
     private String MESSAGE_EXIST_VALUE;
+    private String MESSAGE_UN_AUTHORIZED;
+    private int CODE_UN_AUTHORIZED;
     private int CODE_UPDATE_SUCCESS;
     private int CODE_UPDATE_FAILED;
     private int CODE_SUCCESS;

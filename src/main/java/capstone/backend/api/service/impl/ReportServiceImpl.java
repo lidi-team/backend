@@ -7,10 +7,11 @@ import capstone.backend.api.entity.ApiResponse.KeyResult.KeyResultCheckin;
 import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveCheckin;
 import capstone.backend.api.entity.ApiResponse.Objective.ObjectiveInferior;
-import capstone.backend.api.entity.ApiResponse.Project.ProjectObjectiveResponse;
-import capstone.backend.api.entity.ApiResponse.Report.*;
+import capstone.backend.api.entity.ApiResponse.Report.Chart;
+import capstone.backend.api.entity.ApiResponse.Report.ObjectiveCheckinRequest;
+import capstone.backend.api.entity.ApiResponse.Report.ReportResponse;
+import capstone.backend.api.entity.ApiResponse.Report.UserRequestCheckin;
 import capstone.backend.api.entity.*;
-import capstone.backend.api.entity.ReportDetail;
 import capstone.backend.api.repository.*;
 import capstone.backend.api.service.ReportService;
 import capstone.backend.api.utils.CommonUtils;
@@ -139,7 +140,7 @@ public class ReportServiceImpl implements ReportService {
             t.start();
 
         }
-        if(checkinDto.isObjectComplete()){
+        if (checkinDto.isObjectComplete()) {
             objective.setStatus("completed");
             objectiveRepository.save(objective);
         }
@@ -161,7 +162,7 @@ public class ReportServiceImpl implements ReportService {
         if (page == 0) {
             page = 1;
         }
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         List<ObjectiveCheckin> objectiveResponses = new ArrayList<>();
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
@@ -179,17 +180,17 @@ public class ReportServiceImpl implements ReportService {
         Page<Objective> objectives;
         if (projectId == 0) {
             objectives = objectiveRepository.findAllByTypeAndCycleIdAndUserId(
-                    2,cycleId,user.getId(),PageRequest.of(page-1, limit));
+                    2, cycleId, user.getId(), PageRequest.of(page - 1, limit));
         } else {
             objectives = objectiveRepository.findAllByTypeAndCycleIdAndUserIdAndProjectId(
-                    2,cycleId,user.getId(),projectId,PageRequest.of(page-1, limit));
+                    2, cycleId, user.getId(), projectId, PageRequest.of(page - 1, limit));
         }
 
         List<Objective> objectiveList = objectives.getContent();
         setObjectiveResponse(objectiveResponses, objectiveList);
 
-        response.put("items",objectiveResponses);
-        response.put("meta",commonUtils.paging(objectives,page));
+        response.put("items", objectiveResponses);
+        response.put("meta", commonUtils.paging(objectives, page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -222,12 +223,17 @@ public class ReportServiceImpl implements ReportService {
         }
 
         String role = "";
-        if(user.getId() == objective.getExecute().getUser().getId()){
+        if (user.getId() == objective.getExecute().getUser().getId()) {
             role = "user";
-        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
+        } else if (user.getId() == objective.getExecute().getReviewer().getId()) {
             role = "reviewer";
         } else {
-            role = "guest";
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UN_AUTHORIZED())
+                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                            .build()
+            );
         }
 
         Map<String, Object> objectiveMap = new HashMap<>();
@@ -239,12 +245,12 @@ public class ReportServiceImpl implements ReportService {
 
         response.put("keyResults", keyResultCheckins);
         response.put("teamLeaderId", objective.getExecute().getReviewer().getId());
-        response.put("objective",objectiveMap);
+        response.put("objective", objectiveMap);
         response.put("chart", chart);
         response.put("checkin", checkin);
         response.put("checkinDetail", details);
         response.put("role", role);
-        response.put("limitDate",limitDate(objective));
+        response.put("limitDate", limitDate(objective));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -256,7 +262,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getDetailCheckinByCheckinId(long id,String token) throws Exception {
+    public ResponseEntity<?> getDetailCheckinByCheckinId(long id, String token) throws Exception {
         Map<String, Object> response = new HashMap<>();
         Report report = reportRepository.findById(id).orElse(null);
         if (report == null)
@@ -270,7 +276,6 @@ public class ReportServiceImpl implements ReportService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
         Objective objective = report.getObjective();
-
 
 
         Map<String, Object> objectiveMap = new HashMap<>();
@@ -287,15 +292,20 @@ public class ReportServiceImpl implements ReportService {
         Chart chart = setListChartByObjectiveId(objective);
 
         String role = "";
-        if(user.getId() == objective.getExecute().getUser().getId()){
+        if (user.getId() == objective.getExecute().getUser().getId()) {
             role = "user";
-        } else if(user.getId() == objective.getExecute().getReviewer().getId()){
+        } else if (user.getId() == objective.getExecute().getReviewer().getId()) {
             role = "reviewer";
         } else {
-            role = "guest";
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UN_AUTHORIZED())
+                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                            .build()
+            );
         }
 
-        Map<String,Object> checkin = new HashMap<>();
+        Map<String, Object> checkin = new HashMap<>();
 
         checkin.put("id", report.getId());
         checkin.put("checkinAt", report.getCheckinDate());
@@ -309,8 +319,8 @@ public class ReportServiceImpl implements ReportService {
         response.put("checkinDetail", reportDetails);
         response.put("chart", chart);
         response.put("role", role);
-        response.put("checkin",checkin);
-        response.put("limitDate",limitDate(objective));
+        response.put("checkin", checkin);
+        response.put("limitDate", limitDate(objective));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -334,7 +344,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
-        if (cycle== null){
+        if (cycle == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
@@ -390,8 +400,8 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ResponseEntity<?> getListCheckinInferior(String token, int page, int limit, long cycleId, long projectId) throws Exception {
-        Map<String,Object> response = new HashMap<>();
-        List<Map<String,Object>> inferiors = new ArrayList<>();
+        Map<String, Object> response = new HashMap<>();
+        List<Map<String, Object>> inferiors = new ArrayList<>();
         if (limit == 0) {
             limit = 10;
         }
@@ -401,16 +411,16 @@ public class ReportServiceImpl implements ReportService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
         Page<Execute> pages;
-        if(projectId == 0){
+        if (projectId == 0) {
             pages = executeRepository.findExecuteByReviewerId(cycleId,
-                    user.getId(),PageRequest.of(page -1,limit));
+                    user.getId(), PageRequest.of(page - 1, limit));
         } else {
             pages = executeRepository.findExecuteByReviewerIdAndProjectId(cycleId,
-                            user.getId(),projectId,PageRequest.of(page -1,limit));
+                    user.getId(), projectId, PageRequest.of(page - 1, limit));
         }
 
         pages.getContent().forEach(execute -> {
-            Map<String,Object> inferior = new HashMap<>();
+            Map<String, Object> inferior = new HashMap<>();
             MetaDataResponse position = MetaDataResponse.builder()
                     .id(execute.getPosition().getId())
                     .name(execute.getPosition().getName())
@@ -420,17 +430,17 @@ public class ReportServiceImpl implements ReportService {
                     .name(execute.getProject().getName())
                     .build();
 
-            inferior.put("id",execute.getUser().getId());
-            inferior.put("fullName",execute.getUser().getFullName());
-            inferior.put("urlImage",execute.getUser().getAvatarImage());
-            inferior.put("position",position);
-            inferior.put("project",project);
+            inferior.put("id", execute.getUser().getId());
+            inferior.put("fullName", execute.getUser().getFullName());
+            inferior.put("urlImage", execute.getUser().getAvatarImage());
+            inferior.put("position", position);
+            inferior.put("project", project);
 
             inferiors.add(inferior);
         });
 
-        response.put("items",inferiors);
-        response.put("meta",commonUtils.paging(pages,page));
+        response.put("items", inferiors);
+        response.put("meta", commonUtils.paging(pages, page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -442,10 +452,25 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getListObjectiveInferior(long userId, long cycleId, long projectId) throws Exception {
+    public ResponseEntity<?> getListObjectiveInferior(long userId, long cycleId, long projectId,String token) throws Exception {
         List<ObjectiveInferior> responses = new ArrayList<>();
 
-        Page<Objective> objectives = objectiveRepository.findAllByTypeAndCycleIdAndUserIdAndProjectId(2,cycleId,userId,projectId,PageRequest.of(0,20));
+        Execute execute = executeRepository.findByProjectIdAndUserId(projectId,userId);
+        Execute pm = executeRepository.findPmByProjectId(projectId);
+
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        if(execute.getReviewer().getId() != user.getId() && pm.getId() != user.getId() ){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UN_AUTHORIZED())
+                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                            .build()
+            );
+        }
+
+        Page<Objective> objectives = objectiveRepository.findAllByTypeAndCycleIdAndUserIdAndProjectId(2, cycleId, userId, projectId, PageRequest.of(0, 20));
         objectives.getContent().forEach(objective -> {
             ObjectiveInferior item = ObjectiveInferior.builder()
                     .id(objective.getId())
@@ -468,41 +493,41 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ResponseEntity<?> getDetailCheckinFeedbackByCheckinId(long id) {
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
 
         Report report = reportRepository.findById(id).get();
 
         List<ReportDetail> details = detailRepository.findAllByReportId(id);
 
         Objective objective = report.getObjective();
-        Map<String,Object> objectMap = new HashMap<>();
-        Map<String,Object> userMap = new HashMap<>();
-        objectMap.put("title",objective.getName());
-        userMap.put("fullName",objective.getExecute().getUser().getFullName());
-        objectMap.put("user",userMap);
+        Map<String, Object> objectMap = new HashMap<>();
+        Map<String, Object> userMap = new HashMap<>();
+        objectMap.put("title", objective.getName());
+        userMap.put("fullName", objective.getExecute().getUser().getFullName());
+        objectMap.put("user", userMap);
 
 
-        List<Map<String,Object>> checkinDetails = new ArrayList<>();
+        List<Map<String, Object>> checkinDetails = new ArrayList<>();
         details.forEach(detail -> {
-            Map<String,Object> keyresult = new HashMap<>();
-            keyresult.put("targetValue",detail.getKeyResult().getToValue());
-            keyresult.put("content",detail.getKeyResult().getContent());
+            Map<String, Object> keyresult = new HashMap<>();
+            keyresult.put("targetValue", detail.getKeyResult().getToValue());
+            keyresult.put("content", detail.getKeyResult().getContent());
 
-            Map<String,Object> checkin = new HashMap<>();
-            checkin.put("valueObtained",detail.getValueObtained());
-            checkin.put("confidentLevel",detail.getConfidentLevel());
-            checkin.put("progress",detail.getProgress());
-            checkin.put("problems",detail.getProblems());
-            checkin.put("plans",detail.getPlans());
-            checkin.put("keyResult",keyresult);
+            Map<String, Object> checkin = new HashMap<>();
+            checkin.put("valueObtained", detail.getValueObtained());
+            checkin.put("confidentLevel", detail.getConfidentLevel());
+            checkin.put("progress", detail.getProgress());
+            checkin.put("problems", detail.getProblems());
+            checkin.put("plans", detail.getPlans());
+            checkin.put("keyResult", keyresult);
 
             checkinDetails.add(checkin);
         });
 
-        response.put("id",report.getId());
-        response.put("checkinAt",report.getCheckinDate());
-        response.put("objective",objectMap);
-        response.put("checkinDetails",checkinDetails);
+        response.put("id", report.getId());
+        response.put("checkinAt", report.getCheckinDate());
+        response.put("objective", objectMap);
+        response.put("checkinDetails", checkinDetails);
 
 
         return ResponseEntity.ok().body(
@@ -515,32 +540,34 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ResponseEntity<?> getTotalCheckByCycleId(long cycleId,String token) {
-        List<Map<String,Object>> response = new ArrayList<>();
+    public ResponseEntity<?> getTotalCheckByCycleId(long cycleId, String token) {
+        List<Map<String, Object>> response = new ArrayList<>();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
-        List<Report> reports = reportRepository.findAllByUserIdAndCycleId(user.getId(),cycleId);
-        int reviewed = 0; int draft = 0; int pending = 0;
+        List<Report> reports = reportRepository.findAllByUserIdAndCycleId(user.getId(), cycleId);
+        int reviewed = 0;
+        int draft = 0;
+        int pending = 0;
         for (Report report : reports) {
-            if(report.getStatus().equalsIgnoreCase("reviewed")){
+            if (report.getStatus().equalsIgnoreCase("reviewed")) {
                 reviewed = reviewed + 1;
-            }else if(report.getStatus().equalsIgnoreCase("pending")){
+            } else if (report.getStatus().equalsIgnoreCase("pending")) {
                 pending = pending + 1;
-            }else if(report.getStatus().equalsIgnoreCase("draft")){
+            } else if (report.getStatus().equalsIgnoreCase("draft")) {
                 draft = draft + 1;
             }
         }
-        Map<String,Object> reviewedMap = new HashMap<>();
-        reviewedMap.put("name","Đã duyệt");
-        reviewedMap.put("value",reviewed);
-        Map<String,Object> pendingMap = new HashMap<>();
-        pendingMap.put("name","Đang chờ duyệt");
-        pendingMap.put("value",pending);
-        Map<String,Object> draftMap = new HashMap<>();
-        draftMap.put("name","Đang chỉnh sửa");
-        draftMap.put("value",draft);
+        Map<String, Object> reviewedMap = new HashMap<>();
+        reviewedMap.put("name", "Đã duyệt");
+        reviewedMap.put("value", reviewed);
+        Map<String, Object> pendingMap = new HashMap<>();
+        pendingMap.put("name", "Đang chờ duyệt");
+        pendingMap.put("value", pending);
+        Map<String, Object> draftMap = new HashMap<>();
+        draftMap.put("name", "Đang chỉnh sửa");
+        draftMap.put("value", draft);
 
         response.add(reviewedMap);
         response.add(pendingMap);
@@ -600,7 +627,7 @@ public class ReportServiceImpl implements ReportService {
         if (objective.getStatus().equalsIgnoreCase("completed")) {
             return "Completed";
         }
-        if(objective.getExecute().isClose() || objective.getExecute().isDelete()){
+        if (objective.getExecute().isClose() || objective.getExecute().isDelete()) {
             return "Closed";
         }
         if (report == null) {
@@ -618,7 +645,7 @@ public class ReportServiceImpl implements ReportService {
         Chart chart = new Chart();
         List<Double> progress = new ArrayList<>();
         List<Date> checkinAt = new ArrayList<>();
-        List<Report> reports = reportRepository.findAllByObjectiveIdAndStatusContains(objective.getId(),"Reviewed");
+        List<Report> reports = reportRepository.findAllByObjectiveIdAndStatusContains(objective.getId(), "Reviewed");
         checkinAt.add(objective.getCreateAt());
         progress.add(0.0);
 
@@ -795,11 +822,11 @@ public class ReportServiceImpl implements ReportService {
         return progressKey * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
     }
 
-    private Date limitDate(Objective objective){
+    private Date limitDate(Objective objective) {
         Cycle cycle = objective.getCycle();
         Execute execute = objective.getExecute();
 
-        return cycle.getEndDate().before(execute.getEndDate())? cycle.getEndDate() : execute.getEndDate();
+        return cycle.getEndDate().before(execute.getEndDate()) ? cycle.getEndDate() : execute.getEndDate();
     }
 
 }

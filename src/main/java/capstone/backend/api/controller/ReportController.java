@@ -192,9 +192,10 @@ public class ReportController {
             @ApiParam(value = "id cua chu ki")
             @RequestParam(value = "cycleId") long cycleId,
             @ApiParam(value = "id của project hiện tại")
-            @RequestParam(name = "projectId") long projectId) {
+            @RequestParam(name = "projectId") long projectId,
+            @RequestHeader(value = "Authorization") String token) {
         try {
-            return reportService.getListObjectiveInferior(userId, cycleId, projectId);
+            return reportService.getListObjectiveInferior(userId, cycleId, projectId,token);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());

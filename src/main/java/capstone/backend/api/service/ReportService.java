@@ -21,7 +21,7 @@ public interface ReportService {
 
     ResponseEntity<?> getListCheckinInferior(String token, int page, int limit, long cycleId, long projectId) throws Exception;
 
-    ResponseEntity<?> getListObjectiveInferior(long userId, long cycleId, long projectId) throws Exception;
+    ResponseEntity<?> getListObjectiveInferior(long userId, long cycleId, long projectId, String token) throws Exception;
 
     ResponseEntity<?> getDetailCheckinFeedbackByCheckinId(long id);
 

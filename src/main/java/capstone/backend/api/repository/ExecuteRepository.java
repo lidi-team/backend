@@ -118,4 +118,6 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     @Query(value = "update Execute e set e.close = false where e.project.id = :id and e.isDelete = false ")
     void updateAllStatusWhenOpenProject(@Param(value = "id") long id);
 
+    List<Execute> getExecuteByUserIdAndProjectIdAndClose(long userId,long projectId,boolean status);
+
 }
