@@ -202,9 +202,10 @@ public class ProjectController {
     @GetMapping(path = "/{projectId}/staff")
     public ResponseEntity<?> getListStaffByProjectId(
             @ApiParam(value = "id cua project")
-            @PathVariable(value = "projectId") long projectId){
+            @PathVariable(value = "projectId") long projectId,
+            @RequestHeader(value = "Authorization") String token){
         try {
-            return projectService.getListStaffByProjectId(projectId);
+            return projectService.getListStaffByProjectId(projectId, token);
         } catch (Exception e) {
             logger.error("get list staff failed");
             logger.error(e.getMessage());

@@ -151,22 +151,46 @@ public class DepartmentServiceImpl implements DepartmentService {
             );
         }
 
-        departmentRepository.save(Department.builder()
-                .id(id)
-                .name(departmentDto.getName())
-                .description(departmentDto.getDescription())
-                .build());
-
+        Department departmentOld = departmentRepository.findByName(departmentDto.getName());
+        if(departmentOld != null){
+            if(departmentOld.isDelete()){
+                departmentOld.setDelete(false);
+                departmentOld.setName(departmentDto.getName());
+                departmentOld.setDescription(departmentDto.getDescription());
+                departmentRepository.save(departmentOld);
+            } else{
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên phòng ban này đã tồn tại")
+                                .build()
+                );
+            }
+        }else {
+            departmentRepository.save(Department.builder()
+                    .id(id)
+                    .name(departmentDto.getName())
+                    .description(departmentDto.getDescription())
+                    .build());
+        }
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
+
     }
 
     @Override
     public ResponseEntity<?> deleteDepartment(long id, String jwtToken) throws Exception {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
+
+        if(departmentRepository.checkExisted(id).size() > 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Đơn vị phòng ban này đang có nhân viên")
+                            .build()
+            );
+        }
 
         if (department == null) {
             return ResponseEntity.ok().body(
@@ -180,7 +204,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
