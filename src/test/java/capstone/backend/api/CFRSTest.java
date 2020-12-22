@@ -121,8 +121,8 @@
 //   @Test
 //   public void T05() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "a22";
-//     String limit = "32b";
+//     String page = "123ag";
+//     String limit = "123ag";
 //     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
 //         .body("status", equalTo(400)).body("error", equalTo("Bad Request"))
 //         .body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
@@ -131,8 +131,8 @@
 //   @Test
 //   public void T06() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "30";
-//     String limit = "32b";
+//     String page = "1";
+//     String limit = "123ag";
 //     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
 //         .body("status", equalTo(400)).body("error", equalTo("Bad Request"))
 //         .body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
@@ -142,8 +142,8 @@
 //   @Test
 //   public void T07() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "30";
-//     String limit = "32b";
+//     String page = "10";
+//     String limit = "123_3";
 //     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
 //         .body("status", equalTo(400)).body("error", equalTo("Bad Request"))
 //         .body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
@@ -163,7 +163,7 @@
 //   public void T09() {
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "10";
-//     String limit = "-100";
+//     String limit = "-1";
 //     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
 //         .body("code", equalTo(402)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
 
@@ -193,7 +193,7 @@
 //   public void T12() {
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "0";
-//     String limit = "-1000";
+//     String limit = "-2";
 //     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
 //         .body("code", equalTo(402)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
 
@@ -239,6 +239,33 @@
 
 //   }
 
+//   @Test
+//   public void T65() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String page = "123_3";
+//     String limit = "1000";
+//     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
+//         .body("status", equalTo(400)).body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
+
+//   }
+//   @Test
+//   public void T66() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String page = "1000";
+//     String limit = "1000";
+//     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
+//         .body("code", equalTo(404)).body(matchesJsonSchemaInClasspath("404ErrorSchema.json"));
+
+//   }
+//   @Test
+//   public void T67() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String page = "ad_3*";
+//     String limit = "-1000";
+//     given().header(headers).when().get("cfrs/list-waiting?page=" + page + "&limit=" + limit + "").then().assertThat()
+//         .body("status", equalTo(400)).body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
+
+//   }
 //   // GET LIST HISTORY CFRS
 
 //   @Test
@@ -270,7 +297,7 @@
 //   @Test
 //   public void T19() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "20";
+//     String page = "10";
 //     String cycleId = "3";
 //     String limit = "10";
 //     String type = "2";
@@ -283,7 +310,7 @@
 //   @Test
 //   public void T20() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "100";
+//     String page = "1000";
 //     String cycleId = "3";
 //     String limit = "10";
 //     String type = "2";
@@ -296,13 +323,13 @@
 //   @Test
 //   public void T21() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "100000";
+//     String page = "-1000";
 //     String cycleId = "3";
 //     String limit = "10";
 //     String type = "2";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
-//         .assertThat().body("code", equalTo(200)).body(matchesJsonSchemaInClasspath("CFRS_history_Schema.json"));
+//         .assertThat().body("code", equalTo(402));
 
 //   }
 
@@ -324,11 +351,11 @@
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "1";
 //     String cycleId = "3";
-//     String limit = "10000000";
+//     String limit = "-1000";
 //     String type = "2";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
-//         .assertThat().body("code", equalTo(200)).body(matchesJsonSchemaInClasspath("CFRS_history_Schema.json"));
+//         .assertThat().body("code", equalTo(402));
 
 //   }
 
@@ -400,7 +427,7 @@
 //   @Test
 //   public void T29() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "-1000000";
+//     String page = "-1000";
 //     String cycleId = "3";
 //     String limit = "-1";
 //     String type = "2";
@@ -413,9 +440,9 @@
 //   @Test
 //   public void T30() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "-100000";
+//     String page = "-1000";
 //     String cycleId = "3";
-//     String limit = "-1000000";
+//     String limit = "-1000";
 //     String type = "2";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
@@ -479,12 +506,12 @@
 //   public void T35() {
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "1";
-//     String cycleId = "100";
+//     String cycleId = "100000";
 //     String limit = "1";
 //     String type = "2";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
-//         .assertThat().body("code", equalTo(200)).body(matchesJsonSchemaInClasspath("CFRS_history_Schema.json"));
+//         .assertThat().body("code", equalTo(404));
 
 //   }
 
@@ -504,9 +531,9 @@
 //   @Test
 //   public void T37() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String page = "-100000";
+//     String page = "-1000";
 //     String cycleId = "3";
-//     String limit = "-1000000";
+//     String limit = "-1000";
 //     String type = "2";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
@@ -597,7 +624,7 @@
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "1";
 //     String cycleId = "3";
-//     String limit = "1";
+//     String limit = "2";
 //     String type = "0";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
@@ -610,7 +637,7 @@
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "1";
 //     String cycleId = "3";
-//     String limit = "1";
+//     String limit = "2";
 //     String type = "1";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
@@ -622,7 +649,7 @@
 //   public void T46() {
 //     Header headers = new Header("Authorization", "lidi " + token);
 //     String page = "1";
-//     String cycleId = "3";
+//     String cycleId = "2";
 //     String limit = "1";
 //     String type = "2";
 //     given().header(headers).when()
@@ -637,7 +664,7 @@
 //     String page = "1";
 //     String cycleId = "3";
 //     String limit = "1";
-//     String type = "10000";
+//     String type = "100000000";
 //     given().header(headers).when()
 //         .get("cfrs/history?page=" + page + "&limit=" + limit + "&cycleId=" + cycleId + "&type=" + type + "").then()
 //         .assertThat().body("code", equalTo(402)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
@@ -711,6 +738,30 @@
 //         .body("code", equalTo(402)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
 
 //   }
+//   @Test
+//   public void T68() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String cycleId = "abc";
+//     given().header(headers).when().get("cfrs/user-star?cycleId=" + cycleId + "").then().assertThat()
+//         .body("status", equalTo(400)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
+
+//   }
+//   @Test
+//   public void T69() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String cycleId = "1000000";
+//     given().header(headers).when().get("cfrs/user-star?cycleId=" + cycleId + "").then().assertThat()
+//         .body("code", equalTo(404)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
+
+//   }
+//   @Test
+//   public void T70() {
+//     Header headers = new Header("Authorization", "lidi " + token);
+//     String cycleId = "-1000000";
+//     given().header(headers).when().get("cfrs/user-star?cycleId=" + cycleId + "").then().assertThat()
+//         .body("code", equalTo(404)).body(matchesJsonSchemaInClasspath("402ErrorSchema.json"));
+
+//   }
 
 //   // GET DETAIL CFR
 //   @Test
@@ -773,7 +824,7 @@
 //   @Test
 //   public void T62() {
 //     Header headers = new Header("Authorization", "lidi " + token);
-//     String id = "ab";
+//     String id = "abc";
 //     given().header(headers).when().get("cfrs/detail/" + id + "").then().assertThat()
 //         .body("status", equalTo(400)).body(matchesJsonSchemaInClasspath("400ErrorSchema.json"));
 

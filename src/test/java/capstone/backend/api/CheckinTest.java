@@ -378,7 +378,7 @@
 // 	public void T39() {
 // 	  Header headers = new Header("Authorization", "lidi " + token);
 // 	  String page = "1";
-// 	  String limit = "100000000000000";
+// 	  String limit = "1000000";
 // 	  String cycleId = "3";
 // 	  given().header(headers).when().get("checkin/checkin_request?page="+page+"&limit="+limit+"&cycleId="+cycleId+" ").then().assertThat()
 // 		  .body("code", equalTo(200))
@@ -419,7 +419,7 @@
 // 	public void T43() {
 // 	  Header headers = new Header("Authorization", "lidi " + token);
 // 	  String page = "1";
-// 	  String limit = "-10000000000";
+// 	  String limit = "-1000000";
 // 	  String cycleId = "3";
 // 	  given().header(headers).when().get("checkin/checkin_request?page="+page+"&limit="+limit+"&cycleId="+cycleId+" ").then().assertThat()
 // 		  .body("code", equalTo(402));
@@ -554,7 +554,7 @@
 // 	@Test
 // 	public void T57() {
 // 	  Header headers = new Header("Authorization", "lidi " + token);
-// 	  String page = "1000000000000000";
+// 	  String page = "1000000";
 // 	  String limit = "10";
 // 	  String cycleId = "3";
 // 	  String projectId = "1";
@@ -598,8 +598,8 @@
 // 	@Test
 // 	public void T61() {
 // 	  Header headers = new Header("Authorization", "lidi " + token);
-// 	  String page = "-10000000000000";
-// 	  String limit = "10";
+// 	  String page = "-1000000";
+// 	  String limit = "1";
 // 	  String cycleId = "3";
 // 	  String projectId = "1";
 // 	  given().header(headers).when().get("checkin/inferior?page="+page+"&limit="+limit+"&projectId="+projectId+"&cycleId="+cycleId+"").then().assertThat()
@@ -669,7 +669,7 @@
 // 	public void T68() {
 // 	  Header headers = new Header("Authorization", "lidi " + token);
 // 	  String page = "1";
-// 	  String limit = "-100000000000000";
+// 	  String limit = "-10000000";
 // 	  String cycleId = "3";
 // 	  String projectId = "1";
 // 	  given().header(headers).when().get("checkin/inferior?page="+page+"&limit="+limit+"&projectId="+projectId+"&cycleId="+cycleId+"").then().assertThat()
