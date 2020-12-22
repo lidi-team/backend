@@ -14,6 +14,9 @@ import java.util.List;
 public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Page<Department> findByIsDeleteFalse(Pageable of);
 
+    @Query(value = "select d from Department d where d.isDelete = false")
+    List<Department> findAllByDeleteFalse();
+
     Department findByIdAndIsDeleteFalse(long id);
 
     Page findByNameContainsAndIsDeleteFalse(String name, Pageable pageable);

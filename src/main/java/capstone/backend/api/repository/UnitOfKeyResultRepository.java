@@ -21,4 +21,7 @@ public interface UnitOfKeyResultRepository extends JpaRepository<UnitOfKeyResult
     @Query(value = "select k.unitOfKeyResult.id from KeyResult k " +
             "where k.unitOfKeyResult.id = :id ")
     List<Long> checkExisted(long id);
+
+    @Query(value = "select u from UnitOfKeyResult u where u.isDelete = false")
+    List<UnitOfKeyResult> findAllDeleteFalse();
 }

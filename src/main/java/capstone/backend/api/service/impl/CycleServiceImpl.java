@@ -42,7 +42,7 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ResponseEntity<ApiResponse> getListMetaDataCycle() {
-        List<Cycle> cycles = cycleRepository.findAll();
+        List<Cycle> cycles = cycleRepository.findAllDeleteFalse();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
 
         cycles.forEach(cycle -> {
@@ -126,6 +126,27 @@ public class CycleServiceImpl implements CycleService {
         Date fromDate = utils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = utils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
 
+        List<Cycle> cycles = cycleRepository.findAll();
+        for (Cycle cycle : cycles) {
+            if(cycle.getName().equalsIgnoreCase(cycleDto.getName())){
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên chu kì đã tồn tại")
+                                .build()
+                );
+            }
+            Date cycleFromDate = cycle.getFromDate();
+            Date cycleToDate = cycle.getEndDate();
+
+            if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate))){
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Các chu kì không được trùng thời gian")
+                                .build()
+                );
+            }
+        }
+
         cycleRepository.save(
                 Cycle.builder()
                 .name(cycleDto.getName())
@@ -135,7 +156,7 @@ public class CycleServiceImpl implements CycleService {
                 .build());
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
@@ -158,6 +179,27 @@ public class CycleServiceImpl implements CycleService {
         String endDateStr = cycleDto.getEndDate();
         Date fromDate = utils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = utils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
+        List<Cycle> cycles = cycleRepository.findAll();
+
+        for (Cycle cycle : cycles) {
+            if(cycle.getName().equalsIgnoreCase(cycleDto.getName())){
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên chu kì đã tồn tại")
+                                .build()
+                );
+            }
+            Date cycleFromDate = cycle.getFromDate();
+            Date cycleToDate = cycle.getEndDate();
+
+            if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate))){
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Các chu kì không được trùng thời gian")
+                                .build()
+                );
+            }
+        }
 
         currentCycle = Cycle.builder()
                 .id(currentCycle.getId())
@@ -218,4 +260,5 @@ public class CycleServiceImpl implements CycleService {
                         .data(response).build()
         );
     }
+
 }

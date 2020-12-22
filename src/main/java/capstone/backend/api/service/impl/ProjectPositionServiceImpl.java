@@ -32,7 +32,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
 
     @Override
     public ResponseEntity<ApiResponse> getListMetaDataPosition() throws Exception {
-        ArrayList<ProjectPosition> positions = (ArrayList<ProjectPosition>) positionRepository.findAll();
+        ArrayList<ProjectPosition> positions = (ArrayList<ProjectPosition>) positionRepository.findAllDeleteFalse();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
 
         positions.forEach(projectPosition -> {

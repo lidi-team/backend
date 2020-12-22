@@ -24,6 +24,9 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findAllByIdIn(List<Long> ids);
 
+    @Query(value = "select p from Project p where p.isDelete = false and p.close = false ")
+    List<Project> findAllDeleteFalseAndCloseFalse();
+
     @Query(value = "select p from Project p " +
             "where p.fromDate <= :date and p.endDate > :date ")
     List<Project> findAllByFromDateAndEndDate(Date date);

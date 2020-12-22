@@ -24,4 +24,7 @@ public interface ProjectPositionRepository extends JpaRepository<ProjectPosition
     @Query(value = "select e.id from Execute e where e.position.id = :id ")
     List<Long> checkExisted(@Param(value = "id") long id);
 
+    @Query(value = "select p from ProjectPosition p where p.isDelete = false ")
+    List<ProjectPosition> findAllDeleteFalse();
+
 }
