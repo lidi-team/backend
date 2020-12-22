@@ -141,4 +141,6 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     List<Long> getListIdObjectiveByProjectId(@Param(value = "id") long id);
 
     List<Objective> findAllByExecuteIdAndCycleIdAndType(long executeId, long cycleId, int type);
+
+    List<Objective> findAllByExecuteIdAndType(long executeId, int type);
 }

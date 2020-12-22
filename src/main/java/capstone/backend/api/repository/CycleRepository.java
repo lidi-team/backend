@@ -30,4 +30,7 @@ public interface CycleRepository extends JpaRepository<Cycle, Long> {
     @Query(value = "select o.id from Objective  o where o.cycle.id = :id ")
     List<Long> checkExisted(@Param(value = "id") long id);
 
+    @Query(value = "select c from Cycle c where c.isDelete = false ")
+    List<Cycle> findAllDeleteFalse();
+
 }

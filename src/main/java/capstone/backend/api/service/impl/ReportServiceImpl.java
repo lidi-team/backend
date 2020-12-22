@@ -17,6 +17,7 @@ import capstone.backend.api.service.ReportService;
 import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -91,7 +92,7 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ResponseEntity<?> addCheckin(CheckinDto checkinDto) throws Exception {
-
+        String message = "";
         Objective objective = objectiveRepository.findByIdAndDelete(checkinDto.getObjectiveId());
         List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
         Map<Long, Double> valueOlds = saveOldValueKeyResult(keyResults);
@@ -118,6 +119,7 @@ public class ReportServiceImpl implements ReportService {
         }
 
         if (checkinDto.getStatus().equalsIgnoreCase("Pending")) {
+            message = "Đã gửi yêu cầu phê duyệt cập nhật tiến độ";
             report.setCheckinDate(new Date());
         }
 
@@ -125,6 +127,7 @@ public class ReportServiceImpl implements ReportService {
         reportDetailService.addReportDetails(checkinDto.getCheckinDetails(), report, keyResults);
 
         if (checkinDto.getStatus().equalsIgnoreCase("Reviewed")) {
+            message = "Phê duyệt yêu cầu thành công";
             double oldProgress = objective.getProgress();
             objective.setProgress(checkinDto.getProgress());
             objective.setChanging(objective.getProgress() - oldProgress);
@@ -145,11 +148,15 @@ public class ReportServiceImpl implements ReportService {
             objectiveRepository.save(objective);
         }
 
+        if(checkinDto.getStatus().equalsIgnoreCase("draft")){
+            message = "Lưu nháp thành công";
+        }
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message("Tạo check-in thành công!")
+                        .message(message.isEmpty()? "Tạo cập nhật tiến độ thành công" : message)
                         .build()
         );
     }
@@ -769,7 +776,7 @@ public class ReportServiceImpl implements ReportService {
         for (KeyResult parentKeyResult : parentKeyResults) {
             if (keyResultChanging.containsKey(parentKeyResult.getId())) {
                 double changeKey = keyResultChanging.get(parentKeyResult.getId());
-                double progressKey = parentKeyResult.getProgress() + changeKey * parentKeyResult.getProgress();
+                double progressKey = parentKeyResult.getProgress() + changeKey * calculatePercentObjective(objective,parentObjective);
                 double valueObtain = calculateValueObtainKeyResult(parentKeyResult, progressKey);
                 parentKeyResult.setProgress(progressKey);
                 parentKeyResult.setValueObtained(valueObtain);
@@ -819,7 +826,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private double calculateValueObtainKeyResult(KeyResult keyResult, double progressKey) {
-        return progressKey * (keyResult.getToValue() - keyResult.getFromValue()) + keyResult.getFromValue();
+        return progressKey * (keyResult.getToValue() - keyResult.getFromValue())/100 + keyResult.getFromValue() ;
     }
 
     private Date limitDate(Objective objective) {

@@ -214,7 +214,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
 
     @Override
     public ResponseEntity<?> getListMetaDataMeasureUnit() throws Exception {
-        List<UnitOfKeyResult> units = unitRepository.findAll();
+        List<UnitOfKeyResult> units = unitRepository.findAllDeleteFalse();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
         units.forEach(unit -> {
             responses.add(

@@ -44,6 +44,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectPositionRepository positionRepository;
 
+    private final CycleRepository cycleRepository;
     @Override
     public ResponseEntity<?> getAllProjects() throws Exception {
         List<Project> projects = projectRepository.findAll();
@@ -69,7 +70,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> getListMetaDataProject() throws Exception {
-        ArrayList<Project> projects = (ArrayList<Project>) projectRepository.findAll();
+        ArrayList<Project> projects = (ArrayList<Project>) projectRepository.findAllDeleteFalseAndCloseFalse();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
 
         projects.forEach(project -> {
@@ -190,9 +191,9 @@ public class ProjectServiceImpl implements ProjectService {
         response.put("data", list);
         Map<String, Integer> meta = new HashMap<>();
         int count = list.size();
-        int totalPage = (count%limit == 0 ? count/limit : count/limit + 1 );
+        int totalPage = (count % limit == 0 ? count / limit : count / limit + 1);
         meta.put("totalItems", count);
-        meta.put("currentPage",page);
+        meta.put("currentPage", page);
         meta.put("totalPages", totalPage == 0 ? 1 : totalPage);
         response.put("meta", meta);
 
@@ -294,22 +295,26 @@ public class ProjectServiceImpl implements ProjectService {
                     oldUser.getRoles().remove(rolePm);
                     userRepository.save(oldUser);
                 }
+            }
+            // check if new pm is in project
+            Execute newExecute = executeRepository.findByProjectIdAndUserId(execute.getProject().getId(), pm.getId());
+            if (newExecute != null) {
+                // add information of new pm
+                newExecute.setPosition(position);
+                newExecute.setPm(true);
+                executeRepository.save(newExecute);
+                // clear role old pm
+                execute.setPm(false);
+                execute.setPosition(null);
 
-                // check if new pm is in project
-                Execute newExecute = executeRepository.findByProjectIdAndUserId(execute.getProject().getId(),pm.getId());
-                if(newExecute != null){
-                    // add information of new pm
-                    newExecute.setPosition(position);
-                    newExecute.setPm(true);
-                    executeRepository.save(newExecute);
-                    // clear role old pm
-                    execute.setPm(false);
-                    execute.setPosition(null);
-                }
-            } else{
-                execute = Execute.builder()
-                        .id(execute.getId())
+            } else {
+                // clear role old pm
+                execute.setPm(false);
+                execute.setPosition(null);
+
+                newExecute = Execute.builder()
                         .user(pm)
+                        .project(project)
                         .fromDate(fromDate)
                         .endDate(endDate)
                         .isPm(true)
@@ -317,7 +322,21 @@ public class ProjectServiceImpl implements ProjectService {
                         .position(position)
                         .reviewer(director)
                         .build();
+
             }
+            Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(new Date(), new Date());
+
+            List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(),cycle.getId(),1);
+
+            execute.setReviewer(pm);
+
+            executeRepository.save(newExecute);
+
+            for (Objective objective : objectives) {
+                objective.setExecute(newExecute);
+            }
+
+            objectiveRepository.saveAll(objectives);
 
         } else {
             execute = Execute.builder()
@@ -337,7 +356,7 @@ public class ProjectServiceImpl implements ProjectService {
         if (projectDto.getStatus() == 0) {
             executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
         }
-        if(projectDto.getStatus() == 1){
+        if (projectDto.getStatus() == 1) {
             executeRepository.updateAllStatusWhenOpenProject(projectDto.getId());
         }
 
@@ -452,8 +471,8 @@ public class ProjectServiceImpl implements ProjectService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
-        List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectIdAndClose(user.getId(),projectId,false);
-        if(executes == null || executes.size() == 0){
+        List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectIdAndClose(user.getId(), projectId, false);
+        if (executes == null || executes.size() == 0) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
@@ -518,7 +537,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
 
-        Execute execute = executeRepository.findByProjectIdAndUserId(projectId,userId);
+        Execute execute = executeRepository.findByProjectIdAndUserId(projectId, userId);
         executeRepository.removeStaff(projectId, userId);
 
         return ResponseEntity.ok().body(

@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> getListMetaDataDepartment() throws Exception {
-        ArrayList<Department> departments = (ArrayList<Department>) departmentRepository.findAll();
+        ArrayList<Department> departments = (ArrayList<Department>) departmentRepository.findAllByDeleteFalse();
         ArrayList<MetaDataResponse> responses = new ArrayList<>();
         departments.forEach(department -> {
             responses.add(
@@ -101,6 +101,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> createDepartment(DepartmentDto departmentDto, String jwtToken) throws Exception {
+
+
         Object data = departmentRepository.save(Department.builder()
                 .name(departmentDto.getName())
                 .description(departmentDto.getDescription())
