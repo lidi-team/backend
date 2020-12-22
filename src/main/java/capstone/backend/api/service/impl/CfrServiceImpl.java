@@ -228,23 +228,18 @@ public class CfrServiceImpl implements CfrService {
         } else {
             List<Cfr> cfrs = cfrRepository.findAllByCycleId(cycleId);
                       cfrs.addAll(cfrRepository.findAllByCycleId2(cycleId));
-            users = new ArrayList<>();
-            for (Cfr cfr : cfrs) {
-                boolean isIn = false;
-                for (User user : users) {
-                    if(user.getId() == cfr.getReceiver().getId()){
-                        user.setStar(user.getStar() + cfr.getEvaluationCriteria().getNumberOfStar());
-                        isIn = true;
+            users = cfrs.stream().map(Cfr::getReceiver).distinct().collect(Collectors.toList());
+
+            for (User user : users) {
+                int star = 0;
+                for (Cfr cfr : cfrs) {
+                    if(cfr.getReceiver().getId() == user.getId()){
+                        star += cfr.getEvaluationCriteria().getNumberOfStar();
                     }
                 }
-                if(!isIn){
-                    User user = userRepository.findByEmail(cfr.getReceiver().getEmail()).get();
-                    user.setStar(user.getStar() + cfr.getEvaluationCriteria().getNumberOfStar());
-                    users.add(user);
-                }
-
+                user.setStar(star);
             }
-            sortArray(users);
+            users.sort(Comparator.comparing(User::getStar).reversed());
         }
 
         users.forEach(user -> {
@@ -450,15 +445,4 @@ public class CfrServiceImpl implements CfrService {
         return items;
     }
 
-    private void sortArray(List<User> users){
-        for (int i = 0; i < users.size()-1; i++) {
-            for (int i1 = i+1; i1 < users.size(); i1++) {
-                if(users.get(i).getStar() < users.get(i1).getStar()){
-                    User temp = users.get(i);
-                    users.set(i,users.get(i1));
-                    users.set(i1,temp);
-                }
-            }
-        }
-    }
 }

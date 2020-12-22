@@ -318,6 +318,7 @@ public class ReportServiceImpl implements ReportService {
         checkin.put("checkinAt", report.getCheckinDate());
         checkin.put("nextCheckinDate", report.getNextCheckinDate());
         checkin.put("status", report.getStatus());
+        checkin.put("reviewer",report.getAuthorizedUser().getFullName());
 
         response.put("keyResults", new ArrayList<>());
         response.put("progress", report.getProgress());
@@ -671,6 +672,7 @@ public class ReportServiceImpl implements ReportService {
         checkin.put("checkinAt", report.getCheckinDate());
         checkin.put("nextCheckinDate", report.getNextCheckinDate());
         checkin.put("status", setStatusForObjective(objective, report));
+        checkin.put("reviewer",report.getAuthorizedUser().getFullName());
 
         return checkin;
     }

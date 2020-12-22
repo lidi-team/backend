@@ -34,14 +34,14 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
     List<Report> findAllReportByObjectiveIdAndStatus(long id);
 
     @Query(value = "select r from Report r " +
-            "where r.objective.execute.user.id = :userId " +
+            "where r.objective.execute.reviewer.id = :userId " +
             "and r.status = 'Reviewed' " +
             "and r.isLeaderFeedback = false ")
     Page<Report> findAllInferiorRequest(@Param(value = "userId") long userId,
                                         Pageable pageable);
 
     @Query(value = "select r from Report r " +
-            "where r.authorizedUser.id = :userId " +
+            "where r.objective.execute.user.id = :userId " +
             "and r.status = 'Reviewed' " +
             "and r.isStaffFeedback = false ")
     Page<Report> findAllSuperiorRequest(@Param(value = "userId") long userId,
