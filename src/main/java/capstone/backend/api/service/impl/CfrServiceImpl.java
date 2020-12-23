@@ -418,7 +418,7 @@ public class CfrServiceImpl implements CfrService {
         } else if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_PM"))){
             List<Execute> executes = executeRepository.findAllByUserIdAndDeleteFalseAndCloseFalse(user.getId());
             List<Long> projectIds = executes.stream().map(execute -> execute.getProject().getId()).collect(Collectors.toList());
-            List<Execute> staffs = executeRepository.findAllByProjectIdIn(projectIds).stream().collect(Collectors.toList());
+            List<Execute> staffs = new ArrayList<>(executeRepository.findAllByProjectIdIn(projectIds));
             inferiors = staffs.stream().map(Execute::getUser).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
         } else{
             List<Execute> executes = executeRepository.findAllByUserIdAndDeleteFalseAndCloseFalse(user.getId());
@@ -426,8 +426,16 @@ public class CfrServiceImpl implements CfrService {
             inferiors = staffs.stream().map(Execute::getUser).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
         }
 
-        List<MetaDataResponse> responses = inferiors.stream().map(user1 -> new MetaDataResponse(user1.getId(),user1.getFullName())).collect(Collectors.toList());
-        responses.sort(Comparator.comparing(MetaDataResponse::getName));
+        inferiors.sort(Comparator.comparing(User::getFullName));
+
+        List<Map<String,Object>> responses = new ArrayList<>();
+        for (User inferior : inferiors) {
+            Map<String,Object> map = new HashMap<>();
+            map.put("id",inferior.getId());
+            map.put("name",inferior.getFullName());
+            map.put("avatarUrl",inferior.getAvatarImage());
+            responses.add(map);
+        }
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()

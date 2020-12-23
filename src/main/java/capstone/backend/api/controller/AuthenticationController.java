@@ -43,7 +43,7 @@ public class AuthenticationController {
             return ResponseEntity.status(401).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
-                            .message(commonProperties.getMESSAGE_AUTH_FAILED()).build()
+                            .message("Email hoặc mật khẩu không chính xác").build()
             );
         } catch (Exception e) {
             logger.error("Undefined error");
