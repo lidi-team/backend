@@ -102,7 +102,6 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     Execute findFirstByProjectIsNull();
 
-    @Query(value = "")
     Execute findByProjectIdAndUserId(long projectId, long userId);
 
     @Query(value = "select e.id from Execute e where e.project.id = :id")
@@ -118,6 +117,12 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
     @Query(value = "update Execute e set e.close = false where e.project.id = :id and e.isDelete = false ")
     void updateAllStatusWhenOpenProject(@Param(value = "id") long id);
 
-    List<Execute> getExecuteByUserIdAndProjectIdAndClose(long userId,long projectId,boolean status);
+    @Query(value = "select e from Execute e where e.user.id = :userId and e.project.id = :projectId and e.isDelete = false")
+    List<Execute> getExecuteByUserIdAndProjectId(@Param(value = "userId") long userId,@Param(value = "projectId") long projectId);
 
+    @Query(value = "select e from Execute e where e.user.id = :userId and e.isDelete = false and e.close = false")
+    List<Execute> findAllByUserIdAndDeleteFalseAndCloseFalse(@Param(value = "userId") long userId);
+
+    @Query(value = "select e from Execute  e where e.project.id in (:projectIds) and e.close = false and e.isDelete = false ")
+    List<Execute> findAllByProjectIdIn(@Param(value = "projectIds") List<Long> projectIds);
 }

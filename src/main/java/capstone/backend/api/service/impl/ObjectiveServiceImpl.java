@@ -868,9 +868,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
             return responses;
         }
         List<Long> aligns = commonUtils.stringToArray(alignStr);
-
         List<Objective> objectives = objectiveRepository.findAllObjectiveByListId(aligns);
-
         objectives.forEach(objective -> {
             responses.add(
                     MetaDataResponse.builder()

@@ -134,7 +134,7 @@ public class CFRsController {
             @ApiParam(value = "token",required = true)
             @RequestHeader(name = "Authorization") String token) {
         try {
-            return null;
+            return cfrService.getInferiorForRecognition(token);
         } catch (Exception e) {
             logger.error("get list history cfrs");
             logger.error(e.getMessage());

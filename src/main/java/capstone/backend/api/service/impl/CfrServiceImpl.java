@@ -5,6 +5,7 @@ import capstone.backend.api.controller.ObjectiveController;
 import capstone.backend.api.dto.CreateCfrDto;
 import capstone.backend.api.entity.*;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
+import capstone.backend.api.entity.ApiResponse.MetaDataResponse;
 import capstone.backend.api.repository.*;
 import capstone.backend.api.service.CfrService;
 import capstone.backend.api.utils.CommonUtils;
@@ -45,6 +46,8 @@ public class CfrServiceImpl implements CfrService {
     private final JwtUtils jwtUtils;
 
     private final CommonUtils commonUtils;
+
+    private final ExecuteRepository executeRepository;
 
     @Override
     public ResponseEntity<?> getListWaiting(int page, int limit, String token) throws Exception {
@@ -400,6 +403,37 @@ public class CfrServiceImpl implements CfrService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(map)
+                        .build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> getInferiorForRecognition(String token) throws Exception {
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+        List<User> inferiors;
+        if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_DIRECTOR"))){
+            inferiors = userRepository.findAll();
+            inferiors.remove(user);
+        } else if(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ROLE_PM"))){
+            List<Execute> executes = executeRepository.findAllByUserIdAndDeleteFalseAndCloseFalse(user.getId());
+            List<Long> projectIds = executes.stream().map(execute -> execute.getProject().getId()).collect(Collectors.toList());
+            List<Execute> staffs = executeRepository.findAllByProjectIdIn(projectIds).stream().collect(Collectors.toList());
+            inferiors = staffs.stream().map(Execute::getUser).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
+        } else{
+            List<Execute> executes = executeRepository.findAllByUserIdAndDeleteFalseAndCloseFalse(user.getId());
+            List<Execute> staffs = executes.stream().filter(execute -> execute.getReviewer().getId() == user.getId()).collect(Collectors.toList());
+            inferiors = staffs.stream().map(Execute::getUser).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
+        }
+
+        List<MetaDataResponse> responses = inferiors.stream().map(user1 -> new MetaDataResponse(user1.getId(),user1.getFullName())).collect(Collectors.toList());
+        responses.sort(Comparator.comparing(MetaDataResponse::getName));
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(responses)
                         .build()
         );
     }
