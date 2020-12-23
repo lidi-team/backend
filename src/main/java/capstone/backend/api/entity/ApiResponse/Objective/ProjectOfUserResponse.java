@@ -16,5 +16,6 @@ public class ProjectOfUserResponse {
     private String name;
     private String position;
     private boolean isPm;
+    private boolean remove;
     private List<ObjectiveProjectItem> objectives;
 }
