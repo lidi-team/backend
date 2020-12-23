@@ -161,7 +161,7 @@ public class ProjectServiceImpl implements ProjectService {
                                 .endDate(project.getEndDate())
                                 .description(project.getDescription())
                                 .status(project.isClose() ? 0 : 1)
-                                .pmId(execute.getUser().getId())
+                                .pmId(execute == null ? 0 : execute.getUser().getId())
                                 .weight(project.getWeight())
                                 .parentId(project.getParent() == null ? 0 : project.getParent().getId())
                                 .build()
@@ -179,7 +179,7 @@ public class ProjectServiceImpl implements ProjectService {
                                     .endDate(project.getEndDate())
                                     .description(project.getDescription())
                                     .status(project.isClose() ? 0 : 1)
-                                    .pmId(execute.getUser().getId())
+                                    .pmId(execute == null ? 0 : execute.getUser().getId())
                                     .weight(project.getWeight())
                                     .parentId(project.getParent() == null ? 0 : project.getParent().getId())
                                     .build()
@@ -187,7 +187,6 @@ public class ProjectServiceImpl implements ProjectService {
                 }
             });
         }
-
 
         response.put("data", list);
         Map<String, Integer> meta = new HashMap<>();
@@ -255,11 +254,22 @@ public class ProjectServiceImpl implements ProjectService {
             parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
         }
 
-
         String fromDateStr = projectDto.getStartDate();
         String endDateStr = projectDto.getEndDate();
         Date fromDate = commonUtils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = commonUtils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
+
+        List<Project> projects = projectRepository.findAllByDeleteFalse(projectDto.getName());
+        if(projects != null && projects.size() > 0){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Tên dự án đã tồn tại trong hệ thống")
+                            .data(projectDto.getId())
+                            .build()
+            );
+        }
+
 
         Project project;
         if (projectDto.getId() == 0) {
@@ -305,49 +315,44 @@ public class ProjectServiceImpl implements ProjectService {
                     oldUser.getRoles().remove(rolePm);
                     userRepository.save(oldUser);
                 }
-            }
-            // check if new pm is in project
-            Execute newExecute = executeRepository.findByProjectIdAndUserId(execute.getProject().getId(), pm.getId());
-            if (newExecute != null) {
-                // add information of new pm
-                newExecute.setPosition(position);
-                newExecute.setPm(true);
+                // check if new pm is in project
+                Execute newExecute = executeRepository.findByProjectIdAndUserId(execute.getProject().getId(), pm.getId());
+                if (newExecute != null) {
+                    // add information of new pm
+                    newExecute.setPosition(position);
+                    newExecute.setPm(true);
+                    newExecute.setReviewer(director);
+                    executeRepository.save(newExecute);
+                    // clear role old pm
+                    execute.setPm(false);
+                    execute.setPosition(null);
+
+                } else {
+                    // clear role old pm
+                    execute.setPm(false);
+                    execute.setPosition(null);
+
+                    newExecute = Execute.builder()
+                            .user(pm)
+                            .project(project)
+                            .fromDate(fromDate)
+                            .endDate(endDate)
+                            .isPm(true)
+                            .isDelete(false)
+                            .position(position)
+                            .reviewer(director)
+                            .build();
+
+                }
+                Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(new Date(), new Date());
+                List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(), cycle.getId(), 1);
+                execute.setReviewer(pm);
                 executeRepository.save(newExecute);
-                // clear role old pm
-                execute.setPm(false);
-                execute.setPosition(null);
-
-            } else {
-                // clear role old pm
-                execute.setPm(false);
-                execute.setPosition(null);
-
-                newExecute = Execute.builder()
-                        .user(pm)
-                        .project(project)
-                        .fromDate(fromDate)
-                        .endDate(endDate)
-                        .isPm(true)
-                        .isDelete(false)
-                        .position(position)
-                        .reviewer(director)
-                        .build();
-
+                for (Objective objective : objectives) {
+                    objective.setExecute(newExecute);
+                }
+                objectiveRepository.saveAll(objectives);
             }
-            Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(new Date(), new Date());
-
-            List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(), cycle.getId(), 1);
-
-            execute.setReviewer(pm);
-
-            executeRepository.save(newExecute);
-
-            for (Objective objective : objectives) {
-                objective.setExecute(newExecute);
-            }
-
-            objectiveRepository.saveAll(objectives);
-
         } else {
             execute = Execute.builder()
                     .user(pm)
@@ -473,16 +478,20 @@ public class ProjectServiceImpl implements ProjectService {
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
-
-        List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectIdAndClose(user.getId(), projectId, false);
-        if (executes == null || executes.size() == 0) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UN_AUTHORIZED())
-                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
-                            .build()
-            );
+        if (!user.getRoles().stream().anyMatch(role ->
+                role.getName().equalsIgnoreCase("ROLE_ADMIN")
+                        || role.getName().equalsIgnoreCase("ROLE_DIRECTOR"))) {
+            List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectId(user.getId(), projectId);
+            if (executes == null || executes.size() == 0) {
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder()
+                                .code(commonProperties.getCODE_UN_AUTHORIZED())
+                                .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                                .build()
+                );
+            }
         }
+
 
         List<Execute> staffs = executeRepository.findAllStaffByProjectId(projectId);
         staffs.forEach(staff -> {
@@ -512,6 +521,16 @@ public class ProjectServiceImpl implements ProjectService {
         List<Execute> inserts = new ArrayList<>();
         List<User> staffs = userRepository.findAllByIdIn(ids);
 
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if(project == null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Không thể thêm nhân sự cho dự án")
+                            .build()
+            );
+        }
+
         Execute pm = executeRepository.findPmByProjectId(projectId);
 
         staffs.forEach(staff -> {
@@ -521,7 +540,7 @@ public class ProjectServiceImpl implements ProjectService {
                             .isDelete(false)
                             .isPm(false)
                             .endDate(pm.getEndDate())
-                            .fromDate(pm.getFromDate())
+                            .fromDate(new Date())
                             .reviewer(pm.getUser())
                             .project(pm.getProject())
                             .build()
@@ -532,7 +551,7 @@ public class ProjectServiceImpl implements ProjectService {
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Thêm mới nhân sự thành công")
                         .build()
         );
     }
@@ -540,13 +559,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ResponseEntity<?> removeStaff(long projectId, long userId) throws Exception {
 
+        Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(new Date(), new Date());
         Execute execute = executeRepository.findByProjectIdAndUserId(projectId, userId);
+        List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(),cycle.getId(),2);
+        if(objectives != null && objectives.size() > 0){
+            for (Objective objective : objectives) {
+                objective.setStatus("Completed");
+            }
+        }
+        objectiveRepository.saveAll(objectives);
         executeRepository.removeStaff(projectId, userId);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Đã xóa nhân viên khỏi dự án")
                         .build()
         );
     }
