@@ -534,6 +534,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                 .id(execute.getProject().getId())
                                 .name(execute.getProject().getName())
                                 .position(execute.getPosition().getName())
+                                .remove(execute.isDelete())
                                 .objectives(objectiveItems)
                                 .isPm(execute.isPm())
                                 .build()
