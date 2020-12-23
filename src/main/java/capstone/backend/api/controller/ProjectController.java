@@ -284,4 +284,22 @@ public class ProjectController {
         }
     }
 
+    @ApiOperation(value = "Deactive project")
+    @DeleteMapping(path = "/{projectId}")
+    public ResponseEntity<?> deleteProject(
+            @ApiParam(value = "id cua project")
+            @PathVariable(value = "projectId") long projectId){
+        try {
+            return projectService.deleteProject(projectId);
+        } catch (Exception e) {
+            logger.error("get list staff failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
+
 }

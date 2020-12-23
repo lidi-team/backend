@@ -45,6 +45,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectPositionRepository positionRepository;
 
     private final CycleRepository cycleRepository;
+
     @Override
     public ResponseEntity<?> getAllProjects() throws Exception {
         List<Project> projects = projectRepository.findAll();
@@ -207,7 +208,16 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> getDetailProjectById(long id) throws Exception {
-        Project project = projectRepository.findById(id).get();
+
+        Project project = projectRepository.findById(id).orElse(null);
+
+        if (project == null) {
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
 
         Execute pm = executeRepository.findPmByProjectId(id);
         Map<String, Object> pmResponse = new HashMap<>();
@@ -326,7 +336,7 @@ public class ProjectServiceImpl implements ProjectService {
             }
             Cycle cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(new Date(), new Date());
 
-            List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(),cycle.getId(),1);
+            List<Objective> objectives = objectiveRepository.findAllByExecuteIdAndCycleIdAndType(execute.getId(), cycle.getId(), 1);
 
             execute.setReviewer(pm);
 
@@ -352,13 +362,6 @@ public class ProjectServiceImpl implements ProjectService {
         project = projectRepository.save(project);
         execute.setProject(project);
         executeRepository.save(execute);
-
-        if (projectDto.getStatus() == 0) {
-            executeRepository.updateAllStatusWhenCloseProject(projectDto.getId());
-        }
-        if (projectDto.getStatus() == 1) {
-            executeRepository.updateAllStatusWhenOpenProject(projectDto.getId());
-        }
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -624,6 +627,36 @@ public class ProjectServiceImpl implements ProjectService {
                         .code(commonProperties.getCODE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(response).build()
+        );
+    }
+
+    @Override
+    public ResponseEntity<?> deleteProject(long projectId) {
+
+        Project project = projectRepository.findById(projectId).orElse(null);
+
+        if(project == null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        String message = "";
+        if(project.isClose()){
+            project.setClose(false);
+            message = "Đã mở dự án thành công";
+            executeRepository.updateAllStatusWhenOpenProject(projectId);
+        } else {
+            project.setClose(true);
+            message = "Đã đóng dự án thành công";
+            executeRepository.updateAllStatusWhenCloseProject(projectId);
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_UPDATE_SUCCESS())
+                        .message(message).build()
         );
     }
 
