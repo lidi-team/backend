@@ -566,8 +566,9 @@ public class ProjectServiceImpl implements ProjectService {
             for (Objective objective : objectives) {
                 objective.setStatus("Completed");
             }
+            objectiveRepository.saveAll(objectives);
         }
-        objectiveRepository.saveAll(objectives);
+
         executeRepository.removeStaff(projectId, userId);
 
         return ResponseEntity.ok().body(
