@@ -18,4 +18,6 @@ public interface CfrService {
     ResponseEntity<?> createCfr(CreateCfrDto dto, String token) throws Exception;
 
     ResponseEntity<?> getTotalCfr( String token) throws Exception;
+
+    ResponseEntity<?> getInferiorForRecognition( String token) throws Exception;
 }
