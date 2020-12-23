@@ -36,4 +36,6 @@ public interface ProjectService {
     ResponseEntity<?> getListCandidate(long projectId) throws Exception;
 
     ResponseEntity<?> getAllProjectManagePaging(int page, int limit, String sortWith, String type,String text,String token) throws Exception;
+
+    ResponseEntity<?> deleteProject(long projectId);
 }

@@ -21,7 +21,7 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     Page findByNameContainsAndIsDeleteFalse(String name, Pageable pageable);
 
-    @Query(value = "select e.id from Execute e where e.position.id = :id ")
+    @Query(value = "select e.id from User e where e.department.id = :id ")
     List<Long> checkExisted(long id);
 
     Department findByName(String name);
