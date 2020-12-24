@@ -50,4 +50,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query(value = "select p from Project  p where p.isDelete = false and p.name = :name")
     List<Project> findAllByDeleteFalse(@Param(value = "name") String name);
 
+    @Query(value = "select p from Project  p where p.isDelete = false and p.name = :name and p.id <> :id")
+    List<Project> findAllByDeleteFalseAndIdNotIn(@Param(value = "name") String name, @Param(value = "id") long id);
+
 }

@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +28,7 @@ public class DepartmentController {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private CommonProperties commonProperties;
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "lấy toàn bộ Department, có phân trang")
     @GetMapping
     public ResponseEntity<?> viewListDepartment(
@@ -47,7 +48,7 @@ public class DepartmentController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "tạo Department mới")
     @PostMapping()
     public ResponseEntity<?> createDepartment(
@@ -66,7 +67,7 @@ public class DepartmentController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "lấy thông tin Department theo id")
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getDepartment(
@@ -85,7 +86,7 @@ public class DepartmentController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "cập nhật thông tin Department")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateDepartment(
@@ -104,7 +105,7 @@ public class DepartmentController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "xoá một Department theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteDepartment(

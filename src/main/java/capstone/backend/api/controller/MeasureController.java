@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,7 +25,7 @@ public class MeasureController {
     private CommonProperties commonProperties;
     private static final Logger logger = LoggerFactory.getLogger(MeasureController.class);
     private UnitOfKeyResultService unitOfKeyResultService;
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "lấy toàn bộ measure, có phân trang")
     @GetMapping()
     public ResponseEntity<?> viewListCycles(
@@ -44,7 +45,7 @@ public class MeasureController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "tạo measure")
     @PostMapping()
     public ResponseEntity<?> createMeasure(
@@ -83,7 +84,7 @@ public class MeasureController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "cập nhật measure theo id")
     @PutMapping(path= "/{id}")
     public ResponseEntity<?> updateMeasure(
@@ -102,7 +103,7 @@ public class MeasureController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "xoá measure theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteMeasure(

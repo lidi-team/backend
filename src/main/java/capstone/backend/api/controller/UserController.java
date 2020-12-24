@@ -7,6 +7,7 @@ import capstone.backend.api.dto.UserRegister;
 import capstone.backend.api.dto.UserRegisterDto;
 import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import capstone.backend.api.entity.ApiResponse.User.UserInforResponse;
+import capstone.backend.api.entity.User;
 import capstone.backend.api.service.impl.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -210,6 +212,7 @@ public class UserController {
         }
     }
 
+   @PreAuthorize("hasAnyRole('ROLE_HR','ROLE_ADMIN')")
     @ApiOperation(value = "Kích hoạt/ Huỷ kích hoạt tài khoản theo ID")
     @PutMapping("active/{id}")
     public ResponseEntity<?> activeStaff(@PathVariable(value = "id")long id) {
@@ -247,7 +250,7 @@ public class UserController {
             );
         }
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_HR','ROLE_ADMIN')")
     @ApiOperation(value = "thêm mới danh sách staff vào hệ thống")
     @PutMapping(value = "/add-staff")
     public ResponseEntity<?> addListStaff(

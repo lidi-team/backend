@@ -13,6 +13,7 @@ import capstone.backend.api.entity.Department;
 import capstone.backend.api.entity.Execute;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
+import capstone.backend.api.repository.DepartmentRepository;
 import capstone.backend.api.repository.RoleRepository;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.UserService;
@@ -21,11 +22,14 @@ import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import javax.mail.MessagingException;
 import java.text.ParseException;
@@ -56,6 +60,8 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final MailServiceImpl mailService;
+
+    private final DepartmentRepository departmentRepository;
 
     @Override
     public ResponseEntity<?> getUserInformation(String jwtToken) throws Exception {
@@ -171,7 +177,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message("Ngu").build()
+                            .message("").build()
             );
         }
 
@@ -209,14 +215,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getAllUsers(String name, int page, int size, String sort, String jwtToken) throws Exception {
-        List<User> users = userRepository.
-                findByFullNameContains(name, PageRequest.of(page, size, Sort.by(sort)));
-//        List<User> users = userRepository.findAll(PageRequest.of(page, size, Sort.by(sort).ascending())).toList();
-        int count = userRepository.findByFullNameContains(name).size();
-//        List<UserInforResponse> listUserInforResponse = setUserInformation(users);
+        if(page == 0){
+            page = 1;
+        }
+        if(size<=0){
+            size = 10;
+        }
+        Page<User> users = userRepository.
+                findByFullNameContains(name, PageRequest.of(page-1, size, Sort.by(sort)));
+
         List<Object> listUser = new ArrayList<>();
 
-        users.forEach(user -> {
+        users.getContent().forEach(user -> {
             try {
                 listUser.add(customUserInformation(user));
             } catch (Exception e) {
@@ -227,8 +237,8 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> response = new HashMap<>();
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
-        meta.put("totalItems", count);
-        meta.put("totalPages", (count % size == 0 ? count / size : count / size + 1));
+        meta.put("totalItems", users.getTotalElements());
+        meta.put("totalPages", users.getTotalPages());
         response.put("meta", meta);
 
         return ResponseEntity.ok().body(
@@ -240,29 +250,39 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getStaffPaging(String name, int page, int size, String sort, String jwtToken) throws Exception {
-        Optional<Role> roleStaff = roleRepository.findById(5L);
+        Role roleStaff = roleRepository.findRoleByName("ROLE_USER").orElse(null);
 
+        if(roleStaff == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start("count staffs");
         List<User> users = userRepository.
-                findByFullNameContainsAndRoles(name, roleStaff.get(), PageRequest.of(page, size, Sort.by(sort)));
-//        List<User> users = userRepository.findAllByRolesContains(roleStaff.get(), PageRequest.of(page, size, Sort.by(sort)));
-        int count = userRepository.findByFullNameContainsAndRoles(name, roleStaff.get()).size();
-//        List<UserInforResponse> listUserInforResponse = setUserInformation(users);
-
+                findByFullNameContainsAndRoles(name, roleStaff);
+        List<User> staffs = users.stream().filter(user -> (user.getRoles().size() == 1 && user.getRoles().contains(roleStaff))).collect(Collectors.toList());
+        PageImpl<User> pages = new PageImpl<>(staffs,PageRequest.of(page - 1, size),staffs.size());
+        stopWatch.stop();
+        System.out.println("end "+stopWatch.getLastTaskInfo().getTimeMillis());
         List<Object> listUser = new ArrayList<>();
-
-        users.forEach(user -> {
+        stopWatch.start("add infor");
+        pages.getContent().forEach(user -> {
             try {
                 listUser.add(customUserInformation(user));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-
+        stopWatch.stop();
+        System.out.println("end "+stopWatch.getLastTaskInfo().getTimeMillis());
         Map<String, Object> response = new HashMap<>();
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
-        meta.put("totalItems", count);
-        meta.put("totalPages", (count % size == 0 ? count / size : count / size + 1));
+        meta.put("totalItems", pages.getTotalElements());
+        meta.put("totalPages", pages.getTotalPages());
+        meta.put("currentPage",page);
         response.put("meta", meta);
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -379,9 +399,7 @@ public class UserServiceImpl implements UserService {
     private Map<String, Object> customUserInformation(User user) throws Exception {
         Map<String, Object> userCustom = new HashMap<>();
 
-        try {
-            Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
-            Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+        try {Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
             ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
 
             userCustom.put("id", user.getId());
@@ -392,7 +410,7 @@ public class UserServiceImpl implements UserService {
             userCustom.put("gender", user.getGender());
             userCustom.put("star", user.getStar());
             userCustom.put("roles", roles);
-            userCustom.put("department", department == null ? null : new UserInforResponse().departmentResponse(department.getId(), department.getName()));
+            userCustom.put("department", user.getDepartment() == null ? null : new UserInforResponse().departmentResponse(user.getDepartment().getId(), user.getDepartment().getName()));
             userCustom.put("projects", new UserInforResponse().projectResponses(executes));
             userCustom.put("isActive", user.isActive());
         } catch (Exception e) {
@@ -405,9 +423,7 @@ public class UserServiceImpl implements UserService {
     private List<UserInforResponse> setUserInformation(List<User> users) throws Exception {
         List<UserInforResponse> listUserInforResponse = new ArrayList<>();
         users.forEach(user -> {
-            try {
-                Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
-                Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
+            try {Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
                 ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
 
                 UserInforResponse userInforResponse = UserInforResponse.builder()
@@ -417,8 +433,8 @@ public class UserServiceImpl implements UserService {
                         .avatarUrl(user.getAvatarImage())
                         .dob(user.getDob()).gender(user.getGender())
                         .star(user.getStar()).roles(roles)
-                        .department(department == null ? null
-                                : new UserInforResponse().departmentResponse(department.getId(), department.getName()))
+                        .department(user.getDepartment() == null ? null
+                                : new UserInforResponse().departmentResponse(user.getDepartment().getId(), user.getDepartment().getName()))
                         .projects(new UserInforResponse().projectResponses(executes)).build();
 
                 listUserInforResponse.add(userInforResponse);
@@ -459,12 +475,12 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                            .message(commonProperties.getMESSAGE_SUCCESS())
+                            .message("Thêm người dùng thành công")
                             .build()
             );
         }
 
-        return ResponseEntity.ok().body(
+        return ResponseEntity.badRequest().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_FAILED())
                         .message("Thêm người dùng không thành công")

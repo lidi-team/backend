@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -47,7 +48,7 @@ public class ProjectPositionsController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "tạo position mới")
     @PostMapping()
     public ResponseEntity<?> createPosition(
@@ -85,7 +86,7 @@ public class ProjectPositionsController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "cập nhật thông tin position")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updatePosition(
@@ -104,7 +105,7 @@ public class ProjectPositionsController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "xoá một position theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deletePosition(

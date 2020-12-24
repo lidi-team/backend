@@ -206,17 +206,21 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ResponseEntity<?> getDetailProjectById(long id) throws Exception {
-
+    public ResponseEntity<?> getDetailProjectById(long id,String token) throws Exception {
         Project project = projectRepository.findById(id).orElse(null);
-
         if (project == null) {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
         }
+        if (checkAuthorizedUser(id, token)) return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_UN_AUTHORIZED())
+                        .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                        .build()
+        );
 
         Execute pm = executeRepository.findPmByProjectId(id);
         Map<String, Object> pmResponse = new HashMap<>();
@@ -245,10 +249,41 @@ public class ProjectServiceImpl implements ProjectService {
         );
     }
 
+    private boolean checkAuthorizedUser(long id, String token) {
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+        if (!user.getRoles().stream().anyMatch(role ->
+                role.getName().equalsIgnoreCase("ROLE_ADMIN")
+                        || role.getName().equalsIgnoreCase("ROLE_DIRECTOR"))) {
+            List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectId(user.getId(), id);
+            if (executes == null || executes.size() == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception {
         Role rolePm = roleRepository.findRoleByName("ROLE_PM").get();
         ProjectPosition position = positionRepository.findById(1L).get();
+
+        List<Project> projects;
+        if(projectDto.getId() == 0){
+            projects = projectRepository.findAllByDeleteFalse(projectDto.getName());
+        }else {
+            projects = projectRepository.findAllByDeleteFalseAndIdNotIn(projectDto.getName(),projectDto.getId());
+        }
+        if(projects != null && projects.size() > 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Tên dự án đã tồn tại trong hệ thống")
+                            .data(projectDto.getId())
+                            .build()
+            );
+        }
+
         Project parentProject = null;
         if (projectDto.getParentId() != 0) {
             parentProject = projectRepository.findById(projectDto.getParentId()).orElse(null);
@@ -258,18 +293,6 @@ public class ProjectServiceImpl implements ProjectService {
         String endDateStr = projectDto.getEndDate();
         Date fromDate = commonUtils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = commonUtils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
-
-        List<Project> projects = projectRepository.findAllByDeleteFalse(projectDto.getName());
-        if(projects != null && projects.size() > 0){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
-                            .message("Tên dự án đã tồn tại trong hệ thống")
-                            .data(projectDto.getId())
-                            .build()
-            );
-        }
-
 
         Project project;
         if (projectDto.getId() == 0) {
@@ -427,7 +450,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception {
-        Project project = projectRepository.findById(projectId).get();
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if(project == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
         List<Execute> oldStaffs = executeRepository.findAllStaffByProjectId(projectId);
 
         for (AddStaffToProjectDto dto : dtos) {
@@ -476,21 +507,12 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getListStaffByProjectId(long projectId, String token) throws Exception {
         List<StaffInformation> responses = new ArrayList<>();
 
-        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
-        User user = userRepository.findByEmail(email).get();
-        if (!user.getRoles().stream().anyMatch(role ->
-                role.getName().equalsIgnoreCase("ROLE_ADMIN")
-                        || role.getName().equalsIgnoreCase("ROLE_DIRECTOR"))) {
-            List<Execute> executes = executeRepository.getExecuteByUserIdAndProjectId(user.getId(), projectId);
-            if (executes == null || executes.size() == 0) {
-                return ResponseEntity.ok().body(
-                        ApiResponse.builder()
-                                .code(commonProperties.getCODE_UN_AUTHORIZED())
-                                .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
-                                .build()
-                );
-            }
-        }
+        if (checkAuthorizedUser(projectId, token)) return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_UN_AUTHORIZED())
+                        .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
+                        .build()
+        );
 
 
         List<Execute> staffs = executeRepository.findAllStaffByProjectId(projectId);

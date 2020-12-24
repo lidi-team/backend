@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -46,7 +47,7 @@ public class CycleController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "lấy tất cả cycle, có phân trang")
     @GetMapping()
     public ResponseEntity<?> viewListCycles(
@@ -65,7 +66,7 @@ public class CycleController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "tạo cycle mới")
     @PostMapping()
     public ResponseEntity<?> createCycle(
@@ -83,7 +84,7 @@ public class CycleController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "cập nhật thông tin cycle")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateCycle(
@@ -101,7 +102,7 @@ public class CycleController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "xoá một cycle theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteCycle(

@@ -179,10 +179,10 @@ public class CycleServiceImpl implements CycleService {
         String endDateStr = cycleDto.getEndDate();
         Date fromDate = utils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = utils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
-        List<Cycle> cycles = cycleRepository.findAll();
+        List<Cycle> cycles = cycleRepository.findAllDeleteFalse();
 
         for (Cycle cycle : cycles) {
-            if(cycle.getName().equalsIgnoreCase(cycleDto.getName())){
+            if(cycle.getName().equalsIgnoreCase(cycleDto.getName()) && cycle.getId() != id){
                 return ResponseEntity.badRequest().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Tên chu kì đã tồn tại")
@@ -192,7 +192,7 @@ public class CycleServiceImpl implements CycleService {
             Date cycleFromDate = cycle.getFromDate();
             Date cycleToDate = cycle.getEndDate();
 
-            if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate))){
+            if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate)) && cycle.getId() != id){
                 return ResponseEntity.badRequest().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Các chu kì không được trùng thời gian")
@@ -219,26 +219,24 @@ public class CycleServiceImpl implements CycleService {
     @Override
     public ResponseEntity<?> deleteCycle(long id, String jwtToken) throws Exception {
         Cycle currentCycle = cycleRepository.findById(id).orElse(null);
-
-        if(cycleRepository.checkExisted(id).size() > 0){
+        if(currentCycle == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        if(cycleRepository.checkExisted(id) != null && cycleRepository.checkExisted(id).size() > 0){
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Chu kì này đang được sử dụng").build()
             );
         }
-        if (currentCycle == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
-        } else {
-            currentCycle.setDelete(true);
-            cycleRepository.save(currentCycle);
-        }
+        currentCycle.setDelete(true);
+        cycleRepository.save(currentCycle);
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
+                        .message("Xóa chu kì thành công")
                         .data(cycleRepository.findById(id)).build()
         );
     }

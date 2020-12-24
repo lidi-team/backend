@@ -60,10 +60,30 @@ public class ReportServiceImpl implements ReportService {
     private final CommonUtils commonUtils;
 
     @Override
-    public ResponseEntity<?> getCheckinHistoryByObjectiveId(long id) {
+    public ResponseEntity<?> getCheckinHistoryByObjectiveId(long id,String token) {
+        String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
+        User user = userRepository.findByEmail(email).get();
+
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+        if(objective == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+            );
+        }
+        Execute execute = objective.getExecute();
+        if(user.getId() != execute.getUser().getId()
+                || user.getId() != execute.getReviewer().getId()){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UN_AUTHORIZED())
+                            .message(commonProperties.getMESSAGE_UN_AUTHORIZED()).build()
+            );
+        }
+
         List<ReportResponse> responses = new ArrayList<>();
         List<Report> reports = reportRepository.findAllByObjectiveId(id);
-
         reports.forEach(report -> {
             responses.add(
                     ReportResponse.builder()

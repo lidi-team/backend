@@ -26,9 +26,10 @@ public class ReportController {
 
     @ApiOperation(value = "danh sách lịch sử check in của 1 objective")
     @GetMapping(path = "/list-history/{objectiveId}")
-    public ResponseEntity<?> getCheckinHistoryByObjectiveId(@PathVariable(value = "objectiveId") long objectiveId) {
+    public ResponseEntity<?> getCheckinHistoryByObjectiveId(@PathVariable(value = "objectiveId") long objectiveId,
+                                                            @RequestHeader(value = "Authorization") String token) {
         try {
-            return reportService.getCheckinHistoryByObjectiveId(objectiveId);
+            return reportService.getCheckinHistoryByObjectiveId(objectiveId,token);
         } catch (Exception e) {
             logger.error("get list checkin history failed");
             logger.error(e.getMessage());
@@ -84,9 +85,10 @@ public class ReportController {
     @ApiOperation(value = "Danh sách checkin history của user objective")
     @GetMapping(path = "/history/{id}")
     public ResponseEntity<?> getListCheckinHistory(@ApiParam(value = "id của objective hiện tại")
-                                                   @PathVariable(name = "id") long id) {
+                                                   @PathVariable(name = "id") long id,
+                                                   @RequestHeader(value = "Authorization") String token) {
         try {
-            return reportService.getCheckinHistoryByObjectiveId(id);
+            return reportService.getCheckinHistoryByObjectiveId(id,token);
         } catch (Exception e) {
             logger.error("get list objective checkin failed");
             logger.error(e.getMessage());

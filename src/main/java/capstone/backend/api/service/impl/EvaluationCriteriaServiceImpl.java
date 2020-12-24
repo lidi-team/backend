@@ -66,8 +66,11 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
 
     @Override
     public ResponseEntity<?> getAllEvaluation(int page, int limit, String text, String jwtToken) throws Exception {
-        if (limit == 0){
+        if (limit <= 0){
             limit = 10;
+        }
+        if(page < 1){
+            page = 1;
         }
 
         Page<EvaluationCriteria> evaluationCriterias;

@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,7 +26,7 @@ public class EvaluationCriteriaController {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private CommonProperties commonProperties;
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "lấy toàn bộ Evaluation, có phân trang")
     @GetMapping
     public ResponseEntity<?> viewListEvaluation(
@@ -45,7 +46,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "tạo Evaluation mới")
     @PostMapping()
     public ResponseEntity<?> createEvaluation(
@@ -83,7 +84,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "cập nhật thông tin Evaluation")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateEvaluation(
@@ -102,7 +103,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-
+    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
     @ApiOperation(value = "xoá một Evaluation theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteEvaluation(

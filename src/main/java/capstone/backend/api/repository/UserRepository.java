@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findByFullNameContainsAndRoles(String name, Role role);
 
-    List<User> findByFullNameContains(String name, Pageable pageable);
+    Page<User> findByFullNameContains(String name, Pageable pageable);
 
     @Query(value = "select u from User u where lower(u.fullName) like %:name% and u.isDelete = false and u.isActive = true ")
     List<User> findByFullNameContains(@Param(value = "name") String name);
