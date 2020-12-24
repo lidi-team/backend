@@ -105,6 +105,16 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
 
     @Override
     public ResponseEntity<?> createEvaluation(EvaluationCriteriaDto evaluationCriteriaDto, String jwtToken) throws Exception {
+        EvaluationCriteria evaluationCriteria = evaluationRepository.findByContentAndDeleteFalse(evaluationCriteriaDto.getContent());
+
+        if(evaluationCriteria != null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Tiêu chí đánh giá này đã tồn tại").build()
+            );
+        }
+
         Object data = evaluationRepository.save(EvaluationCriteria.builder()
                 .content(evaluationCriteriaDto.getContent())
                 .numberOfStar(evaluationCriteriaDto.getNumberOfStar())
@@ -156,6 +166,17 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
                             .build()
             );
         }
+        List<EvaluationCriteria> lists = evaluationRepository.findAllAndDeleteFalse();
+
+        for (EvaluationCriteria list : lists) {
+            if(list.getContent().equalsIgnoreCase(evaluationCriteriaDto.getContent()) && list.getId() != id){
+                return ResponseEntity.badRequest().body(
+                        ApiResponse.builder()
+                                .code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tiêu chí đánh giá này đã tồn tại").build()
+                );
+            }
+        }
 
         evaluationRepository.save(EvaluationCriteria.builder()
                 .id(id)
@@ -181,10 +202,19 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
                             .build()
             );
-        }else {
+        }
+
+        if(evaluationRepository.checkExist(id) != null && evaluationRepository.checkExist(id).size() > 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Tiêu chí đánh giá này đang được sử dụng").build()
+            );
+        }
+
             evaluationCriteria.setDelete(true);
             evaluationRepository.save(evaluationCriteria);
-        }
+
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())

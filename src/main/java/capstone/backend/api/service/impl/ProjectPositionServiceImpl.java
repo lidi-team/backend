@@ -92,6 +92,13 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
 
     @Override
     public ResponseEntity<ApiResponse> createPosition(ProjectPositionDto positionDto, String jwtToken) throws Exception{
+        ProjectPosition positionOld = positionRepository.findByName(positionDto.getName());
+        if(positionOld != null){
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                            .message("Vị trí này đã tồn tại").build()
+            );
+        }
 
         Object data = positionRepository.save(ProjectPosition.builder()
                 .name(positionDto.getName())
@@ -126,10 +133,12 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
                 positionOld.setDescription(positionDto.getDescription());
                 positionRepository.save(positionOld);
             }else{
-                return ResponseEntity.ok().body(
-                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
-                        .message("Vị trí này đã tồn tại").build()
-                );
+                if(id != positionOld.getId()){
+                    return ResponseEntity.ok().body(
+                            ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                    .message("Vị trí này đã tồn tại").build()
+                    );
+                }
             }
         }else {
             positionRepository.save(ProjectPosition.builder()
