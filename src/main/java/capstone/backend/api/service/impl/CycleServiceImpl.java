@@ -126,7 +126,7 @@ public class CycleServiceImpl implements CycleService {
         Date fromDate = utils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
         Date endDate = utils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
 
-        List<Cycle> cycles = cycleRepository.findAll();
+        List<Cycle> cycles = cycleRepository.findAllDeleteFalse();
         for (Cycle cycle : cycles) {
             if(cycle.getName().equalsIgnoreCase(cycleDto.getName())){
                 return ResponseEntity.badRequest().body(
@@ -157,7 +157,7 @@ public class CycleServiceImpl implements CycleService {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Tạo mới chu kì thành công")
                         .build()
         );
     }
@@ -211,7 +211,7 @@ public class CycleServiceImpl implements CycleService {
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Cập nhật chu kì thành công")
                         .build()
         );
     }
