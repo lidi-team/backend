@@ -26,7 +26,7 @@ public class EvaluationCriteriaController {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     private CommonProperties commonProperties;
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "lấy toàn bộ Evaluation, có phân trang")
     @GetMapping
     public ResponseEntity<?> viewListEvaluation(
@@ -46,7 +46,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "tạo Evaluation mới")
     @PostMapping()
     public ResponseEntity<?> createEvaluation(
@@ -84,7 +84,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "cập nhật thông tin Evaluation")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateEvaluation(
@@ -103,7 +103,7 @@ public class EvaluationCriteriaController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "xoá một Evaluation theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteEvaluation(

@@ -47,7 +47,7 @@ public class CycleController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "lấy tất cả cycle, có phân trang")
     @GetMapping()
     public ResponseEntity<?> viewListCycles(
@@ -66,7 +66,7 @@ public class CycleController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "tạo cycle mới")
     @PostMapping()
     public ResponseEntity<?> createCycle(
@@ -84,7 +84,7 @@ public class CycleController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "cập nhật thông tin cycle")
     @PutMapping(path = "/{id}")
     public ResponseEntity<?> updateCycle(
@@ -102,7 +102,7 @@ public class CycleController {
             );
         }
     }
-    @PreAuthorize("hasRole(commonProperties.getROLE_ADMIN())")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "xoá một cycle theo id")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<?> deleteCycle(

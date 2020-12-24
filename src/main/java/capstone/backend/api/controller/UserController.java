@@ -189,7 +189,7 @@ public class UserController {
             );
         }
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_HR','ROLE_ADMIN')")
     @ApiOperation(value = "cập nhật thông tin tài khoản Staff")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateInfoStaff(
