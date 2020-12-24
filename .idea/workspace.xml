@@ -39,11 +39,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="fix checkin/checkin_request">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="fix create department" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -249,7 +245,7 @@
       <workItem from="1608713074183" duration="1633000" />
       <workItem from="1608776825380" duration="111000" />
       <workItem from="1608776954413" duration="616000" />
-      <workItem from="1608778417239" duration="1968000" />
+      <workItem from="1608778417239" duration="2284000" />
     </task>
     <task id="LOCAL-00001" summary="User API">
       <created>1603196899661</created>
@@ -293,7 +289,14 @@
       <option name="project" value="LOCAL" />
       <updated>1607439556714</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fix create department">
+      <created>1608780611557</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1608780611557</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -319,6 +322,7 @@
     <MESSAGE value="Add more bug," />
     <MESSAGE value="update chuyên nghiệp" />
     <MESSAGE value="fix checkin/checkin_request" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix checkin/checkin_request" />
+    <MESSAGE value="fix create department" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix create department" />
   </component>
 </project>
