@@ -18,6 +18,8 @@ public interface UnitOfKeyResultRepository extends JpaRepository<UnitOfKeyResult
 
     UnitOfKeyResult findByIdAndIsDeleteFalse(long id);
 
+    UnitOfKeyResult findByName(String name);
+
     @Query(value = "select k.unitOfKeyResult.id from KeyResult k " +
             "where k.unitOfKeyResult.id = :id ")
     List<Long> checkExisted(long id);
