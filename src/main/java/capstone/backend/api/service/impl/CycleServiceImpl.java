@@ -31,7 +31,7 @@ public class CycleServiceImpl implements CycleService {
     @Override
     public Cycle getCycleById(long id) throws Exception {
         Cycle cycle;
-        if(id == 0){
+        if (id == 0) {
             Date today = new Date();
             cycle = cycleRepository.findFirstByFromDateBeforeAndEndDateAfter(today, today);
         } else {
@@ -62,7 +62,7 @@ public class CycleServiceImpl implements CycleService {
     }
 
     @Override
-    public ResponseEntity<ApiResponse> getCurrentCycle(long id) throws Exception{
+    public ResponseEntity<ApiResponse> getCurrentCycle(long id) throws Exception {
         Cycle cycle = getCycleById(id);
         if (cycle == null) {
             return ResponseEntity.ok().body(
@@ -85,20 +85,20 @@ public class CycleServiceImpl implements CycleService {
 
     @Override
     public ResponseEntity<?> getAllCycles(int page, int size, String text) throws Exception {
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         Page<Cycle> cycles;
         List<CycleResponse> items = new ArrayList<>();
-        if(size == 0){
+        if (size == 0) {
             size = 10;
         }
-        if(text == null || text.isEmpty()){
-            cycles = cycleRepository.findByIsDeleteFalse(PageRequest.of(page-1, size));
-        }else {
-            cycles = cycleRepository.findAllByNameContainsAndIsDeleteFalse(text,PageRequest.of(page-1, size));
+        if (text == null || text.isEmpty()) {
+            cycles = cycleRepository.findByIsDeleteFalse(PageRequest.of(page - 1, size));
+        } else {
+            cycles = cycleRepository.findAllByNameContainsAndIsDeleteFalse(text, PageRequest.of(page - 1, size));
         }
 
         List<Cycle> list = cycles.getContent();
-        list.forEach(item ->{
+        list.forEach(item -> {
             items.add(
                     CycleResponse.builder()
                             .id(item.getId())
@@ -108,8 +108,8 @@ public class CycleServiceImpl implements CycleService {
                             .build()
             );
         });
-        response.put("items",items);
-        response.put("meta",utils.paging(cycles,page));
+        response.put("items", items);
+        response.put("meta", utils.paging(cycles, page));
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -123,8 +123,8 @@ public class CycleServiceImpl implements CycleService {
 
         String fromDateStr = cycleDto.getStartDate();
         String endDateStr = cycleDto.getEndDate();
-        Date fromDate = utils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
-        Date endDate = utils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
+        Date fromDate = utils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
+        Date endDate = utils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
 
         List<Cycle> cycles = cycleRepository.findAll();
         for (Cycle cycle : cycles) {
@@ -149,11 +149,11 @@ public class CycleServiceImpl implements CycleService {
 
         cycleRepository.save(
                 Cycle.builder()
-                .name(cycleDto.getName())
-                .fromDate(fromDate)
-                .endDate(endDate)
-                .isDelete(false)
-                .build());
+                        .name(cycleDto.getName())
+                        .fromDate(fromDate)
+                        .endDate(endDate)
+                        .isDelete(false)
+                        .build());
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
@@ -177,8 +177,8 @@ public class CycleServiceImpl implements CycleService {
 
         String fromDateStr = cycleDto.getStartDate();
         String endDateStr = cycleDto.getEndDate();
-        Date fromDate = utils.stringToDate(fromDateStr,CommonUtils.PATTERN_ddMMyyyy);
-        Date endDate = utils.stringToDate(endDateStr,CommonUtils.PATTERN_ddMMyyyy);
+        Date fromDate = utils.stringToDate(fromDateStr, CommonUtils.PATTERN_ddMMyyyy);
+        Date endDate = utils.stringToDate(endDateStr, CommonUtils.PATTERN_ddMMyyyy);
         List<Cycle> cycles = cycleRepository.findAllDeleteFalse();
 
         for (Cycle cycle : cycles) {

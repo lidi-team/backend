@@ -78,6 +78,18 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
 
     @Override
     public ResponseEntity<?> createMeasure(MeasureDto unit, String jwtToken) throws Exception {
+
+        List<UnitOfKeyResult> units = unitRepository.findAllDeleteFalse();
+
+        for (UnitOfKeyResult unitOfKeyResult : units) {
+            if(unitOfKeyResult.getName().equalsIgnoreCase(unit.getType())){
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên đơn vị đo lường đã tồn tại").build()
+                );
+            }
+        }
+
         UnitOfKeyResult data = unitRepository.save(
                 UnitOfKeyResult.builder()
                         .name(unit.getType())

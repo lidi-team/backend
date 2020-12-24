@@ -118,11 +118,26 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
             );
         }
 
-        positionRepository.save(ProjectPosition.builder()
-                .id(id)
-                .name(positionDto.getName())
-                .description(positionDto.getDescription())
-                .build());
+        ProjectPosition positionOld = positionRepository.findByName(positionDto.getName());
+        if(positionOld!=null){
+            if(positionOld.isDelete()){
+                positionOld.setDelete(false);
+                positionOld.setName(positionDto.getName());
+                positionOld.setDescription(positionDto.getDescription());
+                positionRepository.save(positionOld);
+            }else{
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                        .message("Vị trí này đã tồn tại").build()
+                );
+            }
+        }else {
+            positionRepository.save(ProjectPosition.builder()
+                    .id(id)
+                    .name(positionDto.getName())
+                    .description(positionDto.getDescription())
+                    .build());
+        }
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())

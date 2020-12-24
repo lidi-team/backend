@@ -65,8 +65,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> getAllDepartment(int page, int limit, String text, String jwtToken) throws Exception {
-        if (limit == 0) {
+        if (limit <= 0) {
             limit = 10;
+        }
+        if(page < 1){
+            page = 1;
         }
 
         Page<Department> departments;
@@ -77,11 +80,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             departments = departmentRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page - 1, limit, Sort.by("id")));
         }
 
-
         Map<String, Object> responses = new HashMap<>();
         List<Object> items = new ArrayList<>();
-
-
         departments.forEach(projectPosition -> {
             Map<String, Object> item = new HashMap<>();
             item.put("id", projectPosition.getId());
@@ -101,12 +101,27 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> createDepartment(DepartmentDto departmentDto, String jwtToken) throws Exception {
-
-
-        Object data = departmentRepository.save(Department.builder()
-                .name(departmentDto.getName())
-                .description(departmentDto.getDescription())
-                .build());
+        Department departmentOld = departmentRepository.findByName(departmentDto.getName());
+        Department data= new Department();
+        if(departmentOld != null){
+            if(departmentOld.isDelete()){
+                departmentOld.setDelete(false);
+                departmentOld.setName(departmentDto.getName());
+                departmentOld.setDescription(departmentDto.getDescription());
+                data= departmentRepository.save(departmentOld);
+            } else{
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên phòng ban này đã tồn tại")
+                                .build()
+                );
+            }
+        }else {
+            data = departmentRepository.save(Department.builder()
+                    .name(departmentDto.getName())
+                    .description(departmentDto.getDescription())
+                    .build());
+        }
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -178,7 +193,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Cập nhật phòng ban thành công")
                         .build()
         );
 
