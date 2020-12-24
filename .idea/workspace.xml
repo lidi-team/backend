@@ -41,7 +41,8 @@
   <component name="ChangeListManager">
     <list default="true" id="3f4ff909-1af9-4d9f-9f6c-ac3ccb16501c" name="Default Changelist" comment="fix checkin/checkin_request">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/CfrServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/CfrServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/repository/DepartmentRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/capstone/backend/api/service/impl/DepartmentServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,13 +65,6 @@
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHome" value="$USER_HOME$/.m2/wrapper/dists/apache-maven-3.6.3-bin/1iopthnavndlasol9gbrbg6bf2/apache-maven-3.6.3" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="ProjectId" id="1gdmFJaXaQXqvUwtpYfT82TKwVK" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -105,7 +99,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="MTConfigurable" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -186,6 +180,7 @@
     </configuration>
     <list>
       <item itemvalue="Application.ApiApplication" />
+      <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
@@ -248,6 +243,13 @@
       <workItem from="1607409448095" duration="1828000" />
       <workItem from="1607411294082" duration="10562000" />
       <workItem from="1607434342822" duration="6511000" />
+      <workItem from="1608178518076" duration="962000" />
+      <workItem from="1608179504672" duration="5616000" />
+      <workItem from="1608696316334" duration="1404000" />
+      <workItem from="1608713074183" duration="1633000" />
+      <workItem from="1608776825380" duration="111000" />
+      <workItem from="1608776954413" duration="616000" />
+      <workItem from="1608778417239" duration="1968000" />
     </task>
     <task id="LOCAL-00001" summary="User API">
       <created>1603196899661</created>

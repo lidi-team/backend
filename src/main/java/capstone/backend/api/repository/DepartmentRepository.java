@@ -1,6 +1,7 @@
 package capstone.backend.api.repository;
 
 import capstone.backend.api.entity.Department;
+import capstone.backend.api.entity.Objective;
 import capstone.backend.api.entity.ProjectPosition;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,8 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     Department findByIdAndIsDeleteFalse(long id);
 
     Page findByNameContainsAndIsDeleteFalse(String name, Pageable pageable);
+
+    Department findByNameContains(String name);
 
     @Query(value = "select e.id from Execute e where e.position.id = :id ")
     List<Long> checkExisted(long id);

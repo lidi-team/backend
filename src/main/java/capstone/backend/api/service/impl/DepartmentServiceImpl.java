@@ -101,10 +101,27 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> createDepartment(DepartmentDto departmentDto, String jwtToken) throws Exception {
-        Object data = departmentRepository.save(Department.builder()
-                .name(departmentDto.getName())
-                .description(departmentDto.getDescription())
-                .build());
+        Department departmentOld = departmentRepository.findByName(departmentDto.getName());
+        Department data= new Department();
+        if(departmentOld != null){
+            if(departmentOld.isDelete()){
+                departmentOld.setDelete(false);
+                departmentOld.setName(departmentDto.getName());
+                departmentOld.setDescription(departmentDto.getDescription());
+                data= departmentRepository.save(departmentOld);
+            } else{
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên phòng ban này đã tồn tại")
+                                .build()
+                );
+            }
+        }else {
+            data = departmentRepository.save(Department.builder()
+                    .name(departmentDto.getName())
+                    .description(departmentDto.getDescription())
+                    .build());
+        }
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
