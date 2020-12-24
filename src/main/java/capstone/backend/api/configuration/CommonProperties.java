@@ -52,6 +52,11 @@ public class CommonProperties {
     private int OBJ_COMPANY;
     private int OBJ_PROJECT;
     private int OBJ_PERSONAL;
+    private String ROLE_PM;
+    private String ROLE_DIRECTOR;
+    private String ROLE_ADMIN;
+    private String ROLE_HR;
+    private String ROLE_STAFF;
 
 
 }

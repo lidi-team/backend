@@ -39,14 +39,18 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
 
     @Override
     public ResponseEntity<?> getAllMeasure(int page, int size, String text, String jwtToken) throws Exception {
-        if (size == 0){
+        if (size <= 0) {
             size = 10;
         }
 
+        if (page < 1) {
+            page = 1;
+        }
+
         Page<UnitOfKeyResult> measureList;
-        if(text==null) {
+        if (text == null) {
             measureList = unitRepository.findByIsDeleteFalse(PageRequest.of(page - 1, size, Sort.by("id").ascending()));
-        }else{
+        } else {
             measureList = unitRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page - 1, size, Sort.by("id").ascending()));
         }
         Map<String, Object> responses = new HashMap<>();
@@ -76,10 +80,10 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     public ResponseEntity<?> createMeasure(MeasureDto unit, String jwtToken) throws Exception {
         UnitOfKeyResult data = unitRepository.save(
                 UnitOfKeyResult.builder()
-                .name(unit.getType())
-                .preset(unit.getPresent())
-                .measureIndex(unit.getIndex())
-                .build());
+                        .name(unit.getType())
+                        .preset(unit.getPresent())
+                        .measureIndex(unit.getIndex())
+                        .build());
 
 
         Map<String, Object> item = new HashMap<>();
@@ -99,7 +103,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     public ResponseEntity<?> getMeasureById(long id, String jwtToken) {
         UnitOfKeyResult measure = unitRepository.findByIdAndIsDeleteFalse(id);
 
-        if(measure == null){
+        if (measure == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
@@ -130,28 +134,28 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
-        } else {
-            unitOfKeyResult.setPreset(unit.getPresent());
-            unitOfKeyResult.setName(unit.getType());
-            unitOfKeyResult.setMeasureIndex(unit.getIndex());
-            unitRepository.save(unitOfKeyResult);
         }
 
-        UnitOfKeyResult measure = unitRepository.findByIdAndIsDeleteFalse(id);
-
-        if(measure == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+        List<UnitOfKeyResult> units = unitRepository.findAllDeleteFalse();
+        for (UnitOfKeyResult ofKeyResult : units) {
+            if(ofKeyResult.getId() != id && ofKeyResult.getName().equalsIgnoreCase(unit.getType())){
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                .message("Tên đơn vị đo lường đã tồn tại").build()
+                );
+            }
         }
+
+        unitOfKeyResult.setPreset(unit.getPresent());
+        unitOfKeyResult.setName(unit.getType());
+        unitOfKeyResult.setMeasureIndex(unit.getIndex());
+        unitRepository.save(unitOfKeyResult);
 
         Map<String, Object> item = new HashMap<>();
-        item.put("id", measure.getId());
-        item.put("present", measure.getPreset());
-        item.put("type", measure.getName());
-        item.put("index", measure.getMeasureIndex());
+        item.put("id", unitOfKeyResult.getId());
+        item.put("present", unitOfKeyResult.getPreset());
+        item.put("type", unitOfKeyResult.getName());
+        item.put("index", unitOfKeyResult.getMeasureIndex());
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
@@ -164,7 +168,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
     public ResponseEntity<?> deleteMeasure(long id, String jwtToken) throws Exception {
         UnitOfKeyResult unitOfKeyResult = unitRepository.findByIdAndIsDeleteFalse(id);
 
-        if(unitRepository.checkExisted(unitOfKeyResult.getId()).size() > 0){
+        if (unitRepository.checkExisted(unitOfKeyResult.getId()).size() > 0) {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Đơn vị này đang được sử dụng").build()
@@ -183,7 +187,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
 
     @Override
     public ResponseEntity<?> searchMeasure(String name, int page, int size, String sort, String jwtToken) {
-        if (sort == null){
+        if (sort == null) {
             sort = "id";
         }
 
@@ -231,7 +235,6 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
                         .data(responses).build()
         );
     }
-
 
 
 }

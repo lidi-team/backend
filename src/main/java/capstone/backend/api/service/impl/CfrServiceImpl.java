@@ -55,15 +55,15 @@ public class CfrServiceImpl implements CfrService {
         Map<String,Object> superior = new HashMap<>();
         Map<String,Object> inferior = new HashMap<>();
 
-        if(page <= 0){
+        if(page < 1){
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
                             .build()
             );
         }
-        if(limit == 0){
+        if(limit < 1){
             limit = 10;
         }
 
@@ -225,6 +225,14 @@ public class CfrServiceImpl implements CfrService {
     public ResponseEntity<?> getUserStar(long cycleId) throws Exception {
         List<Map<String,Object>> responses = new ArrayList<>();
 
+        if(cycleId < 0){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
         List<User> users;
         if(cycleId == 0){
             users = userRepository.findRankingStar();
@@ -268,7 +276,16 @@ public class CfrServiceImpl implements CfrService {
     @Override
     public ResponseEntity<?> getDetailCfr(long id) throws Exception {
         Map<String,Object> response = new HashMap<>();
-        Cfr cfr = cfrRepository.findById(id).get();
+        Cfr cfr = cfrRepository.findById(id).orElse(null);
+
+        if(cfr == null){
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
 
         Map<String,Object> eva = new HashMap<>();
         Map<String,Object> sender = new HashMap<>();

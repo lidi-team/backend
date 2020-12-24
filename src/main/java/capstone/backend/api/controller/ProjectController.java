@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -93,9 +94,10 @@ public class ProjectController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<?> getProjectById(
             @ApiParam(value = "Id của project")
-            @PathVariable(value = "id")long id){
+            @PathVariable(value = "id")long id,
+            @RequestHeader(value = "Authorization") String token){
         try {
-            return projectService.getDetailProjectById(id);
+            return projectService.getDetailProjectById(id,token);
         } catch (Exception e) {
             logger.error("get detail project failed");
             logger.error(e.getMessage());
@@ -106,7 +108,7 @@ public class ProjectController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "tao moi project")
     @PostMapping(path = "/create")
     public ResponseEntity<?> createProject(
@@ -157,7 +159,7 @@ public class ProjectController {
             );
         }
     }
-
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_PM')")
     @ApiOperation(value = "update toan bo staff cua project")
     @PutMapping(path = "{projectId}/staff")
     public ResponseEntity<?> updateListStaff(
@@ -177,7 +179,7 @@ public class ProjectController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_PM')")
     @ApiOperation(value = "add staff vao project")
     @PostMapping(path = "/{projectId}/staff")
     public ResponseEntity<?> addStaffToProject(
@@ -216,7 +218,7 @@ public class ProjectController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_PM')")
     @ApiOperation(value = "xoa 1 user khoi project")
     @DeleteMapping(path = "/{projectId}/staff/{userId}")
     public ResponseEntity<?> removeStaffFromProject(
@@ -283,7 +285,7 @@ public class ProjectController {
             );
         }
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "Deactive project")
     @DeleteMapping(path = "/{projectId}")
     public ResponseEntity<?> deleteProject(

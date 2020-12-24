@@ -65,16 +65,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public ResponseEntity<?> getAllDepartment(int page, int limit, String text, String jwtToken) throws Exception {
-        if (limit == 0){
+        if (limit == 0) {
             limit = 10;
         }
 
         Page<Department> departments;
 
         if (text == null) {
-            departments = departmentRepository.findByIsDeleteFalse(PageRequest.of(page-1, limit, Sort.by("id")));
-        } else{
-            departments = departmentRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page-1, limit, Sort.by("id")));
+            departments = departmentRepository.findByIsDeleteFalse(PageRequest.of(page - 1, limit, Sort.by("id")));
+        } else {
+            departments = departmentRepository.findByNameContainsAndIsDeleteFalse(text, PageRequest.of(page - 1, limit, Sort.by("id")));
         }
 
 
@@ -120,7 +120,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public ResponseEntity<?> getDepartment(long id, String jwtToken) throws Exception {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
 
-        if(department == null){
+        if (department == null) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
@@ -154,20 +154,22 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         Department departmentOld = departmentRepository.findByName(departmentDto.getName());
-        if(departmentOld != null){
-            if(departmentOld.isDelete()){
+        if (departmentOld != null) {
+            if (departmentOld.isDelete()) {
                 departmentOld.setDelete(false);
                 departmentOld.setName(departmentDto.getName());
                 departmentOld.setDescription(departmentDto.getDescription());
                 departmentRepository.save(departmentOld);
-            } else{
-                return ResponseEntity.ok().body(
-                        ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
-                                .message("Tên phòng ban này đã tồn tại")
-                                .build()
-                );
+            } else {
+                if (departmentOld.getId() != id) {
+                    return ResponseEntity.ok().body(
+                            ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
+                                    .message("Tên phòng ban này đã tồn tại")
+                                    .build()
+                    );
+                }
             }
-        }else {
+        } else {
             departmentRepository.save(Department.builder()
                     .id(id)
                     .name(departmentDto.getName())
@@ -185,8 +187,15 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public ResponseEntity<?> deleteDepartment(long id, String jwtToken) throws Exception {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
+        if (department == null) {
+            return ResponseEntity.ok().body(
+                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
+                            .message(commonProperties.getMESSAGE_NOT_FOUND())
+                            .build()
+            );
+        }
 
-        if(departmentRepository.checkExisted(id).size() > 0){
+        if (departmentRepository.checkExisted(id).size() > 0) {
             return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Đơn vị phòng ban này đang có nhân viên")
@@ -194,20 +203,12 @@ public class DepartmentServiceImpl implements DepartmentService {
             );
         }
 
-        if (department == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
-        }else {
-            department.setDelete(true);
-            departmentRepository.save(department);
-        }
+        department.setDelete(true);
+        departmentRepository.save(department);
 
         return ResponseEntity.ok().body(
                 ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .message("Xóa phòng ban thành công")
                         .build()
         );
     }

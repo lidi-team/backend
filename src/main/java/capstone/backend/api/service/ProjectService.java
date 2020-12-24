@@ -17,7 +17,7 @@ public interface ProjectService {
 
     ResponseEntity<?> getAllProjectPaging(int page, int limit, String sortWith, String type,String text,String token) throws Exception;
 
-    ResponseEntity<?> getDetailProjectById(long id) throws Exception;
+    ResponseEntity<?> getDetailProjectById(long id,String token) throws Exception;
 
     ResponseEntity<?> createProject(CreateProjectDto projectDto) throws Exception;
 
