@@ -122,7 +122,7 @@ public class CfrServiceImpl implements CfrService {
         if(type <1 || type > 3){
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_PARAM_VALUE_INVALID())
+                            .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
                             .build()
             );
@@ -140,8 +140,7 @@ public class CfrServiceImpl implements CfrService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
-        List<Cfr> cfrs = cfrRepository.findAllByCycleId(cycleId);
-                  cfrs.addAll(cfrRepository.findAllByCycleId2(cycleId));
+        List<Cfr> cfrs = cfrRepository.findAllByCycleId(cycle.getFromDate(),cycle.getEndDate());
         List<Cfr> tempCfrs;
         if(type == 1){
             tempCfrs = cfrs.stream().filter(cfr -> cfr.getSender().getId() == user.getId()).collect(Collectors.toList());
@@ -150,6 +149,7 @@ public class CfrServiceImpl implements CfrService {
         } else{
             tempCfrs = cfrs;
         }
+        tempCfrs.sort(Comparator.comparing(Cfr::getCreateAt));
         pages = new PageImpl<>(tempCfrs,PageRequest.of(page-1,limit),tempCfrs.size());
 
         pages.getContent().forEach(cfr ->{
@@ -225,7 +225,9 @@ public class CfrServiceImpl implements CfrService {
     public ResponseEntity<?> getUserStar(long cycleId) throws Exception {
         List<Map<String,Object>> responses = new ArrayList<>();
 
-        if(cycleId < 0){
+        Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
+
+        if(cycle == null){
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
@@ -237,8 +239,7 @@ public class CfrServiceImpl implements CfrService {
         if(cycleId == 0){
             users = userRepository.findRankingStar();
         } else {
-            List<Cfr> cfrs = cfrRepository.findAllByCycleId(cycleId);
-                      cfrs.addAll(cfrRepository.findAllByCycleId2(cycleId));
+            List<Cfr> cfrs = cfrRepository.findAllByCycleId(cycle.getFromDate(),cycle.getEndDate());
             users = cfrs.stream().map(Cfr::getReceiver).distinct().collect(Collectors.toList());
 
             for (User user : users) {

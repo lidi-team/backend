@@ -74,7 +74,7 @@ public class ReportServiceImpl implements ReportService {
         }
         Execute execute = objective.getExecute();
         if(user.getId() != execute.getUser().getId()
-                || user.getId() != execute.getReviewer().getId()){
+                && user.getId() != execute.getReviewer().getId()){
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
