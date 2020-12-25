@@ -82,6 +82,7 @@ public class ReportServiceImpl implements ReportService {
             );
         }
 
+        Cycle cycle = objective.getCycle();
         List<ReportResponse> responses = new ArrayList<>();
         List<Report> reports = reportRepository.findAllByObjectiveId(id);
         reports.forEach(report -> {
@@ -90,7 +91,7 @@ public class ReportServiceImpl implements ReportService {
                             .id(report.getId())
                             .checkinAt(report.getCheckinDate())
                             .nextCheckinDate(report.getNextCheckinDate())
-                            .status(report.getStatus())
+                            .status(checkCompleted(cycle) ? commonProperties.getOBJ_FINISHED() : report.getStatus())
                             .teamLeaderId(report.getAuthorizedUser().getId())
                             .objective(
                                     MetaDataResponse.builder()
@@ -337,7 +338,7 @@ public class ReportServiceImpl implements ReportService {
         checkin.put("id", report.getId());
         checkin.put("checkinAt", report.getCheckinDate());
         checkin.put("nextCheckinDate", report.getNextCheckinDate());
-        checkin.put("status", report.getStatus());
+        checkin.put("status", checkCompleted(objective.getCycle()) ? commonProperties.getOBJ_FINISHED() : report.getStatus());
         checkin.put("reviewer",report.getAuthorizedUser().getFullName());
 
         response.put("keyResults", new ArrayList<>());
@@ -652,6 +653,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private String setStatusForObjective(Objective objective, Report report) {
+        if(checkCompleted(objective.getCycle())){
+            return "Completed";
+        }
         if (objective.getStatus().equalsIgnoreCase("completed")) {
             return "Completed";
         }
@@ -856,6 +860,13 @@ public class ReportServiceImpl implements ReportService {
         Execute execute = objective.getExecute();
 
         return cycle.getEndDate().before(execute.getEndDate()) ? cycle.getEndDate() : execute.getEndDate();
+    }
+
+    private boolean checkCompleted(Cycle cycle){
+        if(cycle.getEndDate().before(new Date())){
+            return true;
+        }
+        return false;
     }
 
 }
