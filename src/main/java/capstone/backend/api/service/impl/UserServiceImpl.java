@@ -215,10 +215,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getAllUsers(String name, int page, int size, String sort, String jwtToken) throws Exception {
-        if(page == 0){
+        if(page < 1){
             page = 1;
         }
-        if(size<=0){
+        if(size <= 0){
             size = 10;
         }
         Page<User> users = userRepository.
@@ -250,6 +250,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> getStaffPaging(String name, int page, int size, String sort, String jwtToken) throws Exception {
+        if(page < 1){
+            page = 1;
+        }
+        if(size <= 0){
+            size = 10;
+        }
         Role roleStaff = roleRepository.findRoleByName("ROLE_USER").orElse(null);
 
         if(roleStaff == null){
@@ -258,16 +264,11 @@ public class UserServiceImpl implements UserService {
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
         }
-        StopWatch stopWatch = new StopWatch();
-        stopWatch.start("count staffs");
         List<User> users = userRepository.
                 findByFullNameContainsAndRoles(name, roleStaff);
         List<User> staffs = users.stream().filter(user -> (user.getRoles().size() == 1 && user.getRoles().contains(roleStaff))).collect(Collectors.toList());
         PageImpl<User> pages = new PageImpl<>(staffs,PageRequest.of(page - 1, size),staffs.size());
-        stopWatch.stop();
-        System.out.println("end "+stopWatch.getLastTaskInfo().getTimeMillis());
         List<Object> listUser = new ArrayList<>();
-        stopWatch.start("add infor");
         pages.getContent().forEach(user -> {
             try {
                 listUser.add(customUserInformation(user));
@@ -275,8 +276,6 @@ public class UserServiceImpl implements UserService {
                 e.printStackTrace();
             }
         });
-        stopWatch.stop();
-        System.out.println("end "+stopWatch.getLastTaskInfo().getTimeMillis());
         Map<String, Object> response = new HashMap<>();
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
