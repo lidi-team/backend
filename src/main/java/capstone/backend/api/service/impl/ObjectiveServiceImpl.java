@@ -480,13 +480,12 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         boolean remove = cycle.getEndDate().before(new Date());
 
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
-
-        List<Execute> executes = executeOrigins.stream().filter(execute ->
-                !(execute.getEndDate().before(cycle.getFromDate())
-                        || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
-
-        List<Long> projectIds = executes.stream().filter(execute -> execute.getProject() != null)
-                .map(execute -> execute.getProject().getId()).collect(Collectors.toList());
+        List<Execute> executes = new ArrayList<>();
+        if(user.getRoles().stream().noneMatch(role -> role.getName().equalsIgnoreCase("ROLE_DIRECTOR"))){
+            executes = executeOrigins.stream().filter(execute ->
+                    !(execute.getEndDate().before(cycle.getFromDate())
+                            || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
+        }
 
         for (Execute execute : executes) {
             if (execute.getProject() != null) {

@@ -640,7 +640,7 @@ public class ReportServiceImpl implements ReportService {
                     .title(objective.getName())
                     .progress(objective.getProgress())
                     .change(objective.getChanging())
-                    .checkinId(status.equalsIgnoreCase("Reviewed") ? 0 : report.getId())
+                    .checkinId((status.equalsIgnoreCase("Reviewed") || report == null) ? 0 : report.getId())
                     .status(status)
                     .keyResults(keyResultResponses)
                     .project(projectResponse)
