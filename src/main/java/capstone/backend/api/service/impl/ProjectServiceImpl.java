@@ -15,6 +15,7 @@ import capstone.backend.api.service.ProjectService;
 import capstone.backend.api.utils.CommonUtils;
 import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -188,13 +189,17 @@ public class ProjectServiceImpl implements ProjectService {
             });
         }
 
-        response.put("data", list);
+
+
+        PagedListHolder pages = new PagedListHolder(list);
+        pages.setPageSize(limit);
+        pages.setPage(page - 1);
+
         Map<String, Integer> meta = new HashMap<>();
-        int count = list.size();
-        int totalPage = (count % limit == 0 ? count / limit : count / limit + 1);
-        meta.put("totalItems", count);
+        meta.put("totalItems", list.size());
         meta.put("currentPage", page);
-        meta.put("totalPages", totalPage == 0 ? 1 : totalPage);
+        meta.put("totalPages", pages.getPageCount());
+        response.put("data", pages.getPageList());
         response.put("meta", meta);
 
         return ResponseEntity.ok().body(
@@ -209,7 +214,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getDetailProjectById(long id,String token) throws Exception {
         Project project = projectRepository.findById(id).orElse(null);
         if (project == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
@@ -452,7 +457,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception {
         Project project = projectRepository.findById(projectId).orElse(null);
         if(project == null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
