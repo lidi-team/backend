@@ -125,15 +125,6 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
             "where o.id in :list")
     List<Objective> findAllObjectiveByListId(@Param(value = "list") List<Long> list);
 
-    @Transactional
-    @Modifying
-    @Query(value = "update Objective o set o.status = 'Completed' where o.execute.id = :executeId")
-    void updateCompletedObjectiveByExecuteId(@Param(value = "executeId") Long executeId);
-
-    @Transactional
-    @Modifying
-    @Query(value = "update Objective o set o.status = 'Completed' where o.execute.id in :ids")
-    void updateCompletedObjectiveByIdIn(@Param(value = "ids") List<Long> ids);
 
     @Query(value = "select o.id from Objective  o " +
             "join Execute  e on o.execute.id = e.id  and e.isDelete = false " +
@@ -143,4 +134,5 @@ public interface ObjectiveRepository extends JpaRepository<Objective, Long> {
     List<Objective> findAllByExecuteIdAndCycleIdAndType(long executeId, long cycleId, int type);
 
     List<Objective> findAllByExecuteIdAndType(long executeId, int type);
+
 }

@@ -74,7 +74,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
         String alignmentObjectives = commonUtils.arrayToString(objectvieDto.getAlignmentObjectives());
         Cycle cycle = cycleService.getCycleById(objectvieDto.getCycleId());
-
+        String message = "";
         Objective objective;
         if (objectvieDto.getId() == 0) {
             objective = Objective.builder()
@@ -88,6 +88,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .type(objectvieDto.getType())
                     .weight(objectvieDto.getWeight())
                     .build();
+            message ="Tạo mới mục tiêu thành công!";
         } else {
             objective = objectiveRepository.findById(objectvieDto.getId()).get();
             objective = Objective.builder()
@@ -102,6 +103,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                     .type(objectvieDto.getType())
                     .weight(objectvieDto.getWeight())
                     .build();
+            message = "Cập nhật mục tiêu thành công!";
         }
 
         ArrayList<KeyResultResponse> keyResultResponses = new ArrayList<>();
@@ -133,7 +135,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_SUCCESS())
-                        .message("Tạo mới/Cập nhật mục tiêu thành công!")
+                        .message(message)
                         .data(objectiveResponse).build()
         );
     }
@@ -476,7 +478,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Cycle cycle = cycleService.getCycleById(cycleId);
 
         boolean remove = cycle.getEndDate().before(new Date());
-        
+
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
 
         List<Execute> executes = executeOrigins.stream().filter(execute ->
@@ -833,7 +835,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         return KeyResultResponse.builder()
                 .id(keyResult.getId())
                 .content(keyResult.getContent())
-                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
+                .measureUnitName(keyResult.getUnitOfKeyResult().getName())
                 .startValue(keyResult.getFromValue())
                 .targetedValue(keyResult.getToValue())
                 .valueObtained(keyResult.getValueObtained())

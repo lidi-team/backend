@@ -116,7 +116,6 @@ public class ReportServiceImpl implements ReportService {
         String message = "";
         Objective objective = objectiveRepository.findByIdAndDelete(checkinDto.getObjectiveId());
         List<KeyResult> keyResults = keyResultRepository.findAllByObjectiveId(objective.getId());
-        Map<Long, Double> valueOlds = saveOldValueKeyResult(keyResults);
 
         User authorizedUser = objective.getExecute().getReviewer();
 
@@ -154,11 +153,9 @@ public class ReportServiceImpl implements ReportService {
             objective.setChanging(objective.getProgress() - oldProgress);
             objectiveRepository.updateChangingAndProgressObjective(objective.getChanging(),
                     objective.getProgress(), objective.getId());
-
-            Map<Long, Double> changing = setListChangingKeyResult(valueOlds, keyResults);
             //update progress of upper objectives and key results;
             Thread t = new Thread(() -> {
-                calculateProgressAllObjective(objective, changing);
+                calculateProgressAllObjective(objective);
             });
             t.setDaemon(true);
             t.start();
@@ -786,69 +783,64 @@ public class ReportServiceImpl implements ReportService {
         return progress;
     }
 
-    private void calculateProgressAllObjective(Objective objective, Map<Long, Double> keyResultChanging) {
+    private void calculateProgressAllObjective(Objective objective) {
         Objective parentObjective = objectiveRepository.findById(objective.getParentId()).get();
 
-        double change = objective.getChanging() * calculatePercentObjective(objective, parentObjective);
-        double progress = parentObjective.getProgress() + change;
+        List<Objective> children = objectiveRepository.findAllByParentId(parentObjective.getId());
 
-        parentObjective.setChanging(change);
+        double totalProgress = 0;
+        int totalWeight = 0;
+        for (Objective child : children) {
+            if (child.getType() == 1) {
+                totalProgress += child.getProgress() * child.getWeight() * child.getExecute().getProject().getWeight();
+                totalWeight += child.getWeight() * child.getExecute().getProject().getWeight();
+            } else {
+                totalProgress += child.getProgress() * child.getWeight();
+                totalWeight += child.getWeight();
+            }
+
+        }
+
+        double progress = totalProgress/totalWeight;
+        double changing = progress - parentObjective.getProgress();
+
+        parentObjective.setChanging(changing);
         parentObjective.setProgress(progress);
-        objectiveRepository.updateChangingAndProgressObjective(change, progress, parentObjective.getId());
+        objectiveRepository.updateChangingAndProgressObjective(changing, progress, parentObjective.getId());
 
         List<KeyResult> parentKeyResults = keyResultRepository.findAllByObjectiveId(parentObjective.getId());
-        Map<Long, Double> oldParentValue = saveOldValueKeyResult(parentKeyResults);
 
         for (KeyResult parentKeyResult : parentKeyResults) {
-            if (keyResultChanging.containsKey(parentKeyResult.getId())) {
-                double changeKey = keyResultChanging.get(parentKeyResult.getId());
-                double progressKey = parentKeyResult.getProgress() + changeKey * calculatePercentObjective(objective,parentObjective);
-                double valueObtain = calculateValueObtainKeyResult(parentKeyResult, progressKey);
-                parentKeyResult.setProgress(progressKey);
-                parentKeyResult.setValueObtained(valueObtain);
-                keyResultRepository.updateKeyResultProgress(progressKey, valueObtain, parentKeyResult.getId());
+            List<KeyResult> keyResults = keyResultRepository.findAllByParentId(parentKeyResult.getId());
+            double childTotalProgress = 0;
+            double childTotalWeight = 0;
+            for (KeyResult keyResult : keyResults) {
+                if(keyResult.getObjective().getType() == 1){
+                    childTotalProgress += keyResult.getProgress()
+                            *keyResult.getObjective().getWeight()
+                            *keyResult.getObjective().getExecute().getProject().getWeight();
+                    childTotalWeight += keyResult.getObjective().getWeight()
+                            *keyResult.getObjective().getExecute().getProject().getWeight();
+                } else{
+                    childTotalProgress += keyResult.getProgress()
+                            *keyResult.getObjective().getWeight();
+                    childTotalWeight += keyResult.getObjective().getWeight();
+                }
+
             }
+            double progressKeyResult = childTotalProgress/childTotalWeight;
+            double valueObtain = calculateValueObtainKeyResult(parentKeyResult,progressKeyResult);
+
+            parentKeyResult.setProgress(progressKeyResult);
+            parentKeyResult.setValueObtained(valueObtain);
         }
+
+        keyResultRepository.saveAll(parentKeyResults);
 
         if (parentObjective.getParentId() != 0) {
-            Map<Long, Double> changingList = setListChangingKeyResult(oldParentValue, parentKeyResults);
-            calculateProgressAllObjective(parentObjective, changingList);
+            calculateProgressAllObjective(parentObjective);
         }
 
-    }
-
-    private double calculatePercentObjective(Objective child, Objective parent) {
-        double totalWeight = 0;
-        List<Objective> children = objectiveRepository.findAllByParentId(parent.getId());
-        for (Objective objective : children) {
-            if (objective.getType() == 1) {
-                totalWeight += objective.getWeight() * objective.getExecute().getProject().getWeight();
-            } else {
-                totalWeight += objective.getWeight();
-            }
-        }
-        if (child.getType() == 1) {
-            return child.getWeight() * child.getExecute().getProject().getWeight() / totalWeight;
-        } else {
-            return child.getWeight() / totalWeight;
-        }
-    }
-
-    private Map<Long, Double> setListChangingKeyResult(Map<Long, Double> olds, List<KeyResult> news) {
-        Map<Long, Double> map = new HashMap<>();
-        for (KeyResult keyResult : news) {
-            double oldProgress = olds.get(keyResult.getId());
-            map.put(keyResult.getParentId(), keyResult.getProgress() - oldProgress);
-        }
-        return map;
-    }
-
-    private Map<Long, Double> saveOldValueKeyResult(List<KeyResult> olds) {
-        Map<Long, Double> oldValue = new HashMap<>();
-        olds.forEach(old -> {
-            oldValue.put(old.getId(), old.getProgress());
-        });
-        return oldValue;
     }
 
     private double calculateValueObtainKeyResult(KeyResult keyResult, double progressKey) {
@@ -863,10 +855,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private boolean checkCompleted(Cycle cycle){
-        if(cycle.getEndDate().before(new Date())){
-            return true;
-        }
-        return false;
+        return cycle.getEndDate().before(new Date());
     }
 
 }
