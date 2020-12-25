@@ -475,11 +475,8 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         User user = userRepository.findByEmail(email).get();
         Cycle cycle = cycleService.getCycleById(cycleId);
 
-        boolean remove = false;
-        if(cycle.getEndDate().before(new Date())){
-            remove = true;
-        }
-
+        boolean remove = cycle.getEndDate().before(new Date());
+        
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
 
         List<Execute> executes = executeOrigins.stream().filter(execute ->
@@ -547,7 +544,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                 .id(execute.getProject().getId())
                                 .name(execute.getProject().getName())
                                 .position(execute.getPosition() == null ? "" : execute.getPosition().getName())
-                                .remove(execute.isDelete() || remove)
+                                .remove(execute.isDelete() || remove || execute.isClose())
                                 .objectives(objectiveItems)
                                 .isPm(execute.isPm())
                                 .build()
