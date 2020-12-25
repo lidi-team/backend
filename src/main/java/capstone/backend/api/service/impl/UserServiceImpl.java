@@ -22,6 +22,7 @@ import capstone.backend.api.utils.security.JwtUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -109,7 +110,7 @@ public class UserServiceImpl implements UserService {
         String email = jwtUtils.getUserNameFromJwtToken(jwtToken.substring(5));
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
@@ -259,7 +260,7 @@ public class UserServiceImpl implements UserService {
         Role roleStaff = roleRepository.findRoleByName("ROLE_USER").orElse(null);
 
         if(roleStaff == null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
@@ -267,20 +268,25 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.
                 findByFullNameContainsAndRoles(name, roleStaff);
         List<User> staffs = users.stream().filter(user -> (user.getRoles().size() == 1 && user.getRoles().contains(roleStaff))).collect(Collectors.toList());
-        PageImpl<User> pages = new PageImpl<>(staffs,PageRequest.of(page - 1, size),staffs.size());
+
+//        PageImpl<User> pages = new PageImpl<User>(staffs,PageRequest.of(page - 1, size),staffs.size());
+        PagedListHolder pages = new PagedListHolder(staffs);
+        pages.setPageSize(size); // number of items per page
+        pages.setPage(page - 1);      // set to first page
+
+        pages.getPageCount(); // number of pages
+        pages.getPageList();
+
         List<Object> listUser = new ArrayList<>();
-        pages.getContent().forEach(user -> {
-            try {
-                listUser.add(customUserInformation(user));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        for (Object o : pages.getPageList()) {
+            User user = (User) o;
+            listUser.add(customUserInformation(user));
+        }
         Map<String, Object> response = new HashMap<>();
         response.put("data", listUser);
         Map<String, Object> meta = new HashMap<>();
-        meta.put("totalItems", pages.getTotalElements());
-        meta.put("totalPages", pages.getTotalPages());
+        meta.put("totalItems", staffs.size());
+        meta.put("totalPages", pages.getPageCount());
         meta.put("currentPage",page);
         response.put("meta", meta);
         return ResponseEntity.ok().body(

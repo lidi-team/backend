@@ -123,7 +123,7 @@ public class CfrServiceImpl implements CfrService {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID())
+                            .message("Không tìm thấy dữ liệu")
                             .build()
             );
         }
@@ -133,7 +133,7 @@ public class CfrServiceImpl implements CfrService {
             return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
+                            .message("Không tìm thấy dữ liệu").build()
             );
         }
 
@@ -227,13 +227,15 @@ public class CfrServiceImpl implements CfrService {
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
 
-        if(cycle == null){
-            return ResponseEntity.badRequest().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+        if(cycleId != 0){
+            if(cycle == null){
+                return ResponseEntity.ok().body(
+                        ApiResponse.builder()
+                                .code(commonProperties.getCODE_NOT_FOUND())
+                                .message("Không tìm thấy dữ liệu")
+                                .build()
+                );
+            }
         }
         List<User> users;
         if(cycleId == 0){
@@ -280,7 +282,7 @@ public class CfrServiceImpl implements CfrService {
         Cfr cfr = cfrRepository.findById(id).orElse(null);
 
         if(cfr == null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())

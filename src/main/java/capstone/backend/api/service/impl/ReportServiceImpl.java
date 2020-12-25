@@ -66,7 +66,7 @@ public class ReportServiceImpl implements ReportService {
 
         Objective objective = objectiveRepository.findById(id).orElse(null);
         if(objective == null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
@@ -293,7 +293,7 @@ public class ReportServiceImpl implements ReportService {
         Map<String, Object> response = new HashMap<>();
         Report report = reportRepository.findById(id).orElse(null);
         if (report == null)
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())

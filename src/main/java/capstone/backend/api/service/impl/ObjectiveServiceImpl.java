@@ -144,7 +144,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
         if (objective == null) {
             logger.error("Objective not found!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
@@ -175,7 +175,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<?> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
         if(objectiveId < 0 || cycleId < 0){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
@@ -276,7 +276,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         }
 
         if (objective == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
@@ -380,7 +380,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
@@ -441,7 +441,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND())
@@ -474,6 +474,11 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
         Cycle cycle = cycleService.getCycleById(cycleId);
+
+        boolean remove = false;
+        if(cycle.getEndDate().before(new Date())){
+            remove = true;
+        }
 
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
 
@@ -542,7 +547,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                                 .id(execute.getProject().getId())
                                 .name(execute.getProject().getName())
                                 .position(execute.getPosition() == null ? "" : execute.getPosition().getName())
-                                .remove(execute.isDelete())
+                                .remove(execute.isDelete() || remove)
                                 .objectives(objectiveItems)
                                 .isPm(execute.isPm())
                                 .build()

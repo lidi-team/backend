@@ -220,7 +220,7 @@ public class CycleServiceImpl implements CycleService {
     public ResponseEntity<?> deleteCycle(long id, String jwtToken) throws Exception {
         Cycle currentCycle = cycleRepository.findById(id).orElse(null);
         if(currentCycle == null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
                             .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
             );
