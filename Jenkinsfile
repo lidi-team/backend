@@ -16,6 +16,7 @@ pipeline {
                 sh 'mvn clean package' 
                 sh 'docker build -t backend .'
                 sh 'docker container run -d -p 8081:8080 --name my-backend backend'
+                sh 'docker rmi $(docker images -f "dangling=true" -q)'
             }
         }
         // stage('Deliver') { 
