@@ -23,7 +23,7 @@ public class KeyResultResponse {
     private String content;
 
     @NonNull
-    private long measureUnitId;
+    private String measureUnitName;
 
     private String reference;
 

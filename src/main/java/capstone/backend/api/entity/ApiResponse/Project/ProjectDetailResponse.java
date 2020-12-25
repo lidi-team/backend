@@ -18,7 +18,7 @@ public class ProjectDetailResponse {
     private String name;
     private Date startDate;
     private Date endDate;
-    private int status;
+    private boolean isActive;
     private String description;
     private Map<String,Object> pm;
     private int weight;

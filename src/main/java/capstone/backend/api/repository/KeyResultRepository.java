@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface KeyResultRepository extends JpaRepository<KeyResult, Long> {
@@ -36,4 +37,6 @@ public interface KeyResultRepository extends JpaRepository<KeyResult, Long> {
     void updateKeyResultProgress(@Param(value = "progress") double progress,
                                  @Param(value = "valueObtain") double valueObtain,
                                  @Param(value = "id") long id);
+
+    List<KeyResult> findAllByParentId(long id);
 }
