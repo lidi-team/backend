@@ -162,7 +162,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
         ProjectPosition projectPosition = positionRepository.findByIdAndIsDeleteFalse(id);
 
         if(positionRepository.checkExisted(id).size() > 0){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Vị trí này đang được sử dụng").build()
             );

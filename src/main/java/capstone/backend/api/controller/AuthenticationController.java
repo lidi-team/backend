@@ -40,7 +40,7 @@ public class AuthenticationController {
         } catch (AuthenticationException e) {
             logger.error("Authenticate failed for email: " + userLoginDto.getEmail());
             logger.error(e.getMessage());
-            return ResponseEntity.status(401).body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Email hoặc mật khẩu không chính xác").build()
