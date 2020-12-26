@@ -4,19 +4,50 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
+        body {
+            font-weight: 300;
+            color: #790c5a;
+            display: flex;
+            font-size: 18px;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Pacifico', cursive;
+            text-decoration: underline;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            width: 100%;
+            background-color: #ffb2a7;
+        }
+
         .container {
-            padding: 28px;
+            display:flex;
+            flex-direction: column;
+            max-width: 1440px;
+            margin: 4rem auto;
+            text-align:center;
+            background-color: #ffddd8;
         }
-        .name{
-            font-weight: bold;
+
+        .text-content {
+            max-width: 800px;
+            margin: auto;
         }
+
     </style>
 </head>
 <body>
-<div class="container">
-    <h3 th:text="${title}">TITLE</h3>
-    <p>Welcome <span class="name" th:text="${fullName}"></span> to LiDi OKRs System, your access password is:</p>
-    <h4 th:text="${code}">code</h4>
+<div class="wrapper">
+    <div class="container">
+        <div class="text-content">
+            <h2 th:text="${title}"></h2>
+            <p>Xin chào <span style="font-weight: bold" th:text="${fullName}">,</span></p>
+            <p>Chào mừng bạn gia nhập đại gia đình LIDI Comporation. Mật khẩu đăng nhập vào hệ thống của bạn là:</p>
+            <p th:text="${code}">matkhau</p>
+        </div>
+    </div>
 </div>
 </body>
 </html>

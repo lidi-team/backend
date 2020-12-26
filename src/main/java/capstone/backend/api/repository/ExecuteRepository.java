@@ -102,7 +102,9 @@ public interface ExecuteRepository extends JpaRepository<Execute, Long> {
 
     Execute findFirstByProjectIsNull();
 
-    Execute findByProjectIdAndUserId(long projectId, long userId);
+    @Query("select e from Execute e where e.project.id = :projectId and e.user.id = :userId and e.isDelete = false ")
+    Execute findByProjectIdAndUserId(@Param(value = "projectId") long projectId,
+                                     @Param(value = "userId") long userId);
 
     @Query(value = "select e.id from Execute e where e.project.id = :id")
     List<Long> findAllByProjectId(@Param(value = "id") long id);

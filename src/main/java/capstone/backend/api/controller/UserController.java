@@ -246,7 +246,7 @@ public class UserController {
             return ResponseEntity.badRequest().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UNDEFINE_ERROR())
-                            .message("Ngu Controller").build()
+                            .message("").build()
             );
         }
     }

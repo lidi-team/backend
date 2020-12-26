@@ -205,7 +205,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .author(childObject.authorOfChildObjective(user))
                             .type(childObject.setObjectiveType(
                                     objective.getType(),
-                                    project == null ? " " : project.getName()))
+                                    project == null ? " " : project.getName(),childObject.getAuthor()))
                             .build()
             );
 
@@ -218,7 +218,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         .data(
                                 DrillDownObjectiveResponse.builder()
                                         .childObjectives(childObjectiveResponses)
-                                        .title(objectiveCurrent == null ? "Objective của công ty" : objectiveCurrent.getName())
+                                        .title(objectiveCurrent == null ? "Mục tiêu công ty" : objectiveCurrent.getName())
                                         .build()
                         )
                         .build()
