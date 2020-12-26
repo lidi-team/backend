@@ -205,7 +205,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                             .author(childObject.authorOfChildObjective(user))
                             .type(childObject.setObjectiveType(
                                     objective.getType(),
-                                    project == null ? " " : project.getName(),childObject.getAuthor()))
+                                    project == null ? " " : project.getName(),user))
                             .build()
             );
 
