@@ -56,6 +56,7 @@ public class ChildObjectiveResponse {
                             .reference(keyResult.getReference())
                             .measureUnitName(keyResult.getUnitOfKeyResult() == null ? " "
                                     : keyResult.getUnitOfKeyResult().getName())
+                            .progress(keyResult.calculateProgress())
                             .build()
             );
         });
@@ -75,6 +76,7 @@ class KeyResultOfChildObjective {
     private String content;
     private String reference;
     private String measureUnitName;
+    private double progress;
 }
 
 @Data
