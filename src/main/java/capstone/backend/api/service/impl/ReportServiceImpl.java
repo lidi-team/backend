@@ -614,7 +614,7 @@ public class ReportServiceImpl implements ReportService {
                 keyResultResponse.put("targetedValue", keyResult.getToValue());
                 keyResultResponse.put("progress", keyResult.getProgress());
                 keyResultResponse.put("content", keyResult.getContent());
-                keyResultResponse.put("measureUnit", keyResult.getUnitOfKeyResult().getName());
+                keyResultResponse.put("measureUnitName", keyResult.getUnitOfKeyResult().getName());
                 keyResultResponse.put("reference", keyResult.getReference());
 
                 keyResultResponses.add(keyResultResponse);
