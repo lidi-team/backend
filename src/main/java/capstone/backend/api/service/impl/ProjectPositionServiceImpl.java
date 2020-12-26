@@ -138,6 +138,12 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
                             ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                     .message("Vị trí này đã tồn tại").build()
                     );
+                } else {
+                    positionRepository.save(ProjectPosition.builder()
+                            .id(id)
+                            .name(positionDto.getName())
+                            .description(positionDto.getDescription())
+                            .build());
                 }
             }
         }else {

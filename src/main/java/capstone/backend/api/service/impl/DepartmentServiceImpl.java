@@ -182,6 +182,12 @@ public class DepartmentServiceImpl implements DepartmentService {
                                     .message("Tên phòng ban này đã tồn tại")
                                     .build()
                     );
+                } else{
+                    departmentRepository.save(Department.builder()
+                            .id(id)
+                            .name(departmentDto.getName())
+                            .description(departmentDto.getDescription())
+                            .build());
                 }
             }
         } else {
