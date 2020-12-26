@@ -1,12 +1,9 @@
 package capstone.backend.api.service;
 
-import capstone.backend.api.dto.KeyResultProgress;
 import capstone.backend.api.dto.ObjectvieDto;
-import capstone.backend.api.entity.ApiResponse.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public interface ObjectiveService {
@@ -37,4 +34,6 @@ public interface ObjectiveService {
     ResponseEntity<?> getListMetaDataOfUser(long userId) throws Exception;
 
     ResponseEntity<?> getProgressOKR(long cycleId, String token) throws Exception;
+
+    ResponseEntity<?> getListObjectiveCompany(long cycleId) throws Exception;
 }
