@@ -177,12 +177,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<?> getListChildObjectiveByObjectiveId(long objectiveId, long cycleId) throws Exception {
         if(objectiveId < 0 || cycleId < 0){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
         Objective objectiveCurrent = objectiveRepository.findByIdAndDelete(objectiveId);
         List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId, objectiveId);
@@ -278,13 +273,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         }
 
         if (objective == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .data(response)
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Execute execute = objective.getExecute();
@@ -382,12 +371,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
         Objective parentObjective = objectiveRepository.findByIdAndDelete(objective.getParentId());
         if (parentObjective != null) {
@@ -443,12 +427,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         Objective objective = objectiveRepository.findByIdAndDelete(id);
 
         if (objective == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
         ArrayList<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
 
@@ -564,7 +543,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
 
     @Override
     public ResponseEntity<?> getDetailObjectiveById(long id) throws Exception {
-        Objective objective = objectiveRepository.findById(id).get();
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+        if(objective == null){
+            return ResponseEntity.notFound().build();
+        }
         List<MetaDataResponse> childrenResponses = new ArrayList<>();
         List<MetaDataResponse> alignResponses = new ArrayList<>();
 
@@ -643,7 +625,10 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     @Override
     public ResponseEntity<?> getAlignObjectiveById(long id) throws Exception {
         List<ObjectiveProjectItem> responses = new ArrayList<>();
-        Objective objective = objectiveRepository.findById(id).get();
+        Objective objective = objectiveRepository.findById(id).orElse(null);
+        if(objective == null){
+            return ResponseEntity.notFound().build();
+        }
 
         List<Long> longs = commonUtils.stringToArray(objective.getAlignmentObjectives());
         longs.forEach(item ->{

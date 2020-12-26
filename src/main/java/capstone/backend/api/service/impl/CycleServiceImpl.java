@@ -65,11 +65,7 @@ public class CycleServiceImpl implements CycleService {
     public ResponseEntity<ApiResponse> getCurrentCycle(long id) throws Exception {
         Cycle cycle = getCycleById(id);
         if (cycle == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
         MetaDataResponse response = MetaDataResponse.builder()
                 .id(cycle.getId())
@@ -168,11 +164,7 @@ public class CycleServiceImpl implements CycleService {
         Cycle currentCycle = cycleRepository.findById(id).orElse(null);
 
         if (currentCycle == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         String fromDateStr = cycleDto.getStartDate();
@@ -220,10 +212,7 @@ public class CycleServiceImpl implements CycleService {
     public ResponseEntity<?> deleteCycle(long id, String jwtToken) throws Exception {
         Cycle currentCycle = cycleRepository.findById(id).orElse(null);
         if(currentCycle == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
         if(cycleRepository.checkExisted(id) != null && cycleRepository.checkExisted(id).size() > 0){
             return ResponseEntity.badRequest().body(

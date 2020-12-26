@@ -24,13 +24,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import javax.mail.MessagingException;
 import java.text.ParseException;
@@ -70,10 +68,7 @@ public class UserServiceImpl implements UserService {
         String email = jwtUtils.getUserNameFromJwtToken(jwtToken.substring(5));
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Department department = departmentService.getDepartmentById(user.getDepartment().getId());
@@ -176,10 +171,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> getUserInformationById(long id, String jwtToken) throws Exception {
         User user = userRepository.findById(id).orElse(null);
         if (user == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message("").build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Department department = departmentService.getDepartmentById(user.getDepartment() == null ? 0 : user.getDepartment().getId());
@@ -260,10 +252,7 @@ public class UserServiceImpl implements UserService {
         Role roleStaff = roleRepository.findRoleByName("ROLE_USER").orElse(null);
 
         if(roleStaff == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
         List<User> users = userRepository.
                 findByFullNameContainsAndRoles(name, roleStaff);

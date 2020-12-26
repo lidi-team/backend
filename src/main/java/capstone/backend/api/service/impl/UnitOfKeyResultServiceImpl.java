@@ -116,11 +116,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         UnitOfKeyResult measure = unitRepository.findByIdAndIsDeleteFalse(id);
 
         if (measure == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Map<String, Object> item = new HashMap<>();
@@ -142,10 +138,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         UnitOfKeyResult unitOfKeyResult = unitRepository.findByIdAndIsDeleteFalse(id);
 
         if (unitOfKeyResult == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         List<UnitOfKeyResult> units = unitRepository.findAllDeleteFalse();
