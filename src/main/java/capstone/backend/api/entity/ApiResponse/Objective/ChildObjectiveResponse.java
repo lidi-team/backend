@@ -25,7 +25,7 @@ public class ChildObjectiveResponse {
     private ArrayList<Long> alignmentObjectives;
     private AuthorOfChildObjective author;
 
-    public String setObjectiveType(int type, String projectName,AuthorOfChildObjective user) {
+    public String setObjectiveType(int type, String projectName,User user) {
         // type = 0: objective company
         if (type == 0) {
             return "Mục tiêu công ty";
@@ -33,7 +33,7 @@ public class ChildObjectiveResponse {
         } else if (type == 2) {
             return "Mục tiêu cá nhân của "+ user.getFullName();
         } else {
-            return "Objective of " + projectName;
+            return "Mục tiêu của " + projectName;
         }
     }
 
