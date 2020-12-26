@@ -287,5 +287,22 @@ public class ObjectiveController {
 
     }
 
+    @ApiOperation(value = "Lấy danh sách objective công ty")
+    @GetMapping(path = "/company")
+    public ResponseEntity<?> getListObjectiveCompany(
+            @ApiParam(value = "id cua Objective hien tai")
+            @RequestParam(value = "cycleId") long cycleId){
+        try {
+            return objectiveService.getListObjectiveCompany(cycleId);
+        } catch (Exception e) {
+            logger.error("get align objective failed");
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(
+                    ApiResponse.builder()
+                            .code(commonProperties.getCODE_UNDEFINE_ERROR())
+                            .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
+            );
+        }
+    }
 
 }

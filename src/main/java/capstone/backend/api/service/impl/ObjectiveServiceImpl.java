@@ -794,6 +794,76 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         );
     }
 
+    @Override
+    public ResponseEntity<?> getListObjectiveCompany(long cycleId) throws Exception {
+
+        List<Objective> objectives = objectiveRepository.findAllByCycleIdAndParentId(cycleId,0);
+
+        List<ObjectiveProjectItem> list = new ArrayList<>();
+
+        for (Objective objective : objectives) {
+
+            List<KeyResult> keyResults = keyResultService.getKeyResultsByObjectiveId(objective.getId());
+
+            List<Objective> children = objectiveRepository.findAllByCycleIdAndParentId(cycleId,objective.getId());
+
+            List<KeyResultResponse> keys = new ArrayList<>();
+            for (KeyResult keyResult : keyResults) {
+                keys.add(
+                        KeyResultResponse.builder()
+                                .id(keyResult.getId())
+                                .measureUnitName(keyResult.getUnitOfKeyResult().getName())
+                                .content(keyResult.getContent())
+                                .progress(keyResult.getProgress())
+                                .startValue(keyResult.getFromValue())
+                                .valueObtained(keyResult.getValueObtained())
+                                .targetedValue(keyResult.getToValue())
+                                .reference(keyResult.getReference())
+                                .build()
+                );
+            }
+
+            List<MetaDataResponse> alignResponses = new ArrayList<>();
+            List<Long> aligns = commonUtils.stringToArray(objective.getAlignmentObjectives());
+            aligns.forEach(item ->{
+                Objective align = objectiveRepository.findByIdAndDelete(item);
+                if(align != null){
+                    alignResponses.add(
+                            MetaDataResponse.builder()
+                                    .id(align.getId())
+                                    .name(align.getName())
+                                    .build()
+                    );
+                }
+            });
+
+            ObjectiveProjectItem item = ObjectiveProjectItem.builder()
+                    .id(objective.getId())
+                    .changing(objective.getChanging())
+                    .progress(objective.getProgress())
+                    .parentId(0)
+                    .type(0)
+                    .alignObjectives(alignResponses)
+                    .childObjectives(new ArrayList<>())
+                    .delete(!(children != null && children.size() > 0))
+                    .keyResults(keys)
+                    .title(objective.getName())
+                    .update(!(children != null && children.size() > 0))
+                    .weight(objective.getWeight())
+                    .build();
+
+            list.add(item);
+        }
+
+        return ResponseEntity.ok().body(
+                ApiResponse.builder()
+                        .code(commonProperties.getCODE_SUCCESS())
+                        .message(commonProperties.getMESSAGE_SUCCESS())
+                        .data(list)
+                        .build()
+        );
+    }
+
     private double calculateProgress(List<Objective> OKRs) {
         double weight = 0;
         double totalProgress = 0;
