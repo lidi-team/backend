@@ -303,6 +303,7 @@ public class ReportServiceImpl implements ReportService {
         objectiveMap.put("title", objective.getName());
         objectiveMap.put("userId", objective.getExecute().getUser().getId());
         objectiveMap.put("progressSuggest", 0);
+        objectiveMap.put("close",objective.getExecute().isDelete() || objective.getExecute().isClose());
         List<KeyResultCheckin> keyResultCheckins = setListKeyResultCheckin(objective.getId());
 
         List<capstone.backend.api.entity.ApiResponse.Report.ReportDetail>
