@@ -66,11 +66,7 @@ public class ReportServiceImpl implements ReportService {
 
         Objective objective = objectiveRepository.findById(id).orElse(null);
         if(objective == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
         Execute execute = objective.getExecute();
         if(user.getId() != execute.getUser().getId()
@@ -236,6 +232,9 @@ public class ReportServiceImpl implements ReportService {
         User user = userRepository.findByEmail(email).get();
 
         Objective objective = objectiveRepository.findByIdAndDelete(id);
+        if(objective == null){
+            return ResponseEntity.notFound().build();
+        }
 
         List<KeyResultCheckin> keyResultCheckins = setListKeyResultCheckin(id);
 
@@ -291,12 +290,7 @@ public class ReportServiceImpl implements ReportService {
         Map<String, Object> response = new HashMap<>();
         Report report = reportRepository.findById(id).orElse(null);
         if (report == null)
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
@@ -371,11 +365,7 @@ public class ReportServiceImpl implements ReportService {
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
         if (cycle == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
@@ -521,7 +511,10 @@ public class ReportServiceImpl implements ReportService {
     public ResponseEntity<?> getDetailCheckinFeedbackByCheckinId(long id) {
         Map<String, Object> response = new HashMap<>();
 
-        Report report = reportRepository.findById(id).get();
+        Report report = reportRepository.findById(id).orElse(null);
+        if(report == null){
+            return ResponseEntity.notFound().build();
+        }
 
         List<ReportDetail> details = detailRepository.findAllByReportId(id);
 

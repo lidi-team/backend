@@ -136,11 +136,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
 
         if (department == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Map<String, Object> item = new HashMap<>();
@@ -161,11 +157,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
 
         if (department == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Department departmentOld = departmentRepository.findByName(departmentDto.getName());
@@ -209,11 +201,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public ResponseEntity<?> deleteDepartment(long id, String jwtToken) throws Exception {
         Department department = departmentRepository.findByIdAndIsDeleteFalse(id);
         if (department == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         if (departmentRepository.checkExisted(id).size() > 0) {

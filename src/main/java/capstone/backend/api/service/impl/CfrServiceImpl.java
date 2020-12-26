@@ -120,21 +120,12 @@ public class CfrServiceImpl implements CfrService {
             limit = 10;
         }
         if(type <1 || type > 3){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message("Không tìm thấy dữ liệu")
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Cycle cycle = cycleRepository.findById(cycleId).orElse(null);
         if (cycle== null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message("Không tìm thấy dữ liệu").build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
@@ -229,12 +220,7 @@ public class CfrServiceImpl implements CfrService {
 
         if(cycleId != 0){
             if(cycle == null){
-                return ResponseEntity.ok().body(
-                        ApiResponse.builder()
-                                .code(commonProperties.getCODE_NOT_FOUND())
-                                .message("Không tìm thấy dữ liệu")
-                                .build()
-                );
+                return ResponseEntity.notFound().build();
             }
         }
         List<User> users;
@@ -282,12 +268,7 @@ public class CfrServiceImpl implements CfrService {
         Cfr cfr = cfrRepository.findById(id).orElse(null);
 
         if(cfr == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Map<String,Object> eva = new HashMap<>();

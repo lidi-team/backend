@@ -214,11 +214,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> getDetailProjectById(long id,String token) throws Exception {
         Project project = projectRepository.findById(id).orElse(null);
         if (project == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
         if (checkAuthorizedUser(id, token)) return ResponseEntity.ok().body(
                 ApiResponse.builder()
@@ -457,12 +453,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ResponseEntity<?> updateListStaff(List<AddStaffToProjectDto> dtos, long projectId) throws Exception {
         Project project = projectRepository.findById(projectId).orElse(null);
         if(project == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
         List<Execute> oldStaffs = executeRepository.findAllStaffByProjectId(projectId);
 

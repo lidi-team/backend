@@ -118,11 +118,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
         ProjectPosition projectPosition = positionRepository.findByIdAndIsDeleteFalse(id);
 
         if (projectPosition == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         ProjectPosition positionOld = positionRepository.findByName(positionDto.getName());
@@ -173,11 +169,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
         }
 
         if (projectPosition == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }else {
             projectPosition.setDelete(true);
             positionRepository.save(projectPosition);
@@ -195,11 +187,7 @@ public class ProjectPositionServiceImpl implements ProjectPositionService {
         ProjectPosition projectPosition = positionRepository.findByIdAndIsDeleteFalse(id);
 
         if(projectPosition == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Map<String, Object> item = new HashMap<>();

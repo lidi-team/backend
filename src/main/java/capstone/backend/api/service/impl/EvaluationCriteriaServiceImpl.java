@@ -134,11 +134,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         EvaluationCriteria evaluationCriteria = evaluationRepository.findByIdAndIsDeleteFalse(id);
 
         if(evaluationCriteria == null){
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder()
-                            .code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND()).build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         Map<String, Object> item = new HashMap<>();
@@ -160,11 +156,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         EvaluationCriteria evaluationCriteria = evaluationRepository.findByIdAndIsDeleteFalse(id);
 
         if (evaluationCriteria == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
         List<EvaluationCriteria> lists = evaluationRepository.findAllAndDeleteFalse();
 
@@ -197,11 +189,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         EvaluationCriteria evaluationCriteria = evaluationRepository.findByIdAndIsDeleteFalse(id);
 
         if (evaluationCriteria == null) {
-            return ResponseEntity.ok().body(
-                    ApiResponse.builder().code(commonProperties.getCODE_NOT_FOUND())
-                            .message(commonProperties.getMESSAGE_NOT_FOUND())
-                            .build()
-            );
+            return ResponseEntity.notFound().build();
         }
 
         if(evaluationRepository.checkExist(id) != null && evaluationRepository.checkExist(id).size() > 0){
