@@ -54,8 +54,8 @@ public class ChildObjectiveResponse {
                             .targetValue(keyResult.getToValue())
                             .content(keyResult.getContent())
                             .reference(keyResult.getReference())
-                            .measureUnitId(keyResult.getUnitOfKeyResult() == null ? 0
-                                    : keyResult.getUnitOfKeyResult().getId())
+                            .measureUnitName(keyResult.getUnitOfKeyResult() == null ? " "
+                                    : keyResult.getUnitOfKeyResult().getName())
                             .build()
             );
         });
@@ -74,7 +74,7 @@ class KeyResultOfChildObjective {
     private double targetValue;
     private String content;
     private String reference;
-    private long measureUnitId;
+    private String measureUnitName;
 }
 
 @Data
