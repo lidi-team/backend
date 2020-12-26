@@ -108,7 +108,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         EvaluationCriteria evaluationCriteria = evaluationRepository.findByContentAndDeleteFalse(evaluationCriteriaDto.getContent());
 
         if(evaluationCriteria != null){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Tiêu chí đánh giá này đã tồn tại").build()
@@ -162,7 +162,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
 
         for (EvaluationCriteria list : lists) {
             if(list.getContent().equalsIgnoreCase(evaluationCriteriaDto.getContent()) && list.getId() != id){
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder()
                                 .code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Tiêu chí đánh giá này đã tồn tại").build()
@@ -193,7 +193,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
         }
 
         if(evaluationRepository.checkExist(id) != null && evaluationRepository.checkExist(id).size() > 0){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Tiêu chí đánh giá này đang được sử dụng").build()

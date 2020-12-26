@@ -174,7 +174,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         UnitOfKeyResult unitOfKeyResult = unitRepository.findByIdAndIsDeleteFalse(id);
 
         if (unitRepository.checkExisted(unitOfKeyResult.getId()).size() > 0) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Đơn vị này đang được sử dụng").build()
             );

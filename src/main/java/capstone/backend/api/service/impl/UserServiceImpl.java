@@ -95,7 +95,7 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<?> changePassword(UserChangePasswordDto userPassDto, String jwtToken) throws Exception {
         if (!validateChangePasswordInformation(userPassDto)) {
             logger.error("Parameter invalid!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
 
         if (!passwordEncoder.matches(userPassDto.getOldPassword(), user.getPassword())) {
             logger.error("Old password is incorrect!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_INVALID()).build()
@@ -327,7 +327,7 @@ public class UserServiceImpl implements UserService {
         User currentUser = userRepository.findById(id).orElse(null);
 
         if (currentUser == null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Người dùng này không tồn tại").build()
@@ -336,7 +336,7 @@ public class UserServiceImpl implements UserService {
         if (currentUser.isActive()) {
             for (Role role : currentUser.getRoles()) {
                 if (role.getName().equalsIgnoreCase("ROLE_DIRECTOR")) {
-                    return ResponseEntity.badRequest().body(
+                    return ResponseEntity.ok().body(
                             ApiResponse.builder()
                                     .code(commonProperties.getCODE_UPDATE_FAILED())
                                     .message("Người dùng này đang có quyền giám đốc").build()
@@ -344,7 +344,7 @@ public class UserServiceImpl implements UserService {
                 }
 
                 if (role.getName().equalsIgnoreCase("ROLE_PM")) {
-                    return ResponseEntity.badRequest().body(
+                    return ResponseEntity.ok().body(
                             ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                     .message("Người dùng này đang là PM của dự án").build()
                     );
@@ -474,7 +474,7 @@ public class UserServiceImpl implements UserService {
             );
         }
 
-        return ResponseEntity.badRequest().body(
+        return ResponseEntity.ok().body(
                 ApiResponse.builder()
                         .code(commonProperties.getCODE_UPDATE_FAILED())
                         .message("Thêm người dùng không thành công")

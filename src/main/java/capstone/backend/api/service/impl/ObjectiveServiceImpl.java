@@ -54,7 +54,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
     public ResponseEntity<?> addObjective(ObjectvieDto objectvieDto, String token) throws Exception {
         if (!validateObjectiveInformation(objectvieDto)) {
             logger.error("Parameter is empty!");
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -111,7 +111,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if (objectvieDto.getKeyResults() != null) {
             if (!keyResultService.validateKeyResults(objectvieDto.getKeyResults())) {
                 logger.error("Parameter is empty!");
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder()
                                 .code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
@@ -156,7 +156,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         if ((objective.getType() == commonProperties.getOBJ_PROJECT() ||
                 objective.getType() == commonProperties.getOBJ_COMPANY())
                 && objectiveRepository.findFirstByParentId(objective.getId()) != null) {
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Không thể xóa mục tiêu của công ty/dự án khi nó đã có mục tiêu con").build()

@@ -276,7 +276,7 @@ public class ProjectServiceImpl implements ProjectService {
             projects = projectRepository.findAllByDeleteFalseAndIdNotIn(projectDto.getName(),projectDto.getId());
         }
         if(projects != null && projects.size() > 0){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Tên dự án đã tồn tại trong hệ thống")

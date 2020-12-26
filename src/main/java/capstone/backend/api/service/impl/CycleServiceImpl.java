@@ -125,7 +125,7 @@ public class CycleServiceImpl implements CycleService {
         List<Cycle> cycles = cycleRepository.findAllDeleteFalse();
         for (Cycle cycle : cycles) {
             if(cycle.getName().equalsIgnoreCase(cycleDto.getName())){
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Tên chu kì đã tồn tại")
                                 .build()
@@ -135,7 +135,7 @@ public class CycleServiceImpl implements CycleService {
             Date cycleToDate = cycle.getEndDate();
 
             if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate))){
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Các chu kì không được trùng thời gian")
                                 .build()
@@ -175,7 +175,7 @@ public class CycleServiceImpl implements CycleService {
 
         for (Cycle cycle : cycles) {
             if(cycle.getName().equalsIgnoreCase(cycleDto.getName()) && cycle.getId() != id){
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Tên chu kì đã tồn tại")
                                 .build()
@@ -185,7 +185,7 @@ public class CycleServiceImpl implements CycleService {
             Date cycleToDate = cycle.getEndDate();
 
             if(!(cycleFromDate.after(endDate) || cycleToDate.before(fromDate)) && cycle.getId() != id){
-                return ResponseEntity.badRequest().body(
+                return ResponseEntity.ok().body(
                         ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                                 .message("Các chu kì không được trùng thời gian")
                                 .build()
@@ -215,7 +215,7 @@ public class CycleServiceImpl implements CycleService {
             return ResponseEntity.notFound().build();
         }
         if(cycleRepository.checkExisted(id) != null && cycleRepository.checkExisted(id).size() > 0){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder().code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Chu kì này đang được sử dụng").build()
             );
