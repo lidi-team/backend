@@ -300,7 +300,7 @@ public class ProjectServiceImpl implements ProjectService {
             project = Project.builder()
                     .name(projectDto.getName())
                     .parent(parentProject)
-                    .close(projectDto.getStatus() == 0)
+                    .close(!projectDto.isActive())
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .description(projectDto.getDescription())
@@ -312,7 +312,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .id(projectDto.getId())
                     .name(projectDto.getName())
                     .parent(parentProject)
-                    .close(projectDto.getStatus() == 0)
+                    .close(!projectDto.isActive())
                     .fromDate(fromDate)
                     .endDate(endDate)
                     .isDelete(false)
@@ -327,8 +327,14 @@ public class ProjectServiceImpl implements ProjectService {
         pm = userRepository.save(pm);
 
         Execute execute = executeRepository.findPmAllByProjectId(project.getId());
+        User director;
+        if(project.getParent() != null){
+            Execute execute1 = executeRepository.findPmByProjectId(project.getParent().getId());
+            director = execute1.getUser();
+        }else {
+            director = userRepository.findDirector();
+        }
 
-        User director = userRepository.findDirector();
 
         if (execute != null) {
             User oldUser = execute.getUser();
