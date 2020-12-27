@@ -43,14 +43,14 @@
 // 				.body("message", equalTo("Thành công")).body("code", equalTo(200))
 // 				.body(matchesJsonSchemaInClasspath("getProjectByIdSchema.json"));
 //     }
-//     @Test
-// 	public void T02() {
-//         String id = "2";
-// 		Header headers = new Header("Authorization", "lidi " + token);
-// 		given().header(headers).when().get("projects/"+id+"").then().assertThat()
-// 				.body("message", equalTo("Thành công")).body("code", equalTo(200))
-// 				.body(matchesJsonSchemaInClasspath("getProjectByIdSchema.json"));
-//     }
+//     // @Test
+// 	// public void T02() {
+//     //     String id = "2";
+// 	// 	Header headers = new Header("Authorization", "lidi " + token);
+// 	// 	given().header(headers).when().get("projects/"+id+"").then().assertThat()
+// 	// 			.body("message", equalTo("Thành công")).body("code", equalTo(200))
+// 	// 			.body(matchesJsonSchemaInClasspath("getProjectByIdSchema.json"));
+//     // }
 //     @Test
 // 	public void T03() {
 //         String id = "0";
@@ -136,28 +136,28 @@
 // 		String id = "-1";
 // 		Header headers = new Header("Authorization", "lidi " + token);
 // 		given().header(headers).when().get("projects/"+id+"/staff").then().assertThat()
-//                 .body("code", equalTo(402));
+//                 .body("code", equalTo(4001));
 // 	}
 // 	@Test
 // 	public void T14() {
 // 		String id = "-2";
 // 		Header headers = new Header("Authorization", "lidi " + token);
 // 		given().header(headers).when().get("projects/"+id+"/staff").then().assertThat()
-//                 .body("code", equalTo(402));
+//                 .body("code", equalTo(4001));
 // 	}
 // 	@Test
 // 	public void T15() {
 // 		String id = "10000000";
 // 		Header headers = new Header("Authorization", "lidi " + token);
 // 		given().header(headers).when().get("projects/"+id+"/staff").then().assertThat()
-//                 .body("code", equalTo(404));
+//                 .body("code", equalTo(4001));
 // 	}
 // 	@Test
 // 	public void T16() {
 // 		String id = "-10000000";
 // 		Header headers = new Header("Authorization", "lidi " + token);
 // 		given().header(headers).when().get("projects/"+id+"/staff").then().assertThat()
-//                 .body("code", equalTo(404));
+//                 .body("code", equalTo(4001));
 // 	}
 // 	@Test
 // 	public void T17() {
@@ -189,7 +189,7 @@
 // 		String id = "0";
 // 		Header headers = new Header("Authorization", "lidi " + token);
 // 		given().header(headers).when().get("projects/"+id+"/candidate").then().assertThat()
-// 				.body("code", equalTo(404));
+// 				.body("code", equalTo(200));
 // 				}
 // 	@Test
 // 	public void T21() {
