@@ -798,6 +798,7 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                         KeyResultResponse.builder()
                                 .id(keyResult.getId())
                                 .measureUnitName(keyResult.getUnitOfKeyResult().getName())
+                                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
                                 .content(keyResult.getContent())
                                 .progress(keyResult.getProgress())
                                 .startValue(keyResult.getFromValue())
@@ -890,11 +891,13 @@ public class ObjectiveServiceImpl implements ObjectiveService {
                 .id(keyResult.getId())
                 .content(keyResult.getContent())
                 .measureUnitName(keyResult.getUnitOfKeyResult().getName())
+                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
                 .startValue(keyResult.getFromValue())
                 .targetedValue(keyResult.getToValue())
                 .valueObtained(keyResult.getValueObtained())
                 .progress(keyResult.getProgress())
                 .reference(keyResult.getReference())
+                .measureUnitId(keyResult.getUnitOfKeyResult().getId())
                 .build();
     }
 

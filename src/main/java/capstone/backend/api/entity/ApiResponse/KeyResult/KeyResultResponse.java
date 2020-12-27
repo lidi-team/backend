@@ -17,12 +17,13 @@ public class KeyResultResponse {
 
     private double targetedValue;
 
+    private long measureUnitId;
+
     private double progress;
 
     @NotNull
     private String content;
 
-    @NonNull
     private String measureUnitName;
 
     private String reference;

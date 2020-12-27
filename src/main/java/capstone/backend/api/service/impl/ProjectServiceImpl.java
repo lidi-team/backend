@@ -327,8 +327,14 @@ public class ProjectServiceImpl implements ProjectService {
         pm = userRepository.save(pm);
 
         Execute execute = executeRepository.findPmAllByProjectId(project.getId());
+        User director;
+        if(project.getParent() != null){
+            Execute execute1 = executeRepository.findPmByProjectId(project.getParent().getId());
+            director = execute1.getUser();
+        }else {
+            director = userRepository.findDirector();
+        }
 
-        User director = userRepository.findDirector();
 
         if (execute != null) {
             User oldUser = execute.getUser();
