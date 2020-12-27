@@ -19,6 +19,6 @@ public class CreateProjectDto {
     private String startDate;
     private String endDate;
     private String description;
-    private int status;
+    private boolean active;
     private int weight;
 }

@@ -42,7 +42,7 @@ public class AuthenticationController {
             logger.error(e.getMessage());
             return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .code(commonProperties.getCODE_AUTH_FAILED())
                             .message("Email hoặc mật khẩu không chính xác").build()
             );
         } catch (Exception e) {
@@ -50,7 +50,7 @@ public class AuthenticationController {
             logger.error(e.getMessage());
             return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .code(commonProperties.getCODE_AUTH_FAILED())
                             .message(commonProperties.getMESSAGE_UNDEFINE_ERROR()).build()
             );
         }

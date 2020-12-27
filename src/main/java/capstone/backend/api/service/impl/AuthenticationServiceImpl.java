@@ -46,7 +46,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             logger.error("Parameter invalid!");
             return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .code(commonProperties.getCODE_AUTH_FAILED())
                             .message(commonProperties.getMESSAGE_PARAM_VALUE_EMPTY()).build()
             );
         }
@@ -56,7 +56,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             logger.error("Account locked!");
             return ResponseEntity.status(401).body(
                     ApiResponse.builder()
-                            .code(commonProperties.getCODE_UPDATE_FAILED())
+                            .code(commonProperties.getCODE_AUTH_FAILED())
                             .message("Tài khoản bị khóa!").build()
             );
         }
