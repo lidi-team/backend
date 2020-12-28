@@ -93,7 +93,7 @@ public class CfrServiceImpl implements CfrService {
         inferior.put("type","LEADER_TO_MEMBER");
         inferior.put("checkins",checkins);
 
-        
+
 
         response.put("superior",superior);
         response.put("inferior",inferior);
