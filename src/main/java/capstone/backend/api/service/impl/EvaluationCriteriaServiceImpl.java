@@ -122,7 +122,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
                 .build());
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(data)
                         .build()
@@ -178,7 +178,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
                 .build());
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
@@ -205,7 +205,7 @@ public class EvaluationCriteriaServiceImpl implements EvaluationCriteriaService 
 
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );

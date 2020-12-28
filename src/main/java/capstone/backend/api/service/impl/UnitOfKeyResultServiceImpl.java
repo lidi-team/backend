@@ -105,7 +105,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         item.put("index", data.getMeasureIndex());
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(item).build()
         );
@@ -163,7 +163,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         item.put("index", unitOfKeyResult.getMeasureIndex());
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(item).build()
         );
@@ -184,7 +184,7 @@ public class UnitOfKeyResultServiceImpl implements UnitOfKeyResultService {
         unitRepository.save(unitOfKeyResult);
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .build()
         );
