@@ -605,6 +605,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ResponseEntity<?> getListCandidate(long projectId) throws Exception {
+        Project project = projectRepository.findById(projectId).orElse(null);
+        if(project == null){
+            return ResponseEntity.notFound().build();
+        }
         List<Long> memberIds = userRepository.findMemberProject(projectId);
         List<User> all = userRepository.findAllByIdNotIn(memberIds);
         List<Map<String, Object>> responses = new ArrayList<>();
@@ -614,7 +618,6 @@ public class ProjectServiceImpl implements ProjectService {
                 candidate.put("id", user.getId());
                 candidate.put("name", user.getFullName());
                 candidate.put("email", user.getEmail());
-
                 responses.add(candidate);
             }
         });
