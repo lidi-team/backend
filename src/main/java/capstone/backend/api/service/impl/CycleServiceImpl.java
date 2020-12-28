@@ -202,7 +202,7 @@ public class CycleServiceImpl implements CycleService {
         cycleRepository.save(currentCycle);
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message("Cập nhật chu kì thành công")
                         .build()
         );
