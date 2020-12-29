@@ -14,6 +14,7 @@ import capstone.backend.api.entity.Execute;
 import capstone.backend.api.entity.Role;
 import capstone.backend.api.entity.User;
 import capstone.backend.api.repository.DepartmentRepository;
+import capstone.backend.api.repository.ExecuteRepository;
 import capstone.backend.api.repository.RoleRepository;
 import capstone.backend.api.repository.UserRepository;
 import capstone.backend.api.service.UserService;
@@ -54,6 +55,8 @@ public class UserServiceImpl implements UserService {
 
     private final ExecuteServiceImpl executeService;
 
+    private final ExecuteRepository executeRepository;
+
     private final CommonUtils utils;
 
     private final PasswordEncoder passwordEncoder;
@@ -73,7 +76,7 @@ public class UserServiceImpl implements UserService {
 
         Department department = departmentService.getDepartmentById(user.getDepartment().getId());
         Set<String> roles = user.getRoles().stream().map(Role::getName).collect(Collectors.toSet());
-        ArrayList<Execute> executes = executeService.getListExecuteByUserId(user.getId());
+        List<Execute> executes = executeRepository.findAllByUserIdAndDeleteFalseAndCloseFalse(user.getId());
 
         UserInforResponse userInforResponse = UserInforResponse.builder().id(user.getId())
                 .email(email).fullName(user.getFullName())
