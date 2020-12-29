@@ -342,7 +342,7 @@ public class CfrServiceImpl implements CfrService {
         }
         if((objective == null && eva.getType().equalsIgnoreCase("recognition"))
             || (report == null && !eva.getType().equalsIgnoreCase("recognition"))){
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+            return ResponseEntity.ok().body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UPDATE_FAILED())
                             .message("Nếu type là recognition thì objective ko được null, nếu type khác recognition thì report ko được null")
