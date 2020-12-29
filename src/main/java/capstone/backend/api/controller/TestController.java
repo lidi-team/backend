@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api/test")
 public class TestController {
 
-//    @GetMapping("teacherRegister")
-//    public UserRegisterDto teacherRegisterApi() {
-//        Set<String> roles = new HashSet<>();
-//        roles.add(RoleUtils.ROLE_USER);
-//        return UserRegisterDto.builder()
-//                .email("hoang5.com")
-//                .password("123445").dob("22/11/1998")
-//                .fullName("Le Son Tung")
-//                .phoneNumber("0342529999")
-//                .gender(1)
-//                .roles(roles).build();
-//    }
+   @GetMapping("teacherRegister")
+   public UserRegisterDto teacherRegisterApi() {
+       Set<String> roles = new HashSet<>();
+       roles.add(RoleUtils.ROLE_USER);
+       return UserRegisterDto.builder()
+               .email("hoang5.com")
+               .password("123445").dob("22/11/1998")
+               .fullName("Le Son Tung")
+               .phoneNumber("0342529999")
+               .gender(1)
+               .roles(roles).build();
+   }
 //
 //    @GetMapping("studentRegister")
 //    public UserRegisterDto studentRegisterApi() {
