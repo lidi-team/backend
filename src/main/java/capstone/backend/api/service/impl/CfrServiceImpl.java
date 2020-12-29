@@ -77,8 +77,7 @@ public class CfrServiceImpl implements CfrService {
         checkins.put("items",items);
         checkins.put("meta",commonUtils.paging(superiors,page));
 
-        superior.put("type","MEMBER_TO_LEADER");
-        superior.put("checkins",checkins);
+
 
         Page<Report> inferiors = reportRepository.findAllSuperiorRequest(user.getId(), PageRequest.of(page-1,limit));
 
@@ -88,8 +87,13 @@ public class CfrServiceImpl implements CfrService {
         checkin1s.put("items",item1s);
         checkin1s.put("meta",commonUtils.paging(inferiors,page));
 
+        superior.put("type","MEMBER_TO_LEADER");
+        superior.put("checkins", checkin1s);
+
         inferior.put("type","LEADER_TO_MEMBER");
-        inferior.put("checkins",checkin1s);
+        inferior.put("checkins",checkins);
+
+
 
         response.put("superior",superior);
         response.put("inferior",inferior);

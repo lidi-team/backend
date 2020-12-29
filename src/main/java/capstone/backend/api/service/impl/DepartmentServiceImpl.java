@@ -124,7 +124,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         return ResponseEntity.ok().body(
-                ApiResponse.builder().code(commonProperties.getCODE_SUCCESS())
+                ApiResponse.builder().code(commonProperties.getCODE_UPDATE_SUCCESS())
                         .message(commonProperties.getMESSAGE_SUCCESS())
                         .data(data)
                         .build()
