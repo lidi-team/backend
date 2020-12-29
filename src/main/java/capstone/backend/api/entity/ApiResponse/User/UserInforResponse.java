@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -40,7 +41,7 @@ public class UserInforResponse {
         return new DepartmentResponse(id, name);
     }
 
-    public ArrayList<ProjectResponse> projectResponses(ArrayList<Execute> executes) throws Exception {
+    public ArrayList<ProjectResponse> projectResponses(List<Execute> executes) throws Exception {
         ArrayList<ProjectResponse> projectResponses = new ArrayList<>();
         if (executes != null && executes.size() > 0) {
             executes.forEach(execute -> {

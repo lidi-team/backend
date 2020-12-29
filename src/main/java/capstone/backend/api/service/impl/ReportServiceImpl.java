@@ -71,7 +71,7 @@ public class ReportServiceImpl implements ReportService {
         Execute execute = objective.getExecute();
         if(user.getId() != execute.getUser().getId()
                 && user.getId() != execute.getReviewer().getId()){
-            return ResponseEntity.badRequest().body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
                             .message(commonProperties.getMESSAGE_UN_AUTHORIZED()).build()
@@ -252,7 +252,7 @@ public class ReportServiceImpl implements ReportService {
         } else if (user.getId() == objective.getExecute().getReviewer().getId()) {
             role = "reviewer";
         } else {
-            return ResponseEntity.ok().body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
                             .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
@@ -296,6 +296,8 @@ public class ReportServiceImpl implements ReportService {
         User user = userRepository.findByEmail(email).get();
         Objective objective = report.getObjective();
 
+        User review = report.getAuthorizedUser();
+
 
         Map<String, Object> objectiveMap = new HashMap<>();
         objectiveMap.put("id", objective.getId());
@@ -314,10 +316,10 @@ public class ReportServiceImpl implements ReportService {
         String role = "";
         if (user.getId() == objective.getExecute().getUser().getId()) {
             role = "user";
-        } else if (user.getId() == objective.getExecute().getReviewer().getId()) {
+        } else if (user.getId() == objective.getExecute().getReviewer().getId() || user.getId() == review.getId()) {
             role = "reviewer";
         } else {
-            return ResponseEntity.ok().body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN.value()).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
                             .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
@@ -479,7 +481,7 @@ public class ReportServiceImpl implements ReportService {
         User user = userRepository.findByEmail(email).get();
 
         if(execute.getReviewer().getId() != user.getId() && pm.getId() != user.getId() ){
-            return ResponseEntity.ok().body(
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
                     ApiResponse.builder()
                             .code(commonProperties.getCODE_UN_AUTHORIZED())
                             .message(commonProperties.getMESSAGE_UN_AUTHORIZED())
