@@ -35,15 +35,19 @@ public class TestController {
 //                .roles(roles).build();
 //    }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @GetMapping("admin")
-    public String adminApi() {
-        return "Admin API";
-    }
-
-    @PreAuthorize("hasRole('ROLE_USER')")
-    @GetMapping("student")
+   @GetMapping("student")
     public String userApi() {
         return "User API";
     }
+    // @PreAuthorize("hasRole('ROLE_ADMIN')")
+    // @GetMapping("admin")
+    // public String adminApi() {
+    //     return "Admin API";
+    // }
+
+    // @PreAuthorize("hasRole('ROLE_USER')")
+    // @GetMapping("student")
+    // public String userApi() {
+    //     return "User API";
+    // }
 }
