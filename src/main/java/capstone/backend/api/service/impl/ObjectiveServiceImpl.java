@@ -738,13 +738,13 @@ public class ObjectiveServiceImpl implements ObjectiveService {
         String email = jwtUtils.getUserNameFromJwtToken(token.substring(5));
         User user = userRepository.findByEmail(email).get();
 
+        List<Map<String,Object>> projectList = new ArrayList<>();
+
         List<Execute> executeOrigins = executeRepository.findAllByUserId(user.getId());
-        List<Execute> executes = executeOrigins.stream().filter(execute ->
+        List<Execute> executes = executeOrigins.stream().filter(execute -> execute.getFromDate() != null && execute.getEndDate() != null &&
                 !(execute.getEndDate().before(cycle.getFromDate())
                         || execute.getFromDate().after(cycle.getEndDate()))).collect(Collectors.toList());
 
-
-        List<Map<String,Object>> projectList = new ArrayList<>();
         for (Execute execute : executes) {
             if(execute.getProject() != null){
                 List<Objective> projectOKRs = objectiveRepository.findAllByProjectIdAndCycleIdAndType(execute.getProject().getId(),cycleId,1);
